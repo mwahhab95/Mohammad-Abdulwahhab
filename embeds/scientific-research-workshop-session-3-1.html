@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Making an Impact: A Communication Guide</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lato:wght@400;700&family=Poppins:wght@600;700;900&family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { 
+            font-family: 'Lato', sans-serif; 
+            background-color: #f8fafc; /* Tailwind gray-50 */
+        }
+        .font-heading {
+            font-family: 'Poppins', sans-serif;
+        }
+        .card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .card-link {
+            text-decoration: none;
+            color: inherit;
+            cursor: pointer;
+        }
+        .page-wrapper {
+            display: none;
+        }
+    </style>
+</head>
+<body class="text-gray-700">
+
+    <!-- =================================================================== -->
+    <!-- MAIN PAGE (HOME)                                                    -->
+    <!-- =================================================================== -->
+    <div id="main-page" class="page-wrapper">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <header class="text-center mb-12">
+                <h1 class="font-heading text-4xl md:text-5xl font-black text-gray-800">Making an Impact</h1>
+                <p class="font-heading text-xl text-gray-500 mt-2">An End-to-End Communication Guide for Researchers</p>
+            </header>
+            <div class="text-center max-w-3xl mx-auto mb-16">
+                <h2 class="font-heading text-3xl font-bold text-gray-800 mb-4">Welcome to Your Communication Journey</h2>
+                <p class="text-lg text-gray-600 leading-relaxed">The path from scientific knowledge to clinical impact is paved with effective communication</p>
+            </div>
+            <main class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                <a onclick="showPage('storytelling-page')" class="card-link"><div class="card bg-white rounded-lg shadow-md p-6 border-l-4 border-blue-500 h-full"><h3 class="font-heading text-xl font-bold text-gray-800 mb-3">1. The Art of Scientific Storytelling</h3><p class="text-gray-600">Explore the "And, But, Therefore" (ABT) framework to ensure your core message is not just informative, but also engaging and memorable.</p></div></a>
+                <a onclick="showPage('podium-page')" class="card-link"><div class="card bg-white rounded-lg shadow-md p-6 border-l-4 border-teal-500 h-full"><h3 class="font-heading text-xl font-bold text-gray-800 mb-3">2. Mastering the Podium</h3><p class="text-gray-600">Transform your oral presentations from a simple data dump into a powerful performance.</p></div></a>
+                <a onclick="showPage('poster-page')" class="card-link"><div class="card bg-white rounded-lg shadow-md p-6 border-l-4 border-orange-500 h-full"><h3 class="font-heading text-xl font-bold text-gray-800 mb-3">3. Designing an Award-Winning Poster</h3><p class="text-gray-600">A scientific poster is a visual conversation starter. Discover the principles of effective design.</p></div></a>
+                <a onclick="showPage('qa-page')" class="card-link"><div class="card bg-white rounded-lg shadow-md p-6 border-l-4 border-green-500 h-full"><h3 class="font-heading text-xl font-bold text-gray-800 mb-3">4. Mastering the Q&A Session</h3><p class="text-gray-600">Learn to listen carefully, rephrase questions for clarity, and deliver concise, confident answers that reinforce your message.</p></div></a>
+            </main>
+        </div>
+        <footer class="text-center pt-16 mt-8 border-t border-gray-200">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-gray-600 mb-8">Your voice has the potential to make a difference.</p>
+            </div>
+            <div class="bg-gray-800 text-gray-300 text-sm py-4">
+                <span>© 2025 Mohammad Abdulwahhab. All Rights Reserved.</span>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- =================================================================== -->
+    <!-- SUBPAGE 1: STORYTELLING                                             -->
+    <!-- =================================================================== -->
+    <div id="storytelling-page" class="page-wrapper">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <header class="text-center mb-12"><h1 class="font-heading text-4xl md:text-4xl font-black text-gray-800">1. The Art of Scientific Storytelling</h1><p class="font-heading text-xl text-gray-500 mt-2">Transforming Data into a Compelling Narrative</p></header>
+            <main class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md text-base leading-relaxed">
+                <section class="mb-10"><h2 class="font-heading text-3xl font-bold text-gray-800 mb-4">Why Storytelling Matters?</h2><p class="mb-4">As pharmacists, we are trained to be precise, objective, and data-driven. We present facts. However, for those facts to have a real-world impact—whether on a fellow clinician, a patient, or a research committee—they must be presented within a narrative. A story provides context, creates an emotional connection, and makes complex information digestible and memorable. The simplest and most powerful narrative structure for science is the "And, But, Therefore" (ABT) framework.</p></section>
+                <section class="mb-10"><h2 class="font-heading text-3xl font-bold text-gray-800 mb-4">The "And, But, Therefore" (ABT) Framework</h2><p class="mb-4">The ABT framework is the backbone of almost every story ever told. It consists of three parts that create a logical and engaging flow:</p><div class="grid md:grid-cols-3 gap-6 text-center"><div class="bg-blue-50 p-6 rounded-lg border border-blue-200"><h3 class="font-heading font-bold text-blue-800 text-2xl mb-2">AND</h3><p>This is the context or the established knowledge. It's the world as we know it, a statement of agreement that sets the stage.</p></div><div class="bg-red-50 p-6 rounded-lg border border-red-200"><h3 class="font-heading font-bold text-red-800 text-2xl mb-2">BUT</h3><p>This is the crucial turning point. It introduces the problem, the contradiction, or the knowledge gap that creates tension.</p></div><div class="bg-green-50 p-6 rounded-lg border border-green-200"><h3 class="font-heading font-bold text-green-800 text-2xl mb-2">THEREFORE</h3><p>This is the solution or the new insight. It resolves the tension and presents your work as the logical conclusion.</p></div></div></section>
+                <section class="mb-10"><h2 class="font-heading text-3xl font-bold text-gray-800 mb-4">Examples in Action</h2><div class="space-y-8"><div><h3 class="font-heading font-semibold text-xl mb-3">Clinical Pharmacy Example:</h3><div class="bg-gray-100 p-6 rounded-md border-l-4 border-gray-400 italic"><p>"Current guidelines for managing hypertension in diabetic patients recommend ACE inhibitors as a first-line therapy, <strong class='text-blue-700'>AND</strong> they are widely prescribed due to their proven efficacy in reducing cardiovascular events. <strong class='text-red-700'>BUT</strong>, a significant portion of our patient population reports a persistent dry cough, leading to poor adherence and discontinuation of this life-saving medication. <strong class='text-green-700'>THEREFORE</strong>, our study evaluated the comparative adherence and blood pressure control between ACE inhibitors and ARBs, demonstrating that an alternative first-line strategy could significantly improve patient outcomes."</p></div></div><div><h3 class="font-heading font-semibold text-xl mb-3">Pharmaceutical Research Example:</h3><div class="bg-gray-100 p-6 rounded-md border-l-4 border-gray-400 italic"><p>"Compound XYZ has shown incredible potency against cancer cells in vitro, <strong class='text-blue-700'>AND</strong> its mechanism of action is well-understood. <strong class='text-red-700'>BUT</strong>, its poor aqueous solubility makes it impossible to formulate into an effective intravenous drug, halting its clinical development. <strong class='text-green-700'>THEREFORE</strong>, we developed a novel nanoparticle delivery system that encapsulates Compound XYZ, dramatically increasing its solubility and bioavailability, paving the way for in-vivo testing."</p></div></div></div></section>
+                <section><h2 class="font-heading text-3xl font-bold text-gray-800 mb-4">Training: Frame Your Own Story</h2><p class="mb-4">Now, it's your turn. Think about your current project, presentation, or paper. Use the template below to distill your complex work into a single, powerful ABT statement. This will become the core message of your communication.</p><div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-lg"><p class="mb-3">For years, we have known that... [Your <strong class='text-blue-700'>AND</strong> statement establishing common ground].</p><p class="mb-3"><strong class='text-red-700'>BUT</strong>, the major challenge/problem/gap in knowledge is... [Your <strong class='text-red-700'>BUT</strong> statement introducing the conflict].</p><p><strong class='text-green-700'>THEREFORE</strong>, my research/project aims to... [Your <strong class='text-green-700'>THEREFORE</strong> statement presenting the resolution].</p></div></section>
+            </main>
+            <div class="text-center mt-12">
+                <a onclick="showPage('main-page')" class="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">← Back to Main Guide</a>
+            </div>
+        </div>
+        <footer class="text-center pt-16 mt-8 border-t border-gray-200">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-gray-600 mb-8">Your voice has the potential to make a difference. This guide is here to help you share it with the world.</p>
+            </div>
+            <div class="bg-gray-800 text-gray-300 text-sm py-4">
+                <span>© 2025 Mohammad Abdulwahhab. All Rights Reserved.</span>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- =================================================================== -->
+    <!-- SUBPAGE 2: MASTERING THE PODIUM                                     -->
+    <!-- =================================================================== -->
+    <div id="podium-page" class="page-wrapper">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <header class="text-center mb-12"><h1 class="font-heading text-4xl md:text-4xl font-black text-gray-800">2. Mastering the Podium</h1><p class="font-heading text-xl text-gray-500 mt-2">Crafting and Delivering Unforgettable Oral Presentations</p></header>
+            <main class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md text-base leading-relaxed">
+                <section class="mb-10"><h2 class="font-heading text-3xl font-bold text-gray-800 mb-4">The Golden Rule: 12/12/24</h2><p class="mb-4">Conference presentations are strictly timed. A simple rule to ensure you are clear, concise, and respectful of time is the <strong>12 Slides / 12 Minutes / 24+ Point Font</strong> rule. Let's break it down.</p><ul class="list-disc list-inside space-y-3"><li><strong>12 Slides:</strong> This forces you to focus on your core message. A typical structure is: Title (1), Introduction/ABT (1), Methods (2), Results (4-5), Conclusion (1), Future Work (1), Acknowledgements (1), Q&A (1). It prevents you from overwhelming the audience with data.</li><li><strong>12 Minutes:</strong> This standard conference slot (often 12 min talk + 3 min Q&A) requires discipline. Aim for about one minute per slide. Rehearsing your talk is not optional—it is essential to ensure you finish on time without rushing.</li><li><strong>24+ Point Font:</strong> Your slides must be readable from the back of a large room. Avoid tiny fonts and dense paragraphs. Use keywords, phrases, and visuals. Your slides are a visual aid, not a script.</li></ul></section>
+
+                <section class="mb-10"><h2 class="font-heading text-3xl font-bold text-gray-800 mb-4">Techniques for a Powerful Delivery</h2>
+                    <div class="space-y-8">
+                        <div><h3 class="font-heading font-semibold text-xl text-red-800">1. Practice for Confidence</h3><ul class="list-disc list-inside space-y-2 mt-3 text-base marker:text-red-800"><li>Rehearse your talk out loud multiple times.</li><li>Time yourself to ensure you fit the schedule.</li><li>Record yourself to analyze your pacing and body language.</li><li>Present to colleagues or friends for valuable feedback.</li></ul></div>
+                        <div><h3 class="font-heading font-semibold text-xl text-teal-700">2. Simplify for Clarity</h3><ul class="list-disc list-inside space-y-2 mt-3 text-base marker:text-teal-700"><li>Avoid or clearly explain any necessary jargon.</li><li>Follow the "one idea per slide" principle to maintain focus.</li><li>Use high-quality graphs and images to show, not just tell.</li><li>Ensure each slide has one single, memorable takeaway message.</li></ul></div>
+                        <div><h3 class="font-heading font-semibold text-xl text-green-800">3. Engage with the Audience</h3><ul class="list-disc list-inside space-y-2 mt-3 text-base marker:text-green-800"><li>Make eye contact with different sections of the audience.</li><li>Vary your vocal tone, pace, and volume to maintain interest.</li><li>Use purposeful gestures to emphasize key points.</li><li>Move around the stage to command attention.</li></ul></div>
+                    </div>
+                </section>
+
+                <section class="mb-10"><h2 class="font-heading text-3xl font-bold text-gray-800 mb-4 text-center">Slide Design Tips</h2>
+                    <div class="space-y-12">
+                        <div class="grid md:grid-cols-2 gap-8 items-center"><div class="text-center"><h3 class="font-heading text-xl font-bold text-red-600 mb-3">DON'T</h3></div><div class="text-center"><h3 class="font-heading text-xl font-bold text-green-600 mb-3">DO</h3></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video flex flex-col"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg" class="w-full h-full"><rect width="400" height="225" fill="#fff"/><text x="10" y="20" font-family="sans-serif" font-size="10" font-weight="bold">Analysis of Novel Drug Formulation on Patient Adherence Rates</text><text x="10" y="35" font-family="sans-serif" font-size="8"><tspan x="10" dy="1.2em">Our study investigated the effects of a new once-daily formulation (Formulation-B) compared to the standard</tspan><tspan x="10" dy="1.2em">twice-daily regimen (Formulation-A) for the management of chronic hypertension. We enrolled 250 patients</tspan><tspan x="10" dy="1.2em">(125 per arm) over 12 months. Adherence was measured using the Medication Possession Ratio (MPR)</tspan><tspan x="10" dy="1.2em">calculated from pharmacy refill data. Secondary outcomes included BP control and patient-reported outcomes</tspan><tspan x="10" dy="1.2em">via the SF-36 questionnaire. The results showed that the MPR for Formulation-B was 0.92 (SD=0.08) while</tspan><tspan x="10" dy="1.2em">the MPR for Formulation-A was 0.78 (SD=0.15), a statistically significant difference (p < 0.001). This</tspan><tspan x="10" dy="1.2em">indicates that simplifying the dosing regimen can have a profound impact on whether or not patients take</tspan><tspan x="10" dy="1.2em">their medication as prescribed, which is a critical factor in long-term disease management.</tspan></text></svg></div><p class="text-base text-center mt-3 text-red-600">A "wall of text" that no one can read.</p></div><div class="border-2 border-green-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video flex flex-col justify-center"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg" class="w-full h-full"><rect width="400" height="225" fill="#fff"/><text x="200" y="80" font-family="Poppins, sans-serif" font-size="28" font-weight="bold" text-anchor="middle">Once-Daily Pill Improves</text><text x="200" y="120" font-family="Poppins, sans-serif" font-size="28" font-weight="bold" text-anchor="middle">Adherence by 18%</text><text x="200" y="160" font-size="24" font-weight="bold" text-anchor="middle" fill="#0d9488">(p < 0.001)</text></svg></div><p class="text-base text-center mt-3 text-green-600">One clear, memorable message.</p></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video flex flex-col justify-center"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#fff"/><text x="200" y="25" font-family="sans-serif" font-size="14" font-weight="bold" text-anchor="middle">Full Study Results</text><g transform="translate(50, 50)"><rect x="0" y="0" width="300" height="150" fill="#f9fafb" stroke="#ccc"/><line x1="0" y1="20" x2="300" y2="20" stroke="#ccc"/><line x1="75" y1="0" x2="75" y2="150" stroke="#ccc"/><line x1="150" y1="0" x2="150" y2="150" stroke="#ccc"/><line x1="225" y1="0" x2="225" y2="150" stroke="#ccc"/><text x="5" y="15" font-size="8">Metric</text><text x="80" y="15" font-size="8">Group A</text><text x="155" y="15" font-size="8">Group B</text><text x="230" y="15" font-size="8">p-value</text><text x="5" y="35" font-size="8">MPR</text><text x="80" y="35" font-size="8">0.78 (0.15)</text><text x="155" y="35" font-size="8">0.92 (0.08)</text><text x="230" y="35" font-size="8"><0.001</text></g></svg></div><p class="text-base text-center mt-3 text-red-600">A dense table that hides the story.</p></div><div class="border-2 border-green-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video flex flex-col justify-center"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#fff"/><text x="200" y="40" font-family="Poppins, sans-serif" font-size="22" font-weight="bold" text-anchor="middle">Once-Daily Pill Improves Adherence</text><g transform="translate(50, 70)"><line x1="0" y1="0" x2="0" y2="120" stroke="black"/><line x1="0" y1="120" x2="300" y2="120" stroke="black"/><text x="-10" y="125" font-size="12" text-anchor="end">0%</text><text x="-10" y="10" font-size="12" text-anchor="end">100%</text><rect x="40" y="42" width="80" height="78" fill="#a7f3d0"/><text x="80" y="140" font-size="14" text-anchor="middle">Twice-Daily</text><text x="80" y="38" font-size="16" text-anchor="middle" font-weight="bold">78%</text><rect x="180" y="10" width="80" height="110" fill="#0d9488"/><text x="220" y="140" font-size="14" text-anchor="middle">Once-Daily</text><text x="220" y="5" font-size="16" text-anchor="middle" font-weight="bold" fill="white">92%</text></g></svg></div><p class="text-base text-center mt-3 text-green-600">A visual that tells the key story.</p></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#fff"/><path d="M50 200 L 100 50 L 150 150 L 200 100 L 250 180 L 300 80 L 350 160" stroke="#ff0000" fill="none" stroke-width="2"/><path d="M50 180 L 100 70 L 150 170 L 200 120 L 250 200 L 300 100 L 350 180" stroke="#0000ff" fill="none" stroke-width="2"/><path d="M50 160 L 100 90 L 150 190 L 200 140 L 250 160 L 300 120 L 350 200" stroke="#008000" fill="none" stroke-width="2"/></svg></div><p class="text-base text-center mt-3 text-red-600">A "spaghetti graph" with no focus.</p></div><div class="border-2 border-green-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#fff"/><path d="M50 180 L 100 70 L 150 170 L 200 120 L 250 200 L 300 100 L 350 180" stroke="#cccccc" fill="none" stroke-width="2"/><path d="M50 160 L 100 90 L 150 190 L 200 140 L 250 160 L 300 120 L 350 200" stroke="#cccccc" fill="none" stroke-width="2"/><path d="M50 200 L 100 50 L 150 150 L 200 100 L 250 180 L 300 80 L 350 160" stroke="#0d9488" fill="none" stroke-width="4"/><text x="290" y="70" font-family="sans-serif" font-size="14" font-weight="bold" fill="#0d9488">Our Drug</text></svg></div><p class="text-base text-center mt-3 text-green-600">Highlight the key data; gray out the rest.</p></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><div class="bg-blue-200 border border-gray-300 p-2 aspect-video flex flex-col justify-center relative"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg" class="w-full h-full"><rect width="400" height="225" fill="#fecaca"/><path d="M50 50 L150 150 L250 50 Z" fill="yellow" stroke="purple" stroke-width="5"/><text x="200" y="180" font-family="Comic Sans MS" font-size="24" fill="green" text-anchor="middle">Our Results!!</text></svg></div><p class="text-base text-center mt-3 text-red-600">Clashing colors and fonts distract.</p></div><div class="border-2 border-green-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video flex flex-col justify-center"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#f8fafc"/><text x="200" y="100" font-family="Poppins, sans-serif" font-size="24" fill="#1f2937" text-anchor="middle">Key Finding:</text><text x="200" y="140" font-family="Poppins, sans-serif" font-size="24" fill="#1f2937" text-anchor="middle">Adherence Improved</text></svg></div><p class="text-base text-center mt-3 text-green-600">Clean, simple, and professional.</p></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#fff"/><text x="20" y="30" font-family="sans-serif" font-size="12">• Point one about the data</text><text x="20" y="50" font-family="sans-serif" font-size="12">• Another point that is very important</text><text x="20" y="70" font-family="sans-serif" font-size="12">• A third point to consider</text><text x="20" y="90" font-family="sans-serif" font-size="12">• Fourth point for discussion</text><text x="20" y="110" font-family="sans-serif" font-size="12">• Fifth point of conclusion</text></svg></div><p class="text-base text-center mt-3 text-red-600">Too many bullets, too much to read.</p></div><div class="border-2 border-green-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video flex items-center justify-around"><svg viewBox="0 0 100 100" class="h-24 w-24"><circle cx="50" cy="50" r="40" fill="#0d9488"/><text x="50" y="60" font-size="40" fill="white" text-anchor="middle">↑</text></svg><svg viewBox="0 0 100 100" class="h-24 w-24"><circle cx="50" cy="50" r="40" fill="#0d9488"/><text x="50" y="60" font-size="40" fill="white" text-anchor="middle">↓</text></svg><svg viewBox="0 0 100 100" class="h-24 w-24"><circle cx="50" cy="50" r="40" fill="#0d9488"/><text x="50" y="58" font-size="30" fill="white" text-anchor="middle">✓</text></svg></div><p class="text-base text-center mt-3 text-green-600">Use icons and keywords for impact.</p></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#fff"/><text x="20" y="30" font-family="sans-serif" font-size="14">Introduction</text><text x="20" y="60" font-family="sans-serif" font-size="14">Some text here...</text><text x="20" y="100" font-family="sans-serif" font-size="14">Results</text><text x="20" y="130" font-family="sans-serif" font-size="14">More text here...</text></svg></div><p class="text-base text-center mt-3 text-red-600">No clear visual hierarchy.</p></div><div class="border-2 border-green-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#fff"/><text x="200" y="40" font-family="Poppins, sans-serif" font-size="24" font-weight="bold" text-anchor="middle">Main Title</text><text x="20" y="80" font-family="Poppins, sans-serif" font-size="16" font-weight="bold">Section 1</text><text x="20" y="110" font-family="sans-serif" font-size="12">Supporting text.</text><text x="20" y="150" font-family="Poppins, sans-serif" font-size="16" font-weight="bold">Section 2</text><text x="20" y="180" font-family="sans-serif" font-size="12">More supporting text.</text></svg></div><p class="text-base text-center mt-3 text-green-600">Use size and weight to guide the eye.</p></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#fff"/><circle cx="100" cy="100" r="50" fill="red"/><rect x="200" y="50" width="100" height="100" fill="blue"/><text x="20" y="200" font-family="Times New Roman" font-size="14">Inconsistent styles</text></svg></div><p class="text-base text-center mt-3 text-red-600">Inconsistent fonts, colors, and shapes.</p></div><div class="border-2 border-green-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#fff"/><rect x="50" y="75" width="100" height="75" fill="#0d9488"/><rect x="250" y="75" width="100" height="75" fill="#0d9488"/><text x="20" y="200" font-family="Poppins, sans-serif" font-size="14" fill="#1f2937">Consistent Branding</text></svg></div><p class="text-base text-center mt-3 text-green-600">Use a consistent color and font scheme.</p></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#0d9488"/><text x="200" y="115" font-family="Poppins, sans-serif" font-size="24" fill="#0f766e" text-anchor="middle">Low Contrast Text</text></svg></div><p class="text-base text-center mt-3 text-red-600">Text is difficult to read.</p></div><div class="border-2 border-green-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><rect width="400" height="225" fill="#0d9488"/><text x="200" y="115" font-family="Poppins, sans-serif" font-size="24" fill="white" text-anchor="middle">High Contrast Text</text></svg></div><p class="text-base text-center mt-3 text-green-600">Ensure high contrast for readability.</p></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><g stroke="black" stroke-width="1"><circle cx="50" cy="50" r="20"/><circle cx="150" cy="50" r="20"/><circle cx="250" cy="50" r="20"/><circle cx="350" cy="50" r="20"/><circle cx="100" cy="150" r="20"/><circle cx="200" cy="150" r="20"/><circle cx="300" cy="150" r="20"/><line x1="65" y1="65" x2="85" y2="135"/><line x1="135" y1="65" x2="115" y2="135"/><line x1="165" y1="65" x2="185" y2="135"/><line x1="235" y1="65" x2="215" y2="135"/><line x1="265" y1="65" x2="285" y2="135"/><line x1="335" y1="65" x2="315" y2="135"/></g></svg></div><p class="text-base text-center mt-3 text-red-600">Overly complex diagram is hard to follow.</p></div><div class="border-2 border-green-400 rounded-lg p-4"><div class="bg-white border border-gray-300 p-2 aspect-video flex items-center justify-around"><svg viewBox="0 0 400 225" xmlns="http://www.w3.org/2000/svg"><g stroke-width="2" fill="none"><path stroke="#0d9488" d="M 80 112.5 L 160 112.5"/><path stroke="black" d="M 160 112.5 L 240 112.5"/><path stroke="#0d9488" d="M 240 112.5 L 320 112.5"/></g><text x="120" y="90" font-size="14" text-anchor="middle">Step 1</text><text x="200" y="90" font-size="14" text-anchor="middle">Step 2</text><text x="280" y="90" font-size="14" text-anchor="middle">Step 3</text></svg></div><p class="text-base text-center mt-3 text-green-600">Simplify diagrams to show the core process.</p></div></div>
+                    </div>
+                </section>
+            </main>
+            <div class="text-center mt-12">
+                <a onclick="showPage('main-page')" class="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">← Back to Main Guide</a>
+            </div>
+        </div>
+        <footer class="text-center pt-16 mt-8 border-t border-gray-200">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-gray-600 mb-8">Your voice has the potential to make a difference. This guide is here to help you share it with the world.</p>
+            </div>
+            <div class="bg-gray-800 text-gray-300 text-sm py-4">
+                <span>© 2025 Mohammad Abdulwahhab. All Rights Reserved.</span>
+            </div>
+        </footer>
+    </div>
+
+
+    <!-- =================================================================== -->
+    <!-- SUBPAGE 3: POSTER DESIGN                                            -->
+    <!-- =================================================================== -->
+    <div id="poster-page" class="page-wrapper">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <header class="text-center mb-12"><h1 class="font-heading text-4xl md:text-4xl font-black text-gray-800">3. Designing an Award-Winning Poster</h1><p class="font-heading text-xl text-gray-500 mt-2">Creating a Visual Magnet for Your Research</p></header>
+            <main class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md text-base leading-relaxed">
+                <section class="mb-10"><h2 class="font-heading text-2xl font-bold text-gray-800 mb-4">Posters as Conversations</h2><p class="mb-4">A poster is not a research paper taped to a board. It's a visual abstract designed to do one thing: attract people and start a conversation. Your goal is to create a design that is so clear and compelling that a viewer can understand your main findings in under 3 minutes, even from a distance. Think of it as an advertisement for your research.</p></section>
+                
+                <section class="mb-10"><h2 class="font-heading text-2xl font-bold text-gray-800 mb-4">Core Principles of Poster Design</h2>
+                    <div class="space-y-6">
+                        <div class="p-6 rounded-lg border bg-blue-50 border-blue-300"><h3 class="font-heading font-bold text-blue-800 text-lg mb-2">1. Title & Authors</h3><p>Your title should be a punchy statement and the largest text on the poster. List authors and their affiliations clearly underneath.</p></div>
+                        <div class="p-6 rounded-lg border bg-teal-50 border-teal-300"><h3 class="font-heading font-bold text-teal-800 text-lg mb-2">2. The 2-Meter Rule</h3><p>Can someone grasp the main point from 2 meters away? The title, key figures, and main takeaway must be visible from a distance to draw people in.</p></div>
+                        <div class="p-6 rounded-lg border bg-green-50 border-green-300"><h3 class="font-heading font-bold text-green-800 text-lg mb-2">3. Logical Flow</h3><p>Guide the reader's eye with columns (usually 3 or 4). The path should be obvious and intuitive: top-to-bottom, left-to-right.</p></div>
+                        <div class="p-6 rounded-lg border bg-yellow-50 border-yellow-300"><h3 class="font-heading font-bold text-yellow-800 text-lg mb-2">4. Prioritize Visuals</h3><p>Show, don't tell. Graphs, charts, and high-quality images should dominate the space. A single, powerful central figure is highly effective.</p></div>
+                        <div class="p-6 rounded-lg border bg-purple-50 border-purple-300"><h3 class="font-heading font-bold text-purple-800 text-lg mb-2">5. Embrace White Space</h3><p>Don't cram every inch with content. Empty space (or "negative space") makes your poster look less intimidating and helps guide the reader's eye.</p></div>
+                        <div class="p-6 rounded-lg border bg-pink-50 border-pink-300"><h3 class="font-heading font-bold text-pink-800 text-lg mb-2">6. Colors & Theme</h3><p>Use a simple, professional color palette (2-3 main colors). Ensure high contrast between text and background for maximum readability.</p></div>
+                        <div class="p-6 rounded-lg border bg-red-50 border-red-300"><h3 class="font-heading font-bold text-red-800 text-lg mb-2">7. Minimal References</h3><p>Keep the reference list extremely short (3-5 key citations) in a small font size at the bottom. A QR code can link to a more extensive list.</p></div>
+                        <div class="p-6 rounded-lg border bg-gray-100 border-gray-300"><h3 class="font-heading font-bold text-gray-800 text-lg mb-2">8. QR Code</h3><p>A modern essential. Link it to a PDF of your poster, the full paper, or your professional profile. It's a great space-saver for extra details.</p></div>
+                    </div>
+                </section>
+
+                <section class="mb-10">
+                    <h2 class="font-heading text-3xl font-bold text-gray-800 mb-4">Figure 1: Anatomy of a Great Poster</h2>
+                    <div class="bg-gray-50 p-4 rounded-lg border">
+                        <svg viewBox="0 0 800 550" xmlns="http://www.w3.org/2000/svg" class="w-full">
+                            <!-- Background -->
+                            <rect width="800" height="550" fill="#f8fafc"/>
+                            <!-- Poster Area -->
+                            <rect x="50" y="50" width="700" height="450" fill="white" stroke="#d1d5db" stroke-width="2"/>
+                            <!-- Header -->
+                            <rect x="50" y="50" width="700" height="80" fill="#e0f2f1"/>
+                            <text x="400" y="90" font-family="Poppins, sans-serif" font-size="24" font-weight="bold" text-anchor="middle">Once-Daily Pill Improves Adherence by 18%</text>
+                            <text x="400" y="115" font-family="Lato, sans-serif" font-size="14" text-anchor="middle">A. Researcher, B. Colleague, C. Advisor - Faculty of Pharmacy</text>
+                            <!-- Columns -->
+                            <!-- Column 1 -->
+                            <text x="160" y="160" font-family="Poppins, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Introduction</text>
+                            <text x="70" y="180" font-family="Lato, sans-serif" font-size="12">
+                                <tspan x="70" dy="1.2em">Lorem ipsum dolor sit amet, consectetur</tspan>
+                                <tspan x="70" dy="1.2em">adipiscing elit. Sed non risus. Suspendisse</tspan>
+                                <tspan x="70" dy="1.2em">lectus tortor, dignissim sit amet.</tspan>
+                            </text>
+                            <text x="160" y="270" font-family="Poppins, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Methods</text>
+                            <text x="70" y="290" font-family="Lato, sans-serif" font-size="12">
+                                <tspan x="70" dy="1.2em">• Randomized Controlled Trial</tspan>
+                                <tspan x="70" dy="1.2em">• N = 250 patients</tspan>
+                                <tspan x="70" dy="1.2em">• Measured MPR over 12 months</tspan>
+                            </text>
+                            <!-- Column 2 (Central Figure) -->
+                            <text x="400" y="160" font-family="Poppins, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Key Finding</text>
+                            <rect x="280" y="175" width="240" height="180" fill="#f0fdfa" stroke="#a7f3d0"/>
+                            <g transform="translate(290, 185)">
+                                <line x1="0" y1="0" x2="0" y2="160" stroke="black"/><line x1="0" y1="160" x2="220" y2="160" stroke="black"/>
+                                <rect x="30" y="62" width="60" height="98" fill="#a7f3d0"/><text x="60" y="58" font-size="12" font-weight="bold">78%</text>
+                                <rect x="130" y="20" width="60" height="140" fill="#0d9488"/><text x="160" y="15" font-size="12" font-weight="bold" fill="white">92%</text>
+                            </g>
+                            <text x="400" y="380" font-family="Lato, sans-serif" font-size="12" text-anchor="middle" font-weight="bold">Figure 1. Adherence (MPR) was significantly</text>
+                            <text x="400" y="395" font-family="Lato, sans-serif" font-size="12" text-anchor="middle" font-weight="bold">higher in the once-daily group (p < 0.001).</text>
+                            <!-- Column 3 -->
+                            <text x="640" y="160" font-family="Poppins, sans-serif" font-size="16" font-weight="bold" text-anchor="middle">Conclusion</text>
+                            <text x="540" y="180" font-family="Lato, sans-serif" font-size="12">
+                                <tspan x="540" dy="1.2em">• Once-daily formulation is superior.</tspan>
+                                <tspan x="540" dy="1.2em">• Improves adherence significantly.</tspan>
+                                <tspan x="540" dy="1.2em">• Should be considered for guidelines.</tspan>
+                            </text>
+                            <!-- QR Code & Refs -->
+                            <text x="160" y="440" font-family="Poppins, sans-serif" font-size="12" font-weight="bold" text-anchor="middle">References</text>
+                            <text x="70" y="455" font-family="Lato, sans-serif" font-size="8">1. Author et al. (2022) J. Important Stuff...</text>
+                            <text x="70" y="465" font-family="Lato, sans-serif" font-size="8">2. Researcher et al. (2023) Big Journal...</text>
+                            <text x="640" y="430" font-family="Poppins, sans-serif" font-size="12" font-weight="bold" text-anchor="middle">Scan for Full Paper</text>
+                            <path d="M590 440 h5 v-5 h5 v5 h5 v5 h-5 v5 h-5 v-5 h-5 v-5 h5 Z M605 440 h5 v5 h-5 Z M620 440 h5 v5 h-5 Z M625 440 h5 v5 h-5 Z M635 440 h5 v5 h-5 Z M590 455 h5 v5 h-5 Z M605 455 h5 v5 h-5 Z M620 455 h5 v5 h-5 Z M635 455 h5 v5 h-5 Z M590 470 h5 v5 h-5 Z M605 470 h5 v5 h-5 Z M620 470 h5 v5 h-5 Z M635 470 h5 v5 h-5 Z M590 475 h5 v5 h-5 Z M605 475 h5 v5 h-5 Z M620 475 h5 v5 h-5 Z M635 475 h5 v5 h-5 Z" fill="black"/>
+                            <!-- Annotations -->
+                            <path d="M 400 50 v -20 h -250" stroke="#0d9488" stroke-width="1.5" fill="none"/>
+                            <text x="150" y="25" font-family="Lato, sans-serif" font-size="12" text-anchor="end" fill="#0d9488">1. Strong, Conclusive Title</text>
+                            <path d="M 160 130 h -130 v 100" stroke="#0d9488" stroke-width="1.5" fill="none"/>
+                            <text x="25" y="240" font-family="Lato, sans-serif" font-size="12" text-anchor="start" fill="#0d9488">2. Logical Flow in Columns</text>
+                            <path d="M 400 405 v 50 h -150" stroke="#0d9488" stroke-width="1.5" fill="none"/>
+                            <text x="350" y="465" font-family="Lato, sans-serif" font-size="12" text-anchor="end" fill="#0d9488">3. Central, Clear Figure</text>
+                            <path d="M 615 500 v 20 h 100" stroke="#0d9488" stroke-width="1.5" fill="none"/>
+                            <text x="720" y="525" font-family="Lato, sans-serif" font-size="12" text-anchor="start" fill="#0d9488">4. QR Code for Details</text>
+                        </svg>
+                    </div>
+                </section>
+
+                <section class="mb-10"><h2 class="font-heading text-2xl font-bold text-gray-800 mb-4">Figure 2: Poster Design - DOs and DON'Ts</h2>
+                    <div class="space-y-12">
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><h3 class="text-center font-heading font-bold text-red-600 mb-3 text-xl">DON'T</h3><div class="bg-white border border-gray-300 p-4 aspect-video flex flex-col justify-center items-center"><svg viewBox="0 0 300 150" class="w-full"><rect x="0" y="0" width="300" height="150" fill="#FFFF00" /><text x="150" y="85" font-family="Poppins, sans-serif" font-size="24" fill="#FF00FF" text-anchor="middle">Low Contrast</text></svg><p class="text-base text-center mt-3 text-red-600">Clashing colors are hard to read and look unprofessional.</p></div></div><div class="border-2 border-green-400 rounded-lg p-4"><h3 class="text-center font-heading font-bold text-green-600 mb-3 text-xl">DO</h3><div class="bg-white border border-gray-300 p-4 aspect-video flex flex-col justify-center items-center"><svg viewBox="0 0 300 150" class="w-full"><rect x="0" y="0" width="300" height="150" fill="#0c4a6e" /><text x="150" y="85" font-family="Poppins, sans-serif" font-size="24" fill="white" text-anchor="middle">High Contrast</text></svg><p class="text-base text-center mt-3 text-green-600">Use a simple, professional palette with high contrast.</p></div></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><h3 class="text-center font-heading font-bold text-red-600 mb-3 text-xl">DON'T</h3><div class="bg-white border border-gray-300 p-4 aspect-video"><svg viewBox="0 0 300 150" class="w-full"><text x="10" y="20" font-family="Lato, sans-serif" font-size="8">This is the introduction to our poster which discusses the intricate details of our research. The study aimed to evaluate the efficacy and safety of a novel compound in a preclinical model. We utilized a double-blind, randomized controlled design with a sample size calculated to provide 80% power. The results were analyzed using a two-way ANOVA followed by Tukey's post-hoc test for multiple comparisons, and the data showed a statistically significant... </text></svg><p class="text-base text-center mt-3 text-red-600">Large blocks of text will not be read.</p></div></div><div class="border-2 border-green-400 rounded-lg p-4"><h3 class="text-center font-heading font-bold text-green-600 mb-3 text-xl">DO</h3><div class="bg-white border border-gray-300 p-4 aspect-video"><svg viewBox="0 0 300 150" class="w-full"><text x="10" y="25" font-family="Poppins, sans-serif" font-size="14" font-weight="bold">Key Background</text><text x="10" y="50" font-family="Lato, sans-serif" font-size="12">• Existing treatments have limitations.</text><text x="10" y="70" font-family="Lato, sans-serif" font-size="12">• Our study tests a novel compound.</text><text x="10" y="90" font-family="Lato, sans-serif" font-size="12">• Aim: Evaluate efficacy and safety.</text></svg><p class="text-base text-center mt-3 text-green-600">Use bullet points and short sentences.</p></div></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><h3 class="text-center font-heading font-bold text-red-600 mb-3 text-xl">DON'T</h3><div class="bg-white border border-gray-300 p-4 aspect-video"><svg viewBox="0 0 300 150" class="w-full"><text x="150" y="15" font-family="Lato, sans-serif" font-size="10" text-anchor="middle">Figure 1</text><rect x="20" y="50" width="30" height="80" fill="#ff0000" /><rect x="60" y="70" width="30" height="60" fill="#00ff00" /><rect x="100" y="30" width="30" height="100" fill="#0000ff" /><rect x="140" y="80" width="30" height="50" fill="#ffff00" /><rect x="180" y="60" width="30" height="70" fill="#ff00ff" /><rect x="220" y="40" width="30" height="90" fill="#00ffff" /></svg><p class="text-base text-center mt-3 text-red-600">A complex graph with no clear message.</p></div></div><div class="border-2 border-green-400 rounded-lg p-4"><h3 class="text-center font-heading font-bold text-green-600 mb-3 text-xl">DO</h3><div class="bg-white border border-gray-300 p-4 aspect-video"><svg viewBox="0 0 300 150" class="w-full"><text x="150" y="20" font-family="Poppins, sans-serif" font-size="12" font-weight="bold" text-anchor="middle">Drug A Significantly Reduces Tumor Size</text><rect x="60" y="50" width="60" height="80" fill="#cccccc" /><text x="90" y="145" font-family="Lato, sans-serif" font-size="10" text-anchor="middle">Placebo</text><rect x="180" y="90" width="60" height="40" fill="#0c4a6e" /><text x="210" y="145" font-family="Lato, sans-serif" font-size="10" text-anchor="middle">Drug A</text></svg><p class="text-base text-center mt-3 text-green-600">A simple graph with a descriptive title.</p></div></div></div>
+                        <div class="grid md:grid-cols-2 gap-8"><div class="border-2 border-red-400 rounded-lg p-4"><h3 class="text-center font-heading font-bold text-red-600 mb-3 text-xl">DON'T</h3><div class="bg-white border border-gray-300 p-4 aspect-video"><svg viewBox="0 0 300 150" class="w-full"><rect x="10" y="10" width="100" height="50" fill="#f3f4f6" stroke="#d1d5db" /><rect x="150" y="30" width="120" height="80" fill="#f3f4f6" stroke="#d1d5db" /><rect x="40" y="90" width="80" height="50" fill="#f3f4f6" stroke="#d1d5db" /></svg><p class="text-base text-center mt-3 text-red-600">A chaotic layout with no clear flow.</p></div></div><div class="border-2 border-green-400 rounded-lg p-4"><h3 class="text-center font-heading font-bold text-green-600 mb-3 text-xl">DO</h3><div class="bg-white border border-gray-300 p-4 aspect-video"><svg viewBox="0 0 300 150" class="w-full"><path d="M100 0 V 150 M200 0 V 150" stroke="#e5e7eb" stroke-width="2" stroke-dasharray="4"/><rect x="10" y="10" width="80" height="130" fill="#f3f4f6" stroke="#d1d5db" /><rect x="110" y="10" width="80" height="130" fill="#f3f4f6" stroke="#d1d5db" /><rect x="210" y="10" width="80" height="130" fill="#f3f4f6" stroke="#d1d5db" /></svg><p class="text-base text-center mt-3 text-green-600">Use a clean, grid-based column layout.</p></div></div></div>
+                    </div>
+                </section>
+                
+                <section class="mb-10"><h2 class="font-heading text-2xl font-bold text-gray-800 mb-4">Poster Creation Tools & Dimensions</h2><div class="grid md:grid-cols-2 gap-8"><div><h3 class="font-heading font-semibold text-lg mb-3">Recommended Software</h3><ul class="list-disc list-inside space-y-2"><li><strong>PowerPoint/Google Slides:</strong> Accessible and easy to use. Set the slide size to your final poster dimensions from the start.</li><li><strong>Canva:</strong> Great for user-friendly design with many templates.</li><li><strong>Adobe Illustrator/Inkscape:</strong> Professional vector graphics tools that offer maximum control for custom designs.</li></ul></div><div><h3 class="font-heading font-semibold text-lg mb-3">Common Metric Sizes (cm)</h3><p class="mb-2"><strong>Always check conference guidelines first!</strong></p><ul class="list-disc list-inside space-y-2"><li><strong>Portrait (Vertical):</strong><ul class="list-['-_'] list-inside ml-4"><li>A0: 84.1 cm x 118.9 cm</li><li>A1: 59.4 cm x 84.1 cm</li><li>A2: 42.0 cm x 59.4 cm</li></ul></li><li><strong>Landscape (Horizontal):</strong><ul class="list-['-_'] list-inside ml-4"><li>A0: 118.9 cm x 84.1 cm</li><li>A1: 84.1 cm x 59.4 cm</li><li>Common custom: 120 cm x 90 cm</li></ul></li></ul></div></div></section>
+                <section><h2 class="font-heading text-2xl font-bold text-gray-800 mb-4">Training: Your 3-Minute Poster Pitch</h2><p class="mb-4">When someone stops at your poster, you need a concise, engaging pitch ready. It should take no more than 3 minutes and follow your poster's narrative.</p><div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-lg space-y-4"><p><strong>1. The Hook (15 sec):</strong> Start with your title and main finding. "Hi, thanks for stopping by. In our work, we found that a new once-daily pill can improve patient adherence by almost 20%."</p><p><strong>2. The Walk-through (90 sec):</strong> Briefly walk them through your poster, pointing to the key figures. "We know adherence is a big problem [point to intro], so we ran a trial comparing the new pill to the old one [point to methods], and here's what we found [point to main graph]."</p><p><strong>3. The "So What?" (15 sec):</strong> End with the conclusion and its importance. "This means we have a clear strategy to help patients better control their blood pressure. Do you have any questions?"</p></div></section>
+            </main>
+            <div class="text-center mt-12">
+                <a onclick="showPage('main-page')" class="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">← Back to Main Guide</a>
+            </div>
+        </div>
+        <footer class="text-center pt-16 mt-8 border-t border-gray-200">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-gray-600 mb-8">Your voice has the potential to make a difference. This guide is here to help you share it with the world.</p>
+            </div>
+            <div class="bg-gray-800 text-gray-300 text-sm py-4">
+                <span>© 2025 Mohammad Abdulwahhab. All Rights Reserved.</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- =================================================================== -->
+    <!-- SUBPAGE 4: MASTERING THE Q&A                                        -->
+    <!-- =================================================================== -->
+    <div id="qa-page" class="page-wrapper">
+        <div class="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
+            <header class="text-center mb-12"><h1 class="font-heading text-4xl md:text-4xl font-black text-gray-800">4. Mastering the Q&A Session</h1><p class="font-heading text-xl text-gray-500 mt-2">Turning Questions into Opportunities</p></header>
+            <main class="max-w-4xl mx-auto bg-white p-8 rounded-lg shadow-md text-base leading-relaxed">
+                <section class="mb-10"><h2 class="font-heading text-2xl font-bold text-gray-800 mb-4">The Q&A is Part of the Presentation</h2><p class="mb-4">Many presenters treat the Q&A session as an afterthought, but it's one of the most important parts of your talk. It's an opportunity to clarify your points, demonstrate the depth of your knowledge, and engage directly with your audience in a scientific dialogue. A well-handled Q&A session can solidify a good presentation into a great one.</p></section>
+                <section class="mb-10"><h2 class="font-heading text-2xl font-bold text-gray-800 mb-4">The L-R-A Technique: Listen, Rephrase, Answer</h2><p class="mb-4">A simple, effective technique for handling almost any question is L-R-A.</p><div class="space-y-6"><div class="bg-green-50 p-6 rounded-lg border border-green-200"><h3 class="font-heading font-bold text-green-800 text-lg mb-2">1. Listen Carefully</h3><p>Give the questioner your full attention. Don't interrupt. Listen to the entire question, not just the first few words. This shows respect and ensures you understand what is actually being asked.</p></div><div class="bg-green-50 p-6 rounded-lg border border-green-200"><h3 class="font-heading font-bold text-green-800 text-lg mb-2">2. Rephrase for Clarity</h3><p>This is the most critical step. Briefly rephrase the question back to the asker. This does two things: 1) It confirms you understood the question correctly, and 2) It gives your brain a few extra seconds to formulate a concise answer. Example: "So, if I'm hearing you correctly, you're asking about the potential off-target effects of this drug?"</p></div><div class="bg-green-50 p-6 rounded-lg border border-green-200"><h3 class="font-heading font-bold text-green-800 text-lg mb-2">3. Answer Concisely</h3><p>Start with a direct answer, then provide a brief explanation. Avoid rambling. A good answer is clear, confident, and directly addresses the rephrased question. Once you've answered, stop talking. It's okay to have a moment of silence.</p></div></div></section>
+                <section class="mb-10"><h2 class="font-heading text-2xl font-bold text-gray-800 mb-4">Handling Difficult Questions</h2><div class="space-y-8"><div><h3 class="font-heading font-semibold text-lg mb-2">The "I Don't Know" Question</h3><p class="mb-3">It is perfectly acceptable not to know the answer. Honesty is better than bluffing.</p><div class="bg-gray-100 p-4 rounded-md border-l-4 border-gray-400 italic"><p><strong>Professional Response:</strong> "That's an excellent question. Our study wasn't designed to look at that specific outcome, but it's an important area for future research. I'd be happy to discuss it with you afterwards."</p></div></div><div><h3 class="font-heading font-semibold text-lg mb-2">The Hostile or Challenging Question</h3><p class="mb-3">Stay calm and professional. Do not get defensive. Address the scientific merit of the question, not the tone.</p><div class="bg-gray-100 p-4 rounded-md border-l-4 border-gray-400 italic"><p><strong>Professional Response:</strong> "I appreciate that perspective, thank you. While our data points towards this conclusion, I agree that exploring alternative interpretations is valuable. The methodology we used is standard for this type of study, but we can certainly discuss the limitations."</p></div></div><div><h3 class="font-heading font-semibold text-lg mb-2">The Vague or Multi-Part Question</h3><p class="mb-3">Use your rephrasing power to break it down or ask for clarification.</p><div class="bg-gray-100 p-4 rounded-md border-l-4 border-gray-400 italic"><p><strong>Professional Response:</strong> "That's a great point with a few parts to it. To make sure I answer what you're most interested in, could we start with the first part about the patient selection criteria?"</p></div></div></div></section>
+                <section><h2 class="font-heading text-2xl font-bold text-gray-800 mb-4">Training: Anticipate and Prepare</h2><p class="mb-4">The best way to master the Q&A is to prepare for it. As you rehearse your talk, think about the questions you might be asked. What are the weakest points in your argument? What are the most controversial findings? What might be confusing?</p><div class="bg-yellow-50 border-l-4 border-yellow-400 p-6 rounded-r-lg"><p><strong>Action Item:</strong> Write down the <strong>three toughest questions</strong> you could possibly receive about your presentation. Then, practice answering each one using the <strong>Listen-Rephrase-Answer</strong> technique. This exercise alone will dramatically boost your confidence.</p></div></section>
+            </main>
+            <div class="text-center mt-12">
+                <a onclick="showPage('main-page')" class="bg-gray-700 text-white font-bold py-3 px-6 rounded-lg hover:bg-gray-800 transition-colors cursor-pointer">← Back to Main Guide</a>
+            </div>
+        </div>
+        <footer class="text-center pt-16 mt-8 border-t border-gray-200">
+            <div class="container mx-auto px-4 sm:px-6 lg:px-8">
+                <p class="text-gray-600 mb-8">Your voice has the potential to make a difference. This guide is here to help you share it with the world.</p>
+            </div>
+            <div class="bg-gray-800 text-gray-300 text-sm py-4">
+                <span>© 2025 Mohammad Abdulwahhab. All Rights Reserved.</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- JavaScript for Page Navigation -->
+    <script>
+        // ===================================================================
+        // CORE FUNCTIONS
+        // ===================================================================
+        function showPage(pageId) {
+            document.querySelectorAll('.page-wrapper').forEach(function(page) {
+                page.style.display = 'none';
+            });
+            const newPage = document.getElementById(pageId);
+            if (newPage) {
+                newPage.style.display = 'block';
+            }
+            window.scrollTo(0, 0);
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            showPage('main-page');
+        });
+    </script>
+
+</body>
+</html>

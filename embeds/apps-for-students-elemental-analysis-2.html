@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Empirical & Molecular Formula Solver</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            padding: 20px;
+        }
+        .main-container {
+            background-color: #ffffff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 650px;
+        }
+        h1 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 700;
+            text-align: center;
+        }
+        .section {
+            margin-bottom: 25px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            padding: 15px;
+        }
+        .section-title {
+            font-weight: 700;
+            font-size: 18px;
+            margin-top: 0;
+            margin-bottom: 15px;
+            color: #007bff;
+        }
+        button {
+            padding: 10px 15px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 15px;
+            font-weight: 700;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .error-message {
+            color: #dc3545; font-weight: 700; margin-top: 15px; text-align: center;
+        }
+        
+        /* Generator Section */
+        #generator-controls { display: flex; gap: 20px; align-items: center; justify-content: center; margin-bottom: 15px; }
+        #generator-controls label { font-weight: normal; }
+        #problem-statement { font-size: 16px; color: #333; line-height: 1.6; }
+        .percent-highlight { color: #c9302c; font-weight: bold; }
+
+        /* Solver Section */
+        .solver-inputs { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 15px; margin-bottom: 20px; }
+        .input-group { display: flex; flex-direction: column; }
+        .input-group label { font-size: 14px; font-weight: 700; color: #555; margin-bottom: 5px; }
+        .input-group input { padding: 8px; font-family: 'Roboto', sans-serif; font-size: 14px; border: 2px solid #ccc; border-radius: 5px; text-align: center; }
+
+        /* Results Section */
+        .results p { margin: 0.5rem 0; font-size: 1.15rem; font-weight: 600; }
+        .results span { font-weight: normal; color: #333; }
+        .monospace { 
+            font-family: "Courier New", Courier, monospace; font-size: 1.6rem; 
+            background-color: #f4f4f4; padding: 4px 8px; border-radius: 4px;
+        }
+        .color-red { color: darkred; }
+        .color-blue { color: darkblue; }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <h1>Comprehensive Formula Solver</h1>
+
+        <div class="section">
+            <h3 class="section-title">Step 1: Generate a Practice Problem</h3>
+            <div id="generator-controls">
+                <span>Include Elements:</span>
+                <label><input type="checkbox" id="include-O"> Oxygen</label>
+                <label><input type="checkbox" id="include-N"> Nitrogen</label>
+            </div>
+            <button id="generate-problem-btn">Generate New Problem</button>
+            <p id="problem-statement" style="margin-top: 15px;">Click the button to generate a problem.</p>
+        </div>
+
+        <div class="section">
+            <h3 class="section-title">Step 2: Input Data & Calculate Solution</h3>
+            <div class="solver-inputs">
+                <div class="input-group" id="group-C"><label for="percent-C">% Carbon</label><input type="number" id="percent-C" step="any"></div>
+                <div class="input-group" id="group-H"><label for="percent-H">% Hydrogen</label><input type="number" id="percent-H" step="any"></div>
+                <div class="input-group" id="group-O" style="display:none;"><label for="percent-O">% Oxygen</label><input type="number" id="percent-O" step="any"></div>
+                <div class="input-group" id="group-N" style="display:none;"><label for="percent-N">% Nitrogen</label><input type="number" id="percent-N" step="any"></div>
+                <div class="input-group"><label for="molecular-weight">Molecular Weight (g/mol)</label><input type="number" id="molecular-weight" step="any"></div>
+            </div>
+            <button id="calculate-btn">Calculate Full Solution</button>
+        </div>
+        
+        <div class="section results" id="results-container" style="display:none;">
+            <h3 class="section-title">Step 3: View Results</h3>
+            <p class="color-red">Empirical Formula: <span id="calc-ef" class="monospace"></span></p>
+            <p class="color-blue">Molecular Formula: <span id="calc-mf" class="monospace"></span></p>
+            <p class="color-red">IHD: <span id="calc-ihd" class="monospace"></span></p>
+            <p id="calc-error" class="error-message"></p>
+        </div>
+    </div>
+
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const integerAtomicMasses = {'H': 1, 'C': 12, 'N': 14, 'O': 16};
+        
+        const generateBtn = document.getElementById('generate-problem-btn');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const problemStatement = document.getElementById('problem-statement');
+        const calcError = document.getElementById('calc-error');
+        const resultsContainer = document.getElementById('results-container');
+        const includeO_checkbox = document.getElementById('include-O');
+        const includeN_checkbox = document.getElementById('include-N');
+        
+        const truncate = (value) => Math.floor(value * 1000) / 1000;
+        const toSubscript = (text) => String(text).replace(/[0-9]/g, (char) => '₀₁₂₃₄₅₆₇₈₉'[char]);
+        const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+        // --- NEW FUNCTION to control visibility based on checkboxes ---
+        function updateInputVisibility() {
+            document.getElementById('group-O').style.display = includeO_checkbox.checked ? 'flex' : 'none';
+            document.getElementById('group-N').style.display = includeN_checkbox.checked ? 'flex' : 'none';
+        }
+
+        function generateProblem() {
+            clearSolverAndResults();
+            const includeO = includeO_checkbox.checked;
+            const includeN = includeN_checkbox.checked;
+
+            let numC, numH, numO, numN;
+            
+            do {
+                numC = getRandomInt(2, 8);
+                numO = includeO ? getRandomInt(1, 4) : 0;
+                numN = includeN ? getRandomInt(1, 2) : 0;
+                
+                const maxIHD = numC + 1;
+                const ihd = getRandomInt(0, maxIHD);
+                numH = (2 * numC + 2 + numN) - (2 * ihd);
+            
+            } while (numH <= 0);
+
+            let formulaString = `C${numC}H${numH}`;
+            if (numN > 0) formulaString += `N${numN}`;
+            if (numO > 0) formulaString += `O${numO}`;
+            
+            const parsedData = parseFormulaForComposition(formulaString, integerAtomicMasses);
+            
+            const percentStrings = Object.keys(parsedData.composition).map(el => 
+                `<span class="percent-highlight">${parsedData.composition[el].toFixed(3)}%</span> ${el}`
+            );
+            
+            problemStatement.innerHTML = `A compound is found to contain ${percentStrings.join(', ')} by mass. Its molecular weight is approximately <span class="percent-highlight">${parsedData.molarMass} g/mol</span>. Determine its empirical formula, molecular formula, and IHD.`;
+            
+            Object.keys(parsedData.composition).forEach(el => {
+                document.getElementById(`percent-${el}`).value = parsedData.composition[el].toFixed(3);
+            });
+            document.getElementById('molecular-weight').value = parsedData.molarMass;
+        }
+
+        function calculateSolution() {
+            calcError.textContent = '';
+            resultsContainer.style.display = 'block';
+            
+            try {
+                const elementsData = [];
+                ['C', 'H', 'O', 'N'].forEach(symbol => {
+                    const group = document.getElementById(`group-${symbol}`);
+                    if (group.style.display !== 'none') {
+                        const percent = parseFloat(document.getElementById(`percent-${symbol}`).value);
+                        if (isNaN(percent) || percent <= 0) throw new Error("Ensure all percentages are valid positive numbers.");
+                        elementsData.push({ symbol, percent });
+                    }
+                });
+
+                if (elementsData.length === 0) throw new Error("No element data provided.");
+
+                const percentC = elementsData.find(e => e.symbol === 'C')?.percent || 0;
+                const percentH = elementsData.find(e => e.symbol === 'H')?.percent || 0;
+                const percentN = elementsData.find(e => e.symbol === 'N')?.percent || 0;
+                const percentO = elementsData.find(e => e.symbol === 'O')?.percent || 0;
+                
+                const cDiv = truncate(percentC / 12);
+                const hDiv = truncate(percentH / 1);
+                const nDiv = truncate(percentN / 14);
+                const oDiv = truncate(percentO / 16);
+
+                const values = [cDiv, hDiv, nDiv, oDiv].filter(v => v > 0.001);
+                if (values.length === 0) throw new Error("No elements found from input data.");
+                
+                const minValue = Math.min(...values);
+                const ratios = [cDiv, hDiv, nDiv, oDiv].map(v => v > 0 ? truncate(v / minValue) : 0);
+                
+                let finalRatios = null;
+                for (let factor = 1; factor <= 7; factor++) {
+                    const adj = ratios.map(r => r * factor);
+                    if (adj.filter(r => r > 0).every(r => Math.abs(r - Math.round(r)) <= 0.15)) {
+                        finalRatios = adj.map(r => Math.round(r));
+                        break;
+                    }
+                }
+                if (!finalRatios) finalRatios = ratios.map(r => Math.round(r));
+                const [rc, rh, rn, ro] = finalRatios;
+                
+                let ef = `C${rc > 1 ? rc : ''}H${rh > 1 ? rh : ''}`;
+                if (rn > 0) ef += `N${rn > 1 ? rn : ''}`;
+                if (ro > 0) ef += `O${ro > 1 ? ro : ''}`;
+                
+                const molecularWeight = parseFloat(document.getElementById('molecular-weight').value);
+                if (isNaN(molecularWeight)) throw new Error("Please provide a valid molecular weight.");
+                
+                const efWeight = (rc*12) + (rh*1) + (rn*14) + (ro*16);
+                if (efWeight === 0) throw new Error("Calculated empirical formula weight is zero.");
+                
+                const mf_factor = Math.round(molecularWeight / efWeight);
+                const [mc, mh, mn, mo] = [rc, rh, rn, ro].map(r => r * mf_factor);
+                
+                let mf = `C${mc > 1 ? mc : ''}H${mh > 1 ? mh : ''}`;
+                if (mn > 0) mf += `N${mn > 1 ? mn : ''}`;
+                if (mo > 0) mf += `O${mo > 1 ? mo : ''}`;
+                
+                const ihd = Math.floor((2 * mc + 2 + mn - mh) / 2);
+
+                document.getElementById('calc-ef').innerHTML = toSubscript(ef);
+                document.getElementById('calc-mf').innerHTML = toSubscript(mf);
+                document.getElementById('calc-ihd').innerHTML = ihd >= 0 ? ihd : 'Invalid';
+
+            } catch (error) {
+                calcError.textContent = `Error: ${error.message}`;
+                document.getElementById('calc-ef').innerHTML = '--';
+                document.getElementById('calc-mf').innerHTML = '--';
+                document.getElementById('calc-ihd').innerHTML = '--';
+            }
+        }
+        
+        function parseFormulaForComposition(formula, massData) {
+            const counts = {};
+            const regex = /([A-Z][a-z]?)(\d*)/g;
+            [...formula.matchAll(regex)].forEach(match => {
+                const count = match[2] ? parseInt(match[2]) : 1;
+                counts[match[1]] = (counts[match[1]] || 0) + count;
+            });
+            const molarMass = Object.keys(counts).reduce((sum, symbol) => sum + counts[symbol] * massData[symbol], 0);
+            const composition = {};
+            Object.keys(counts).forEach(symbol => {
+                composition[symbol] = (counts[symbol] * massData[symbol] / molarMass) * 100;
+            });
+            return { molarMass, composition };
+        }
+
+        function clearSolverAndResults() {
+            problemStatement.innerHTML = "Generating...";
+            resultsContainer.style.display = 'none';
+            ['C', 'H', 'O', 'N'].forEach(el => {
+                document.getElementById(`percent-${el}`).value = '';
+            });
+            document.getElementById('molecular-weight').value = '';
+            document.getElementById('calc-ef').innerHTML = '';
+            document.getElementById('calc-mf').innerHTML = '';
+            document.getElementById('calc-ihd').innerHTML = '';
+            calcError.textContent = '';
+        }
+
+        generateBtn.addEventListener('click', generateProblem);
+        calculateBtn.addEventListener('click', calculateSolution);
+        
+        // --- NEW: Add event listeners to the checkboxes ---
+        includeO_checkbox.addEventListener('change', updateInputVisibility);
+        includeN_checkbox.addEventListener('change', updateInputVisibility);
+        
+        // --- Initialize the view correctly on page load ---
+        updateInputVisibility();
+        generateProblem();
+    });
+    </script>
+</body>
+</html>

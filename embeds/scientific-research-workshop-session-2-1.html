@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Decoding Research: An End-to-End Guide for Researchers</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F8F9FA;
+        }
+        .page-content { display: none; }
+        .page-content.active { display: block; }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+        }
+        @media (min-width: 768px) { .chart-container { height: 350px; } }
+        .flow-step {
+            display: flex; align-items: center; justify-content: center;
+            width: 100px; height: 100px; border-radius: 50%;
+            font-weight: 700; color: #FFFFFF; font-size: 2.5rem; /* Increased font size */
+            text-align: center; line-height: 1; flex-shrink: 0;
+        }
+        .flow-arrow { font-size: 2.5rem; color: #01949A; }
+        .paper-section {
+            border-left: 4px solid #01949A; padding: 1rem 1.5rem;
+            margin-bottom: 1rem; position: relative;
+            background-color: #ffffff; border-radius: 0 8px 8px 0;
+        }
+        .paper-section::before {
+            content: ''; position: absolute; left: -11px; top: 50%;
+            transform: translateY(-50%); width: 20px; height: 20px;
+            border-radius: 50%; background-color: #01949A;
+            border: 3px solid #F8F9FA;
+        }
+        .checklist-item::before {
+            content: '✓'; color: #01949A; font-weight: bold;
+            margin-right: 0.75rem; font-size: 1.25rem; flex-shrink: 0;
+        }
+        blockquote {
+            border-left: 5px solid #004369;
+            background-color: #eef2f9;
+            padding: 1rem 1.5rem;
+            margin: 1.5rem 0;
+            border-radius: 0 8px 8px 0;
+            font-style: italic;
+            color: #334155;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <header class="bg-white shadow-md">
+        <div class="container mx-auto px-6 py-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-extrabold text-[#004369]">Decoding Research</h1>
+            <p class="text-lg md:text-xl mt-2 text-[#01949A]">An End-to-End Guide for Researcherss</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 md:p-8 mt-8">
+
+        <!-- =================================================================== -->
+        <!-- START PAGE (MAIN MENU)                                              -->
+        <!-- =================================================================== -->
+        <div id="page-start" class="page-content active">
+            <section class="text-center">
+                <h2 class="text-3xl font-bold text-[#004369]">Welcome to the Researcher's Journey</h2>
+                <p class="mt-2 text-lg max-w-3xl mx-auto text-gray-700">The path from a nascent idea to a published article is both a science and an art. This guide is designed to demystify that journey, providing you with a structured framework for producing high-impact, publishable research. Let us begin.</p>
+            </section>
+
+            <section class="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <a href="#" onclick="showPage('page-finer'); return false;" class="block bg-white border-l-8 border-[#004369] rounded-2xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-2xl font-bold text-[#004369]">1. It All Starts with a Question</h3>
+                    <p class="mt-3 text-gray-600">Every significant study begins with a compelling question. We will explore the FINER criteria, a framework to ensure your research question is not just interesting, but robust and achievable.</p>
+                </a>
+                <a href="#" onclick="showPage('page-publications'); return false;" class="block bg-white border-l-8 border-[#01949A] rounded-2xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-2xl font-bold text-[#01949A]">2. Publication Venues & Quality</h3>
+                    <p class="mt-3 text-gray-600">The destination for your manuscript matters. Learn to strategically evaluate publication venues—from conferences to Q1 journals—to maximize your work's visibility and impact.</p>
+                </a>
+                <a href="#" onclick="showPage('page-anatomy'); return false;" class="block bg-white border-l-8 border-[#DB1F48] rounded-2xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-2xl font-bold text-[#DB1F48]">3. Anatomy of a Research Paper</h3>
+                    <p class="mt-3 text-gray-600">Master the IMRaD format, the universal language of scientific storytelling. We will dissect each section to understand its unique purpose in constructing a persuasive academic argument.</p>
+                </a>
+                <a href="#" onclick="showPage('page-toolkit'); return false;" class="block bg-white border-l-8 border-[#f19f1b] rounded-2xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-2xl font-bold text-[#f19f1b]">4. Modern Researcher's Toolkit</h3>
+                    <p class="mt-3 text-gray-600">Efficiency and rigor are paramount. We will discuss the indispensable role of reference managers and the ethical, effective use of AI as your research assistant.</p>
+                </a>
+                <a href="#" onclick="showPage('page-presubmission'); return false;" class="block bg-white border-l-8 border-[#106a43] rounded-2xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-2xl font-bold text-[#106a43]">5. Pre-Submission Preparation</h3>
+                    <p class="mt-3 text-gray-600">The final stage before submission is critical. This checklist covers the meticulous details—from formatting to your cover letter—that distinguish a professional submission from an amateur one.</p>
+                </a>
+                <a href="#" onclick="showPage('page-post-submission'); return false;" class="block bg-white border-l-8 border-[#044389] rounded-2xl shadow-lg p-6 hover:shadow-2xl hover:-translate-y-1 transition-all duration-300">
+                    <h3 class="text-2xl font-bold text-[#044389]">6. The Journey After Submission</h3>
+                    <p class="mt-3 text-gray-600">Submission is only the beginning. We will demystify the peer review black box, interpret editorial decisions, and learn to craft a professional response to reviewer feedback.</p>
+                </a>
+            </section>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- SUBPAGE 1: FINER                                                    -->
+        <!-- =================================================================== -->
+        <div id="page-finer" class="page-content">
+            <section class="bg-white rounded-2xl shadow-lg p-6 md:p-10 mb-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#004369]">1. It All Starts with a Question</h2>
+                    <p class="mt-2 text-lg max-w-3xl mx-auto">The intellectual merit and ultimate success of your research project hinge on the quality of its foundational question. A poorly conceived question leads to ambiguous results and wasted effort. We use the FINER framework as a litmus test for our ideas.</p>
+                </div>
+                
+                <blockquote><strong>Professor's Note:</strong> The FINER criteria are not just a checklist; they are a thinking tool. Vigorously interrogating your idea against these five pillars at the outset will save you countless hours down the line and dramatically increase your chances of producing meaningful work.</blockquote>
+
+                <!-- UPDATED VERTICAL FINER LAYOUT -->
+                <div class="mt-10 space-y-8 max-w-3xl mx-auto">
+                    <!-- Item F -->
+                    <div class="flex items-center gap-6">
+                        <div class="flow-step bg-[#004369]">F</div>
+                        <div>
+                            <h3 class="text-xl font-bold">Feasible</h3>
+                            <p class="text-base text-gray-600 mt-1">Can you actually do this?</p>
+                            <p class="text-sm text-gray-500 mt-1">Assess your resources honestly. Do you have adequate time, funding, technical expertise, equipment, and access to subjects or data? A project is only viable if it is logistically possible within your constraints.</p>
+                        </div>
+                    </div>
+                    <!-- Item I -->
+                    <div class="flex items-center gap-6">
+                        <div class="flow-step bg-[#01949A]">I</div>
+                        <div>
+                            <h3 class="text-xl font-bold">Interesting</h3>
+                            <p class="text-base text-gray-600 mt-1">Does it spark curiosity?</p>
+                            <p class="text-sm text-gray-500 mt-1">First, it must interest <em>you</em> enough to sustain your motivation through the rigors of research. Second, it must be interesting to your peers, mentors, and the broader academic community.</p>
+                        </div>
+                    </div>
+                    <!-- Item N -->
+                    <div class="flex items-center gap-6">
+                        <div class="flow-step bg-[#DB1F48]">N</div>
+                        <div>
+                            <h3 class="text-xl font-bold">Novel</h3>
+                            <p class="text-base text-gray-600 mt-1">Does it contribute new knowledge?</p>
+                            <p class="text-sm text-gray-500 mt-1">Your research must offer something original. It might confirm or refute previous findings, extend them to a new population, or provide an entirely new perspective. It must advance the scholarly conversation.</p>
+                        </div>
+                    </div>
+                    <!-- Item E -->
+                    <div class="flex items-center gap-6">
+                        <div class="flow-step bg-[#01949A]">E</div>
+                        <div>
+                            <h3 class="text-xl font-bold">Ethical</h3>
+                            <p class="text-base text-gray-600 mt-1">Is it morally and procedurally sound?</p>
+                            <p class="text-sm text-gray-500 mt-1">This is non-negotiable. Your study design must be approved by an Institutional Review Board (IRB) or equivalent ethics committee. You must ensure participant safety, informed consent, and data confidentiality.</p>
+                        </div>
+                    </div>
+                    <!-- Item R -->
+                    <div class="flex items-center gap-6">
+                        <div class="flow-step bg-[#004369]">R</div>
+                        <div>
+                            <h3 class="text-xl font-bold">Relevant</h3>
+                            <p class="text-base text-gray-600 mt-1">Why does this research matter?</p>
+                            <p class="text-sm text-gray-500 mt-1">Consider the potential impact. Will your findings influence clinical practice, shape policy, inform scientific theory, or point toward future avenues of research? The work must have significance beyond your own interest.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- UPDATED EXAMPLES SECTION -->
+                <div class="mt-12">
+                    <h3 class="text-2xl font-bold text-center text-[#004369] mb-6">FINER in Action: Practical Examples</h3>
+                    <!-- Example Set 1: Social Media -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-lg text-red-800">Vague Idea (Pre-FINER)</h4>
+                            <p class="mt-2 font-semibold">"I want to study the effects of social media on students."</p>
+                            <p class="text-sm mt-2 text-red-700"><strong>Critique:</strong> Too broad. "Social media" is not specific. "Effects" is not measurable. "Students" is not defined. The scope is not feasible for a single study.</p>
+                        </div>
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-lg text-green-800">Refined Question (Post-FINER)</h4>
+                            <p class="mt-2 font-semibold">"To what extent does daily TikTok usage time correlate with self-reported anxiety symptoms (GAD-7 scale) among undergraduate students?"</p>
+                            <p class="text-sm mt-2 text-green-700"><strong>Analysis:</strong> This is specific, measurable, and has a clear scope, making it a strong, feasible research question.</p>
+                        </div>
+                    </div>
+                    <!-- Example Set 2: Sleep (Updated) -->
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-lg text-red-800">Vague Idea (Pre-FINER)</h4>
+                            <p class="mt-2 font-semibold">"Are students who feel tired getting bad grades?"</p>
+                            <p class="text-sm mt-2 text-red-700"><strong>Critique:</strong> This question is based on subjective feelings ("feel tired") and vague outcomes ("bad grades"). It lacks the specific, measurable variables required for scientific inquiry.</p>
+                        </div>
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg">
+                            <h4 class="font-bold text-lg text-green-800">Refined Question (Post-FINER)</h4>
+                            <p class="mt-2 font-semibold">"What is the correlation between average nightly hours of sleep and end-of-semester GPA among first-year college students?"</p>
+                            <p class="text-sm mt-2 text-green-700"><strong>Analysis:</strong> This question is <strong>Feasible</strong> (survey data), <strong>Interesting</strong>, <strong>Novel</strong> (first-year focus), <strong>Relevant</strong> (informs student support), and <strong>Ethical</strong> (with consent).</p>
+                        </div>
+                    </div>
+                </div>
+
+            </section>
+        </div>
+        
+        <!-- =================================================================== -->
+        <!-- SUBPAGE 2: PUBLICATIONS                                             -->
+        <!-- =================================================================== -->
+        <div id="page-publications" class="page-content">
+            <section class="mb-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#004369]">2. Publication Venues & Quality</h2>
+                    <p class="mt-2 text-lg max-w-3xl mx-auto">Choosing the right home for your manuscript is a strategic decision that profoundly affects its audience and influence. Let's analyze the landscape.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                         <h3 class="text-2xl font-bold text-center text-[#004369] mb-2">Types of Publication Venues</h3>
+                         <p class="text-center text-sm mb-4">Each format serves a distinct academic purpose. Your choice depends on your goals: speed, feedback, prestige, or depth.</p>
+                        <div class="chart-container">
+                            <canvas id="venuesChart"></canvas>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                         <h3 class="text-2xl font-bold text-center text-[#004369] mb-2">Understanding Journal Quality</h3>
+                         <p class="text-center text-sm mb-4">Journal Quartiles (derived from databases like Scopus or Web of Science) provide a standardized measure of a journal's impact relative to others in its field.</p>
+                        <div class="chart-container">
+                            <canvas id="quartileChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+                <blockquote><strong>Professor's Tip:</strong> While aiming for a Q1 journal is an admirable goal, the single most important factor is **fit**. A brilliant paper will be rejected if it doesn't align with the journal's scope and audience. Always read a journal's "Aims & Scope" and browse recent articles before submitting. A well-placed article in a Q2 journal is far better than a desk rejection from a mismatched Q1 journal.</blockquote>
+            </section>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- SUBPAGE 3: ANATOMY                                                  -->
+        <!-- =================================================================== -->
+        <div id="page-anatomy" class="page-content">
+            <section class="bg-white rounded-2xl shadow-lg p-6 md:p-10 mb-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#004369]">3. Anatomy of a Research Paper</h2>
+                    <p class="mt-2 text-lg max-w-3xl mx-auto">The IMRaD format (Introduction, Methodology, Results, and Discussion) is the bedrock of scientific communication. Mastering this structure is essential for constructing a clear, logical, and persuasive argument.</p>
+                </div>
+                <div>
+                    <div class="paper-section">
+                        <h3 class="text-xl font-bold text-[#004369]">Abstract</h3>
+                        <p>A concise, self-contained synopsis of your entire study. It must articulate the problem, the methods used, the principal results, and the main conclusions. Think of it as an executive summary for busy researchers.</p>
+                    </div>
+                    <div class="paper-section">
+                        <h3 class="text-xl font-bold text-[#004369]">Introduction (The "Why")</h3>
+                        <p>This section acts as a funnel. It begins with the broad background of your topic, narrows to the specific gap in the existing literature, and culminates in your precise research question and hypothesis. It establishes the rationale for your study.</p>
+                    </div>
+                    <div class="paper-section">
+                        <h3 class="text-xl font-bold text-[#004369]">Methodology (The "How")</h3>
+                        <p>The principle here is **reproducibility**. You must describe your methods with sufficient detail that another competent researcher could replicate your study exactly. This includes study design, participant characteristics, data collection procedures, and statistical analyses.</p>
+                    </div>
+                     <div class="paper-section">
+                        <h3 class="text-xl font-bold text-[#004369]">Results (The "What")</h3>
+                        <p>Here, you present your findings objectively and without interpretation. This is a factual report of the data. Use clear text, tables, and figures to present the outcomes of your analyses. You are presenting the 'what,' not yet the 'so what'.</p>
+                    </div>
+                    <div class="paper-section">
+                        <h3 class="text-xl font-bold text-[#004369]">Discussion (The "So What?")</h3>
+                        <p>This is arguably the most critical section. Here, you interpret your results, explain their significance, and connect them back to the research question you posed in the introduction. You must compare your findings with existing literature, acknowledge your study's limitations, and suggest implications and future research directions.</p>
+                    </div>
+                    <div class="paper-section">
+                        <h3 class="text-xl font-bold text-[#004369]">Conclusion</h3>
+                        <p>A brief, powerful summary of the study's main takeaways. It should not introduce new information but should reinforce the central message and its importance, leaving the reader with a clear understanding of your contribution to the field.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- =================================================================== -->
+        <!-- SUBPAGE 4: TOOLKIT                                                  -->
+        <!-- =================================================================== -->
+        <div id="page-toolkit" class="page-content">
+            <section class="mb-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#004369]">4. Modern Researcher's Toolkit</h2>
+                    <p class="mt-2 text-lg max-w-3xl mx-auto">Embracing modern technology is not a shortcut; it is a prerequisite for efficient and rigorous scholarship. Let's discuss two indispensable categories of tools.</p>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-center text-[#004369] mb-4">AI as a Research Assistant</h3>
+                        <p class="text-sm text-center mb-4">Large Language Models (e.g., ChatGPT) are powerful but must be wielded with academic integrity. Think of AI as a brainstorming partner or a language polisher, never as an author.</p>
+                        <blockquote><strong>Warning:</strong> The uncritical use of AI for generating text constitutes academic misconduct. It can introduce factual "hallucinations" and subtle plagiarism. You, the author, are solely responsible for every word in your manuscript.</blockquote>
+                        <div class="grid grid-cols-2 gap-4 mt-4">
+                            <div>
+                                <h4 class="font-bold text-lg text-green-600">Ethical Uses</h4>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                                    <li>Brainstorming research angles</li>
+                                    <li>Rephrasing for clarity</li>
+                                    <li>Checking grammar and syntax</li>
+                                    <li>Summarizing literature</li>
+                                    <li>Generating code snippets</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <h4 class="font-bold text-lg text-red-600">Unethical Uses</h4>
+                                <ul class="list-disc list-inside text-sm mt-2 space-y-1">
+                                    <li>Writing entire paragraphs/sections</li>
+                                    <li>Generating data or results</li>
+                                    <li>Creating fraudulent references</li>
+                                    <li>Subverting critical thought</li>
+                                    <li>Plagiarizing ideas/text</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-white rounded-2xl shadow-lg p-6">
+                        <h3 class="text-2xl font-bold text-center text-[#004369] mb-4">Essential Reference Managers</h3>
+                        <p class="text-center text-sm mb-4">Manual citation management is an inefficient and error-prone practice of the past. Using a reference manager is a fundamental skill for the modern scholar. It is your digital librarian and administrative assistant.</p>
+                        <div class="flex justify-around items-center mt-8 p-4 bg-gray-50 rounded-lg">
+                            <span class="font-bold text-xl text-[#004369]">Mendeley</span>
+                            <span class="font-bold text-xl text-[#01949A]">Zotero</span>
+                            <span class="font-bold text-xl text-[#DB1F48]">EndNote</span>
+                        </div>
+                         <p class="text-center text-sm mt-4 text-gray-500">These tools organize your sources, integrate with your word processor, and format your citations and bibliography in any style with a single click. This saves immense time and prevents costly, unprofessional citation errors.</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <!-- =================================================================== -->
+        <!-- SUBPAGE 5: PRE-SUBMISSION                                           -->
+        <!-- =================================================================== -->
+        <div id="page-presubmission" class="page-content">
+            <section class="bg-white rounded-2xl shadow-lg p-6 md:p-10 mb-12">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-[#004369]">5. Pre-Submission Preparation</h2>
+                    <p class="mt-2 text-lg max-w-3xl mx-auto">A "desk rejection" is a rejection by the editor without peer review, often due to a failure to follow instructions. This final, meticulous checklist is your defense against that unfortunate fate.</p>
+                </div>
+                <div class="space-y-4 max-w-6xl mx-auto">
+                    <div class="checklist-item flex items-start">
+                        <span class="font-bold whitespace-nowrap mr-1">Adhere to Journal Guidelines:</span>
+                        <span>Scrutinize the "Instructions for Authors" and format your manuscript, figures, and tables to their exact specifications (e.g., word count, citation style, file types).</span>
+                    </div>
+                    <div class="checklist-item flex items-start">
+                        <span class="font-bold whitespace-nowrap mr-1">Compose a Compelling Cover Letter:</span>
+                        <span>Write a formal letter to the editor. Briefly introduce your study, state its primary finding, explain its novelty and significance, and articulate why it is a strong fit for their journal's readership.</span>
+                    </div>
+                    <div class="checklist-item flex items-start">
+                        <span class="font-bold whitespace-nowrap mr-1">Proofread with Extreme Diligence:</span>
+                        <span>Grammatical errors and typos signal carelessness. Read your manuscript aloud to catch awkward phrasing. Use a grammar tool, but do not rely on it exclusively.</span>
+                    </div>
+                    <div class="checklist-item flex items-start">
+                        <span class="font-bold whitespace-nowrap mr-1">Verify All Citations and References:</span>
+                        <span>Ensure every in-text citation matches an entry in the bibliography, and vice-versa. Double-check author names and publication years for accuracy.</span>
+                    </div>
+                    <div class="checklist-item flex items-start">
+                        <span class="font-bold whitespace-nowrap mr-1">Secure Peer Feedback:</span>
+                        <span>Before official submission, have a trusted colleague or mentor read your manuscript. A fresh set of eyes is invaluable for spotting errors in logic, clarity, or presentation that you have become blind to.</span>
+                    </div>
+                    <div class="checklist-item flex items-start">
+                        <span class="font-bold whitespace-nowrap mr-1">Check for Plagiarism:</span>
+                        <span>Use a tool like Turnitin to perform a final check for unintentional plagiarism or inadequate paraphrasing. Ensure all sources are appropriately credited.</span>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        <!-- =================================================================== -->
+        <!-- SUBPAGE 6: POST-SUBMISSION                                          -->
+        <!-- =================================================================== -->
+        <div id="page-post-submission" class="page-content">
+            <section class="bg-white rounded-2xl shadow-lg p-6 md:p-10 mb-12">
+                <div class="text-center mb-10">
+                    <h2 class="text-3xl font-bold text-[#004369]">6. The Journey After Submission</h2>
+                    <p class="mt-2 text-lg max-w-3xl mx-auto">Submission is a milestone, not the finish line. The manuscript now enters peer review, a system of scholarly quality control. Understanding this process is key to navigating it successfully.</p>
+                </div>
+
+                <h3 class="text-2xl font-bold text-center text-[#004369] mb-6">The Peer Review Workflow</h3>
+                <div class="space-y-4 relative">
+                    <div class="absolute left-6 top-2 bottom-2 w-0.5 bg-gray-200"></div>
+                    <div class="relative pl-12"><div class="absolute left-0 top-1 flex items-center justify-center w-12 h-12 rounded-full bg-[#004369] text-white font-bold text-xl">1</div><h4 class="text-xl font-bold text-[#004369]">Initial Editorial Screening</h4><p>The journal editor performs a triage, assessing your paper's fit with the journal's scope, its novelty, and its adherence to formatting guidelines. This is where a "desk rejection" can occur.</p></div>
+                    <div class="relative pl-12"><div class="absolute left-0 top-1 flex items-center justify-center w-12 h-12 rounded-full bg-[#01949A] text-white font-bold text-xl">2</div><h4 class="text-xl font-bold text-[#004369]">Assignment to Reviewers</h4><p>If the manuscript passes screening, the editor invites two or more experts in your field to provide a detailed critique. This process is often double-blind and can take weeks to months.</p></div>
+                    <div class="relative pl-12"><div class="absolute left-0 top-1 flex items-center justify-center w-12 h-12 rounded-full bg-[#DB1F48] text-white font-bold text-xl">3</div><h4 class="text-xl font-bold text-[#004369]">Editorial Decision</h4><p>The editor synthesizes the reviewer feedback with their own expert judgment to render one of the four decisions below.</p></div>
+                </div>
+
+                <div class="mt-10">
+                    <h3 class="text-2xl font-bold text-center text-[#004369] mb-6">Interpreting the Four Decision Outcomes</h3>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-green-50 border-l-4 border-green-500 p-4 rounded-r-lg"><h4 class="font-bold text-lg text-green-800">✅ Accept</h4><p class="text-sm text-green-700">The highest praise. The manuscript is accepted, perhaps with minor copyediting. This is a rare and celebrated outcome for an initial submission.</p></div>
+                        <div class="bg-yellow-50 border-l-4 border-yellow-500 p-4 rounded-r-lg"><h4 class="font-bold text-lg text-yellow-800">⚠️ Minor Revisions</h4><p class="text-sm text-yellow-700">A very positive outcome. The paper is fundamentally sound, but requires small, specific clarifications or corrections. Acceptance is highly likely after revision.</p></div>
+                        <div class="bg-orange-50 border-l-4 border-orange-500 p-4 rounded-r-lg"><h4 class="font-bold text-lg text-orange-800">🔄 Major Revisions</h4><p class="text-sm text-orange-700">This is a common and encouraging result. The core idea has merit, but substantial work is needed (e.g., more analysis, significant rewriting). A diligent revision has a strong chance of success.</p></div>
+                        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-r-lg"><h4 class="font-bold text-lg text-red-800">❌ Reject</h4><p class="text-sm text-red-700">While disappointing, this is a routine part of academic life. The paper, in its current form, is not a fit for the journal. Use the feedback to improve the work for submission elsewhere.</p></div>
+                    </div>
+                </div>
+
+                <div class="mt-10 bg-gray-50 p-6 rounded-lg">
+                     <h3 class="text-2xl font-bold text-center text-[#004369] mb-4">Crafting a Professional Response to Revisions</h3>
+                     <blockquote>Remember: Constructive criticism is a gift that improves your work. Treat the review process as a collaboration, not a confrontation.</blockquote>
+                     <ul class="space-y-4">
+                         <li class="checklist-item flex items-start"><div><strong>Be Gracious and Professional:</strong> Begin your response letter by sincerely thanking the editor and reviewers for their time and insightful contributions to improving your manuscript.</div></li>
+                         <li class="checklist-item flex items-start"><div><strong>Address Every Single Point:</strong> Create a structured, point-by-point response. Copy each reviewer comment verbatim, and below it, detail your response and the corresponding changes made in the manuscript.</div></li>
+                         <li class="checklist-item flex items-start"><div><strong>Justify Disagreements Respectfully:</strong> If you disagree with a suggestion, you must not ignore it. Provide a polite, clear, and evidence-based rebuttal explaining your scientific reasoning for not making the suggested change.</div></li>
+                         <li class="checklist-item flex items-start"><div><strong>Visually Highlight Your Changes:</strong> Make the reviewers' job easier. In the revised manuscript, use colored text or the "Track Changes" feature to clearly indicate where modifications have been made.</div></li>
+                     </ul>
+                </div>
+            </section>
+        </div>
+
+        <!-- Common Back Button for all Subpages -->
+        <div id="back-button-container" class="text-center mt-8 hidden">
+             <button onclick="showPage('page-start')" class="bg-[#004369] text-white font-bold py-3 px-6 rounded-lg hover:bg-[#01949A] transition-colors duration-300 shadow-md">
+                ⬅️ Return to Main Guide
+            </button>
+        </div>
+    </main>
+
+    <footer class="mt-12 bg-[#004369] text-white text-center py-6">
+        <p class="font-semibold">Your research has the potential to make a difference. This guide is here to help you share it with the world.</p>
+        <p class="text-xs text-gray-300 mt-2">© 2025 Mohammad Abdulwahhab. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        const pages = document.querySelectorAll('.page-content');
+        const backButtonContainer = document.getElementById('back-button-container');
+
+        function showPage(pageId) {
+            pages.forEach(page => page.classList.remove('active'));
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) targetPage.classList.add('active');
+
+            if (pageId === 'page-start') {
+                backButtonContainer.classList.add('hidden');
+            } else {
+                backButtonContainer.classList.remove('hidden');
+                targetPage.appendChild(backButtonContainer);
+            }
+            window.scrollTo(0, 0);
+        }
+
+        const vibrantPalette = { darkBlue: '#004369', teal: '#01949A', red: '#DB1F48', beige: '#E5DDC8' };
+        const commonChartOptions = {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins: { legend: { display: false } },
+            scales: {
+                y: { beginAtZero: true, ticks: { color: vibrantPalette.darkBlue } },
+                x: { ticks: { color: vibrantPalette.darkBlue, font: { weight: 'bold' } } }
+            }
+        };
+
+        const venuesCtx = document.getElementById('venuesChart').getContext('2d');
+        new Chart(venuesCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Conference', 'Local Journal', 'Intl. Journal'],
+                datasets: [{ label: 'General Impact / Reach', data: [40, 65, 95], backgroundColor: [vibrantPalette.beige, vibrantPalette.teal, vibrantPalette.darkBlue] }]
+            },
+            options: { ...commonChartOptions }
+        });
+
+        const quartileCtx = document.getElementById('quartileChart').getContext('2d');
+        new Chart(quartileCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Q1 (Top 25%)', 'Q2', 'Q3', 'Q4'],
+                datasets: [{ label: 'Prestige Level', data: [100, 75, 50, 25], backgroundColor: [vibrantPalette.darkBlue, vibrantPalette.teal, vibrantPalette.red, vibrantPalette.beige] }]
+            },
+            options: { ...commonChartOptions, scales: { ...commonChartOptions.scales, y: { display: false } } }
+        });
+    </script>
+</body>
+</html>
