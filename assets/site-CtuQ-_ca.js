@@ -1,0 +1,1 @@
+(()=>{const e=document.querySelector("[data-mobile-toggle]"),t=document.getElementById("site-nav");e&&t&&e.addEventListener("click",()=>{const i=t.classList.toggle("is-open");e.setAttribute("aria-expanded",String(i))})})();
