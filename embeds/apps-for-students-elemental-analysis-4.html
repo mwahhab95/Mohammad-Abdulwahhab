@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Percent Composition Calculator</title>
+    <!-- Importing the Roboto font from Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .calculator-container {
+            background-color: #ffffff;
+            padding: 25px 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            width: 100%;
+            max-width: 500px;
+        }
+
+        h1 {
+            color: #333;
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            font-size: 14px;
+            font-weight: 700;
+            color: #555;
+            margin-bottom: 8px;
+        }
+
+        input[type="text"] {
+            width: 100%;
+            padding: 10px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            text-align: center;
+            border: 2px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+            transition: border-color 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-color: #007bff;
+        }
+
+        button {
+            width: 100%;
+            padding: 12px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 16px;
+            font-weight: 700;
+            color: #fff;
+            background-color: #007bff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        #results-container {
+            margin-top: 25px;
+            text-align: left;
+        }
+
+        #error-message {
+            color: #dc3545;
+            font-weight: 700;
+            text-align: center;
+        }
+        
+        .results-summary {
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .results-summary strong {
+            font-weight: 700;
+            color: #333;
+        }
+
+        #results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+
+        #results-table th, #results-table td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+        }
+
+        #results-table th {
+            background-color: #f2f2f2;
+            font-weight: 700;
+            color: #333;
+        }
+        
+        #results-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="calculator-container">
+        <h1>Percent Composition Calculator</h1>
+
+        <div class="input-group">
+            <label for="formula-input">Enter Chemical Formula</label>
+            <input type="text" id="formula-input" placeholder="e.g., CH3COOH or H2SO4">
+        </div>
+
+        <button id="calculate-btn">Calculate</button>
+
+        <div id="results-container">
+            <p id="error-message"></p>
+            <div id="results-output" style="display: none;">
+                <p class="results-summary">Total Molar Mass: <strong id="total-mass"></strong> g/mol</p>
+                <table id="results-table">
+                    <thead>
+                        <tr>
+                            <th>Element</th>
+                            <th>Mass (g/mol)</th>
+                            <th>Percent by Mass</th>
+                        </tr>
+                    </thead>
+                    <tbody id="results-tbody">
+                        <!-- Rows will be inserted here by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const atomicMasses = {
+                'H': 1, 'He': 4, 'Li': 7, 'Be': 9, 'B': 11, 'C': 12, 'N': 14, 'O': 16,
+                'F': 19, 'Ne': 20, 'Na': 23, 'Mg': 24, 'Al': 27, 'Si': 28, 'P': 31, 'S': 32,
+                'Cl': 35, 'Ar': 40, 'K': 39, 'Ca': 40, 'Sc': 45, 'Ti': 48, 'V': 51, 'Cr': 52,
+                'Mn': 55, 'Fe': 56, 'Co': 59, 'Ni': 59, 'Cu': 64, 'Zn': 65, 'Ga': 70, 'Ge': 73,
+                'As': 75, 'Se': 79, 'Br': 80, 'Kr': 84, 'Rb': 85, 'Sr': 88, 'Y': 89, 'Zr': 91,
+                'Nb': 93, 'Mo': 96, 'Ru': 101, 'Rh': 103, 'Pd': 106, 'Ag': 108, 'Cd': 112,
+                'In': 115, 'Sn': 119, 'Sb': 122, 'Te': 128, 'I': 127, 'Xe': 131, 'Cs': 133,
+                'Ba': 137, 'La': 139, 'Hf': 178, 'Ta': 181, 'W': 184, 'Re': 186, 'Os': 190,
+                'Ir': 192, 'Pt': 195, 'Au': 197, 'Hg': 201, 'Tl': 204, 'Pb': 207, 'Bi': 209,
+                'Po': 209, 'At': 210, 'Rn': 222, 'Fr': 223, 'Ra': 226, 'Ac': 227, 'Th': 22,
+                'Pa': 231, 'U': 238
+            };
+
+            const formulaInput = document.getElementById('formula-input');
+            const calculateBtn = document.getElementById('calculate-btn');
+            const errorMessage = document.getElementById('error-message');
+            const resultsOutput = document.getElementById('results-output');
+            const totalMassEl = document.getElementById('total-mass');
+            const resultsTbody = document.getElementById('results-tbody');
+
+            function standardizeElement(symbol) {
+                if (!symbol || symbol.length === 0) return '';
+                if (symbol.length === 1) return symbol.toUpperCase();
+                return symbol.charAt(0).toUpperCase() + symbol.slice(1).toLowerCase();
+            }
+
+            function calculateComposition() {
+                errorMessage.textContent = '';
+                resultsOutput.style.display = 'none';
+                resultsTbody.innerHTML = '';
+                
+                const formula = formulaInput.value.trim();
+                if (formula === '') {
+                    errorMessage.textContent = 'Please enter a chemical formula.';
+                    return;
+                }
+
+                try {
+                    const elementCounts = {};
+                    let i = 0;
+                    
+                    while (i < formula.length) {
+                        let symbol;
+                        let count = 1;
+
+                        const twoLetterCandidate = (i + 2 <= formula.length) ? formula.substring(i, i + 2) : '';
+                        const standardizedTwoLetter = standardizeElement(twoLetterCandidate);
+
+                        const oneLetterCandidate = formula.substring(i, i + 1);
+                        const standardizedOneLetter = standardizeElement(oneLetterCandidate);
+
+                        if (atomicMasses[standardizedTwoLetter]) {
+                            symbol = standardizedTwoLetter;
+                            i += 2;
+                        } else if (atomicMasses[standardizedOneLetter]) {
+                            symbol = standardizedOneLetter;
+                            i += 1;
+                        } else {
+                            throw new Error(`Invalid chemical symbol sequence starting with '${oneLetterCandidate}'. Please revise the entry.`);
+                        }
+
+                        let countStr = '';
+                        while (i < formula.length && !isNaN(parseInt(formula[i]))) {
+                            countStr += formula[i];
+                            i++;
+                        }
+                        if (countStr !== '') count = parseInt(countStr);
+                        
+                        elementCounts[symbol] = (elementCounts[symbol] || 0) + count;
+                    }
+
+                    if (Object.keys(elementCounts).length === 0) {
+                        throw new Error('Could not parse the formula. Please revise the entry.');
+                    }
+
+                    let totalMolarMass = 0;
+                    const elementDetails = [];
+
+                    for (const element in elementCounts) {
+                        const count = elementCounts[element];
+                        const mass = atomicMasses[element];
+                        const elementMass = count * mass;
+                        totalMolarMass += elementMass;
+                        elementDetails.push({ element, mass: elementMass });
+                    }
+                    
+                    totalMassEl.textContent = totalMolarMass;
+
+                    elementDetails.forEach(detail => {
+                        const percentage = (detail.mass / totalMolarMass) * 100;
+                        const row = `
+                            <tr>
+                                <td>${detail.element}</td>
+                                <td>${detail.mass}</td>
+                                <td>${percentage.toFixed(3)}%</td>
+                            </tr>
+                        `;
+                        resultsTbody.innerHTML += row;
+                    });
+
+                    resultsOutput.style.display = 'block';
+
+                } catch (error) {
+                    errorMessage.textContent = `Error: ${error.message}`;
+                }
+            }
+
+            calculateBtn.addEventListener('click', calculateComposition);
+            formulaInput.addEventListener('keypress', function(event) {
+                if (event.key === 'Enter') {
+                    calculateComposition();
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

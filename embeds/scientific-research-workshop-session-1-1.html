@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Ultimate Guide to Digital Literacy</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .nav-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .nav-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        .page-section {
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 350px;
+        }
+        @media (min-width: 768px) { .chart-container { height: 400px; } }
+        .resource-card, .tool-card {
+            transition: transform 0.2s ease-in-out, background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+        }
+        .resource-card:hover, .tool-card:hover {
+            transform: scale(1.03);
+        }
+        /* Style for increased font size in Section 1 */
+        .mindset-content {
+            font-size: 1.1rem; /* Base font size for the section */
+            line-height: 1.7;  /* Spacing between lines */
+        }
+        .mindset-content h1, .mindset-content h2, .mindset-content h3, .mindset-content h4 {
+            line-height: 1.4; /* Adjust spacing for headings */
+        }
+        .mindset-content .text-sm {
+            font-size: 1rem; /* Make sure smaller text is still readable */
+        }
+        .mindset-content blockquote {
+            font-size: 1.05rem;
+        }
+        .sticky header {
+            padding-top: 1.3rem;    /* Increase/decrease for more/less height */
+            padding-bottom: 0.9rem; /* Increase/decrease for more/less height */
+        }
+        .sticky header h1 {
+            font-size: 3rem;    /* Adjust for title size */
+        }
+        .sticky header p {
+            font-size: 1.25rem;   /* Adjust for subtitle size */
+        }
+    </style>
+</head>
+<body class="bg-slate-100">
+
+    <!-- ================================================================= -->
+    <!-- STICKY HEADER (Now always visible)                                -->
+    <!-- ================================================================= -->
+    <div class="bg-slate-100/95 backdrop-blur-sm shadow-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 md:px-8">
+            <header class="text-center py-6">
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight text-gray-900">The Digital Literacy Guide</h1>
+                <p class="mt-4 text-lg md:text-xl text-gray-600 max-w-5xl mx-auto">Master the skills to navigate the digital world with confidence. Choose a topic below to begin.</p>
+            </header>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto p-4 sm:p-6 md:p-8">
+
+        <!-- ================================================================= -->
+        <!-- Main Menu Section (Visible by default)                            -->
+        <!-- ================================================================= -->
+        <div id="main-menu">
+            <!-- The header was moved from here to the new sticky container above -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Card 1 -->
+                <div onclick="showPage('page-mindset')" class="nav-card cursor-pointer block bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-teal-600">
+                    <div class="p-8"><h2 class="text-2xl font-bold text-gray-800">1. The Researcher's Mindset</h2><p class="mt-2 text-gray-600">Learn to think critically and recognize biases before you even start searching.</p><div class="mt-6 font-semibold text-teal-600 flex items-center">Start Learning <span class="ml-2">→</span></div></div>
+                </div>
+                <!-- Card 2 -->
+                <div onclick="showPage('page-sift')" class="nav-card cursor-pointer block bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-blue-500">
+                    <div class="p-8"><h2 class="text-2xl font-bold text-gray-800">2. The SIFT Method</h2><p class="mt-2 text-gray-600">A powerful, four-step method to quickly verify information you see online.</p><div class="mt-6 font-semibold text-blue-600 flex items-center">Master the Method <span class="ml-2">→</span></div></div>
+                </div>
+                <!-- Card 3 -->
+                <div onclick="showPage('page-challenge')" class="nav-card cursor-pointer block bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-red-500">
+                    <div class="p-8"><h2 class="text-2xl font-bold text-gray-800">3. Fact-Check Challenge</h2><p class="mt-2 text-gray-600">Put your skills to the test! Can you spot the misinformation in these examples?</p><div class="mt-6 font-semibold text-red-600 flex items-center">Take the Challenge <span class="ml-2">→</span></div></div>
+                </div>
+                <!-- Card 4 (NEW) -->
+                <div onclick="showPage('page-tools')" class="nav-card cursor-pointer block bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-slate-700">
+                    <div class="p-8"><h2 class="text-2xl font-bold text-gray-800">4. Essential Tools & Techniques</h2><p class="mt-2 text-gray-600">Essential tools for academic research and digital investigation.</p><div class="mt-6 font-semibold text-slate-600 flex items-center">Open the Toolkit <span class="ml-2">→</span></div></div>
+                </div>
+                <!-- Card 5 -->
+                <div onclick="showPage('page-search')" class="nav-card cursor-pointer block bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-indigo-500">
+                    <div class="p-8"><h2 class="text-2xl font-bold text-gray-800">5. The Art of Smart Search</h2><p class="mt-2 text-gray-600">Go beyond basic Google to find reliable information faster.</p><div class="mt-6 font-semibold text-indigo-600 flex items-center">Improve Your Searches <span class="ml-2">→</span></div></div>
+                </div>
+                <!-- Card 6 -->
+                <div onclick="showPage('page-treasure')" class="nav-card cursor-pointer block bg-white rounded-xl shadow-lg overflow-hidden border-t-8 border-amber-500">
+                    <div class="p-8"><h2 class="text-2xl font-bold text-gray-800">6. Pharmacists' Treasure Chest</h2><p class="mt-2 text-gray-600">A curated list of top-tier, reliable sources for medical information.</p><div class="mt-6 font-semibold text-amber-600 flex items-center">Explore Resources <span class="ml-2">→</span></div></div>
+                </div>
+            </div>
+            <footer class="text-center mt-16 text-gray-500"><p>© 2025 Mohammad Abdulwahhab. All rights reserved.</p></footer>
+        </div>
+
+
+        <!-- ================================================================= -->
+        <!-- Page 1: Mindset (hidden by default)                               -->
+        <!-- ================================================================= -->
+        <div id="page-mindset" class="page-section hidden mindset-content">
+            <header class="bg-teal-800 p-6 md:p-8 text-white text-center rounded-2xl mb-12 shadow-lg"><h1 class="text-2xl sm:text-3xl md:text-4xl font-bold">1. The Researcher's Mindset in Your Daily Life</h1><p class="mt-2 text-lg md:text-xl text-teal-100">From Digital Chaos to Reliable Source</p></header>
+            
+            <section class="mb-12">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>The Challenge: Recognizing Fake News</h2>
+                <p class="text-gray-700 mb-6 max-w-7xl">On Facebook and WhatsApp, you see these kinds of posts every day. They are designed to look real and to be shared quickly. Your first job is to learn to spot them.</p>
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="infographic-card bg-red-50 border-2 border-red-200 rounded-lg p-6">
+                        <h4 class="font-bold text-red-900 mb-2">The "Miracle Cure" Post</h4>
+                        <blockquote class="text-red-800 italic">"Forget chemotherapy! A mixture of boiled garlic and lemon juice taken every morning cleans your arteries and reverses heart disease in just 3 weeks! This is the secret doctors don't want you to know. #NaturalHealth</blockquote>
+                    </div>
+                    <div class="infographic-card bg-yellow-50 border-2 border-yellow-200 rounded-lg p-6">
+                        <h4 class="font-bold text-yellow-900 mb-2">The "Friend of a Friend" Warning</h4>
+                         <blockquote class="text-yellow-800 italic">"URGENT WARNING FROM A DOCTOR AT QASR EL EINY: Please share! We are seeing many cases of sudden kidney failure in young people. The cause is the popular painkiller [name of a real, common drug]. My sister's colleague saw it with her own eyes. Stop taking it now and warn your families!"</blockquote>
+                    </div>
+                </div>
+                <div class="mt-8 bg-teal-50 rounded-lg p-6 text-center shadow-inner">
+                    <h3 class="text-2xl font-bold text-teal-700">Pause Before You Believe or Share.</h3>
+                    <p class="text-gray-600 mt-2">These posts feel urgent and important, but a good researcher (and a good future pharmacist) learns to stop and think first. This pause is your most important tool.</p>
+                </div>
+            </section>
+            
+            <section class="mb-12">
+                <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-teal-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>Your First Weapon: Understanding Your Own Mind</h2>
+                <div class="bg-white rounded-lg p-6 grid md:grid-cols-2 gap-8 items-center border border-gray-200">
+                    <div class="p-4 rounded-lg">
+                        <h3 class="font-bold text-xl text-gray-700">The Trap of Confirmation Bias</h3>
+                        <p class="text-gray-600 mt-2">Your brain prefers information that agrees with what you already think. This is a natural shortcut, but it's very dangerous for a scientist.</p>
+                        <div class="mt-4 p-4 bg-blue-50 rounded-lg">
+                            <h4 class="text-lg font-semibold text-blue-800">For example:</h4>
+                            <p class="text-blue-700 mt-2">If you already believe that "natural is always better," you will instantly believe the post about hibiscus curing diabetes. You won't question it. But you will be very suspicious of a scientific study that says hibiscus only has a small effect. You might even think the study is a lie from a drug company.</p>
+                        </div>
+                    </div>
+                    <div class="text-center">
+                        <div class="relative p-4">
+                            <div class="flex justify-center items-center mb-4"><svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.982 18.725A7.488 7.488 0 0012 15.75a7.488 7.488 0 00-5.982 2.975m11.963 0a9 9 0 10-11.963 0m11.963 0A8.966 8.966 0 0112 21a8.966 8.966 0 01-5.982-2.275M15 9.75a3 3 0 11-6 0 3 3 0 016 0z" /></svg><p class="font-semibold text-lg ml-2">Your Beliefs</p></div>
+                            <div class="flex justify-around items-center"><div class="flex flex-col items-center"><p class="p-3 bg-green-100 text-green-800 rounded-lg shadow">Info that agrees</p><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-green-500 mt-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7l5 5m0 0l-5 5m5-5H6" /></svg><p class="text-green-600 font-bold">ACCEPTED</p></div><div class="flex flex-col items-center"><p class="p-3 bg-red-100 text-red-800 rounded-lg shadow">Info that challenges</p><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 text-red-500 mt-2" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" /></svg><p class="text-red-600 font-bold">REJECTED</p></div></div>
+                            <p class="text-base text-gray-500 mt-4">A good researcher must fight this bias. You must actively look for information that *disagrees* with your beliefs.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            
+            <section class="bg-gray-100 p-8 rounded-xl">
+                <h3 class="text-xl sm:text-2xl font-bold text-gray-800 mb-6 text-center">Other Mental Traps to Avoid</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-lg text-gray-700">The Bandwagon Effect</h4>
+                        <p class="text-gray-600 mt-2">This is the "everyone is saying it" trap. You start to believe something is true just because it's popular.</p>
+                        <p class="text-base mt-3 p-3 bg-gray-50 rounded-md"><strong>Example:</strong> "A Facebook post claiming a certain expensive imported vitamin can prevent COVID-19 gets 10,000 shares. You think, 'If so many people are sharing it, there must be some truth to it,' even though there is no scientific proof."</p>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg border border-gray-200 shadow-sm">
+                        <h4 class="font-bold text-lg text-gray-700">Ease-of-recall bias</h4>
+                        <p class="text-gray-600 mt-2">Your brain gives more weight to dramatic or recent stories that you can remember easily.</p>
+                        <p class="text-base mt-3 p-3 bg-gray-50 rounded-md"><strong>Example:</strong> "You see a very emotional video about one person who had a rare, severe side effect from a vaccine. This one scary story sticks in your mind more than the statistics showing millions of people took the vaccine safely. You start to feel the vaccine is more dangerous than it really is."</p>
+                    </div>
+                </div>
+            </section>
+
+            <section class="mt-12 bg-teal-800 text-white rounded-xl p-8 shadow-lg">
+                <h2 class="text-2xl font-bold text-center mb-4">Your Professional Responsibility</h2>
+                <p class="text-center text-teal-100 max-w-3xl mx-auto">
+                    As a future pharmacist, this is not just a personal skill—it is a core part of your job. Patients, friends, and family will come to you with these exact Facebook posts and WhatsApp messages. They will ask you, "Is this true? Should I stop taking my medicine?"
+                </p>
+                <p class="text-center text-teal-100 max-w-3xl mx-auto mt-4">
+                    Your duty is to be the voice of reason and science. You must be able to calmly explain why a "friend of a friend" story is not reliable evidence, and why they should trust the scientific process over a viral post. Mastering these skills will make you a trustworthy and effective healthcare professional.
+                </p>
+            </section>
+
+            <div class="text-center mt-16"><button onclick="showMenu()" class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg">← Back to Main Menu</button></div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- Page 2: SIFT (hidden by default)                                  -->
+        <!-- ================================================================= -->
+        <div id="page-sift" class="page-section hidden">
+            <header class="text-center mb-12"><h1 class="text-4xl md:text-5xl font-extrabold text-blue-900 mb-2">2. The SIFT Method in Action</h1><p class="text-lg text-gray-600">How to Quickly Verify Information You See Online</p></header>
+            <section class="mb-12"><div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-red-500"><p class="text-lg font-semibold text-gray-500 mb-2">You see a post that claims:</p><blockquote class="text-base md:text-lg font-bold text-gray-800 italic">"A forgotten Pharaonic papyrus reveals that daily consumption of hibiscus tea (Karkadeh) completely cures high blood pressure in a week! The Ministry of Health is trying to suppress this info!"</blockquote></div><div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-yellow-500 mt-6"><p class="text-lg font-semibold text-gray-500 mb-2">You see a post that claims:</p><blockquote class="text-base md:text-lg font-bold text-gray-800 italic">"LEAKED DOCUMENT: Confidential plans show the Suez Canal is being secretly leased to a foreign corporation for 99 years! Share to expose them! #Egypt_Is_Not_For_Sale"</blockquote></div><div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-blue-500 mt-6"><p class="text-lg font-semibold text-gray-500 mb-2">You see a post that claims:</p><blockquote class="text-base md:text-lg font-bold text-gray-800 italic">"BREAKING: Photos show a new tunnel has been discovered under the Sphinx leading to the 'Hall of Records'! The Government has sealed the area and is denying everything."</blockquote></div><div class="bg-white rounded-xl shadow-lg p-6 border-l-8 border-green-500 mt-6"><p class="text-lg font-semibold text-gray-500 mb-2">You see a post that claims:</p><blockquote class="text-base md:text-lg font-bold text-gray-800 italic">"URGENT: A WhatsApp message claims ibuprofen causes sudden kidney failure in young adults based on a doctor’s anecdote."</blockquote></div></section>
+            <main class="space-y-12"><div class="bg-white rounded-xl shadow-lg p-6 md:p-8 flex flex-col md:flex-row items-center gap-6"><div class="text-center"><span class="text-9xl font-black text-red-500">S</span></div><div class="flex-1"><h2 class="text-3xl font-bold text-gray-800 mb-2">STOP.</h2><p class="text-base md:text-lg text-gray-600">Before you share, get angry, or get excited, just pause. Sensational posts are designed to provoke an emotional reaction. A simple pause is your first and most powerful defense against misinformation.</p></div><div class="text-7xl hidden md:block" aria-hidden="true">🛑</div></div><div class="bg-white rounded-xl shadow-lg p-6 md:p-8"><div class="text-center mb-6"><span class="text-9xl font-black text-blue-800">I</span><br><br><br><h2 class="text-3xl font-bold text-gray-800 mt-[-2rem]">INVESTIGATE the Source.</h2></div><p class="text-base md:text-lg text-gray-600 text-center max-w-3xl mx-auto mb-6">Who is behind the information? Not all sources are created equal. A quick search on the "karkadeh cure" reveals it's being pushed by anonymous social media accounts and blogs selling herbal remedies, not medical institutions. This dramatically lowers its credibility.</p><div class="chart-container"><canvas id="sourceCredibilityChart"></canvas></div><p class="text-sm text-center text-gray-500 mt-2">This chart visualizes the general credibility of different source types. Always prioritize evidence from the top of the scale.</p></div><div class="bg-white rounded-xl shadow-lg p-6 md:p-8"><div class="text-center mb-6"><span class="text-9xl font-black text-blue-800">F</span><br><br><br><h2 class="text-3xl font-bold text-gray-800 mt-[-2rem]">FIND Better Coverage.</h2></div><p class="text-base md:text-lg text-gray-600 text-center max-w-3xl mx-auto mb-8">Is anyone else reporting this? A real medical breakthrough from a "Pharaonic papyrus" would be a massive global story covered by reputable news and health organizations. Search for the topic, not the specific biased claim.</p><div class="grid grid-cols-1 md:grid-cols-2 gap-8"><div class="bg-red-50 border-2 border-red-200 rounded-lg p-4"><h3 class="text-lg font-bold text-red-800 mb-2 text-center">Bad Search 👎</h3><p class="text-sm text-red-700 text-center mb-4">"karkadeh cure high blood pressure papyrus"</p><ul class="space-y-2 list-disc list-inside text-red-900"><li>More anonymous Facebook posts</li><li>Forums with personal stories</li><li>Herbal remedy websites</li><li>Content that confirms the bias</li></ul></div><div class="bg-green-50 border-2 border-green-200 rounded-lg p-4"><h3 class="text-lg font-bold text-green-800 mb-2 text-center">Good Search 👍</h3><p class="text-sm text-green-700 text-center mb-4">"hibiscus tea blood pressure study"</p><ul class="space-y-2 list-disc list-inside text-green-900"><li>World Health Organization (WHO)</li><li>Official Ministry of Health statements</li><li>Peer-reviewed medical journals</li><li>Major news outlets (Reuters, Ahram Online)</li></ul></div></div></div><div class="bg-white rounded-xl shadow-lg p-6 md:p-8"><div class="text-center mb-6"><span class="text-9xl font-black text-blue-800">T</span><br><br><br><h2 class="text-3xl font-bold text-gray-800 mt-[-2rem]">TRACE to the Original Context.</h2></div><p class="text-base md:text-lg text-gray-600 text-center max-w-3xl mx-auto mb-8">Follow the claim back to its origin. Does the "Pharaonic papyrus" actually exist? If so, what does it really say? Often, the original context is non-existent or completely twisted.</p><div class="flex flex-col items-center space-y-0"><div class="p-4 bg-gray-100 rounded-lg shadow text-center"><p class="font-bold">The Claim on Social Media</p><p class="text-sm">Mentions a "Pharaonic papyrus"</p></div><div class="w-px h-8 bg-gray-300"></div><div class="p-4 bg-gray-100 rounded-lg shadow text-center"><p class="font-bold">Search Academic & Museum Databases</p><p class="text-sm">(e.g., Grand Egyptian Museum archives, Google Scholar)</p></div><div class="w-px h-8 bg-gray-300"></div><div class="relative w-full text-center"><div class="w-full h-px bg-gray-300 absolute top-1/2 left-0"></div><div class="flex justify-around relative"><div class="w-px h-8 bg-gray-300 absolute left-1/4 top-[-2rem]"></div><div class="w-px h-8 bg-gray-300 absolute right-1/4 top-[-2rem]"></div><div class="w-1/2 flex flex-col items-center text-center"><p class="mb-2 font-semibold">Outcome A</p><div class="p-4 bg-red-50 border-2 border-red-200 rounded-lg shadow"><p class="font-bold text-red-800">No Papyrus Exists</p<p class="text-sm text-red-700">The claim is completely fabricated.</p></div></div><div class="w-1/2 flex flex-col items-center text-center"><p class="mb-2 font-semibold">Outcome B</p><div class="p-4 bg-yellow-50 border-2 border-yellow-200 rounded-lg shadow"><p class="font-bold text-yellow-800">Context is Misinterpreted</p><p class="text-sm text-yellow-700">A real study showing a mild benefit is twisted into a "cure".</p></div></div></div></div></div></div></main>
+            <footer class="mt-16 text-center"><div class="bg-blue-800 text-white rounded-xl shadow-lg p-8"><h2 class="text-3xl font-bold">You are now a trusted source.</h2><p class="text-lg text-blue-200 mt-2">By taking a few minutes to apply the SIFT method, you can effectively sort fact from fiction and protect yourself and your community from harmful misinformation.</p></div></footer>
+            <div class="text-center mt-16"><button onclick="showMenu()" class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg">← Back to Main Menu</button></div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- Page 3: Challenge (hidden by default)                             -->
+        <!-- ================================================================= -->
+        <div id="page-challenge" class="page-section hidden">
+            <header class="text-center mb-12"><h1 class="text-4xl md:text-5xl font-extrabold text-[#073B4C] mb-2">3. Fact-Check Challenge</h1><p class="text-lg text-gray-600">Can you spot the misinformation? Use the SIFT method to investigate these claims.</p></header>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="claim-card border-t-[#FF6B6B] bg-white rounded-lg shadow-lg">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold text-[#073B4C] mb-4">Claim 1: The "Miracle Cure"</h2>
+                        <blockquote class="bg-gray-50 p-4 rounded-lg border-l-4 border-[#FF6B6B] text-gray-700 italic mb-6">"Forget chemotherapy! The 'alkaline diet' is the secret cure for cancer. Cancer cells can't survive in an alkaline environment, so eating only alkaline foods will raise your body's pH and starve the cancer cells to death."</blockquote>
+                        <h3 class="text-lg font-semibold text-[#073B4C] mb-3">Verification Path:</h3>
+                        <ul class="space-y-3 text-gray-600">
+                            <li><span class="font-bold text-[#FF6B6B]">Investigate:</span> Look for the website's "About Us" page. Are the authors medical doctors (M.D.) or researchers (Ph.D.)? Or are they "health coaches" or "nutritionists" without accredited degrees? A conflict of interest is a huge red flag: do they sell alkaline water, supplements, or diet books?</li>
+                            <li><span class="font-bold text-[#FF6B6B]">Find:</span> Search reputable sources for the core claim. A search like <code class="text-sm bg-gray-200 p-1 rounded">site:cancer.gov "alkaline diet"</code> will show you that major cancer institutes confirm that food cannot change your blood pH. Your body's renal and respiratory systems regulate it tightly. This debunks the entire premise of the claim.</li>
+                            <li><span class="font-bold text-[#FF6B6B]">Trace:</span> Look for the actual science on PubMed. A search for <code class="text-sm bg-gray-200 p-1 rounded">"alkaline diet" AND cancer "human trial"</code> will yield few, if any, results. The absence of high-quality evidence (like large-scale human clinical trials) for such a big claim is your answer. The claim is not supported by science.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="claim-card border-t-[#118AB2] bg-white rounded-lg shadow-lg">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold text-[#073B4C] mb-4">Claim 2: The "Vaccine Scare"</h2>
+                        <blockquote class="bg-gray-50 p-4 rounded-lg border-l-4 border-[#118AB2] text-gray-700 italic mb-6">"URGENT WARNING: A new report from 'Doctors for Medical Freedom' shows that the annual flu vaccine is now linked to a 50% increase in early-onset Alzheimer's disease in adults. They are trying to hide this!"</blockquote>
+                        <h3 class="text-lg font-semibold text-[#073B4C] mb-3">Verification Path:</h3>
+                        <ul class="space-y-3 text-gray-600">
+                            <li><span class="font-bold text-[#118AB2]">Investigate:</span> Search the group's name, "Doctors for Medical Freedom". Are they a recognized professional body like the American Medical Association? Or are they primarily an advocacy or political group? See who funds them and what their stated mission is. This helps determine if their goal is scientific or ideological.</li>
+                            <li><span class="font-bold text-[#118AB2]">Find:</span> Check what trusted health authorities say. Search <code class="text-sm bg-gray-200 p-1 rounded">site:cdc.gov "flu vaccine" alzheimer's</code>. The absence of any such warning from major public health bodies is a powerful indicator that the claim is not credible. Look for what's NOT being said by experts.</li>
+                            <li><span class="font-bold text-[#118AB2]">Trace:</span> Go to Google Scholar and search for <code class="text-sm bg-gray-200 p-1 rounded">"influenza vaccine" AND "Alzheimer's disease"</code>. You may find that high-quality, large-scale studies actually suggest the opposite: that flu and other adult vaccinations are associated with a *reduced* risk of Alzheimer's. This is a classic misinformation tactic: finding a real area of research and twisting or reversing the findings.</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="claim-card border-t-[#FFD166] bg-white rounded-lg shadow-lg">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold text-[#073B4C] mb-4">Claim 3: The "Big Pharma" Conspiracy</h2>
+                        <blockquote class="bg-gray-50 p-4 rounded-lg border-l-4 border-[#FFD166] text-gray-700 italic mb-6">"Why are doctors pushing expensive statin drugs? A daily teaspoon of organic turmeric is proven to be more effective at lowering high cholesterol. This cheap cure is being suppressed to protect profits."</blockquote>
+                        <h3 class="text-lg font-semibold text-[#073B4C] mb-3">Verification Path:</h3>
+                        <ul class="space-y-3 text-gray-600">
+                            <li><span class="font-bold text-[#FFD166]">Investigate:</span> The claim uses classic conspiratorial language ("suppressed," "protect profits"). The source is likely an anonymous social media account or a blog that profits from anti-establishment sentiment or by selling "natural" alternatives. Anonymity is a major red flag for health advice.</li>
+                            <li><span class="font-bold text-[#FFD166]">Find:</span> Search for the established medical consensus. A query like <code class="text-sm bg-gray-200 p-1 rounded">"cholesterol management guidelines" filetype:pdf</code> will lead to official documents from heart associations (e.g., AHA, ESC). These guidelines are built on a mountain of evidence and recommend statins as a primary, proven therapy.</li>
+                            <li><span class="font-bold text-[#FFD166]">Trace:</span> Search PubMed for the direct comparison: <code class="text-sm bg-gray-200 p-1 rounded">"turmeric" vs "statin" cholesterol "clinical trial"</code>. You will not find studies proving turmeric is "more effective." You might find small studies showing turmeric has a modest effect, but this is vastly different from the claim. Evaluate the strength of the claim ("more effective") versus the strength of the evidence (small trials vs. decades of statin data).</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="claim-card border-t-[#06D6A0] bg-white rounded-lg shadow-lg">
+                    <div class="p-6">
+                        <h2 class="text-2xl font-bold text-[#073B4C] mb-4">Claim 4: The Local/Regional Cure</h2>
+                        <blockquote class="bg-gray-50 p-4 rounded-lg border-l-4 border-[#06D6A0] text-gray-700 italic mb-6">"My uncle stopped all his blood pressure pills. He just drinks boiled hibiscus tea (karkade) three times a day and his blood pressure is completely normal now. It's a 100% effective and safe replacement."</blockquote>
+                        <h3 class="text-lg font-semibold text-[#073B4C] mb-3">Verification Path:</h3>
+                        <ul class="space-y-3 text-gray-600">
+                            <li><span class="font-bold text-[#06D6A0]">Investigate:</span> The source of evidence is an anecdote ("my uncle"). This is not data. It is a story. It lacks a control group, blinding, and statistical analysis. Did the uncle also change his diet? Start exercising? Was his BP cuff accurate? Anecdotes are powerful for persuasion but are scientifically useless for proving efficacy.</li>
+                            <li><span class="font-bold text-[#06D6A0]">Find:</span> Check official hypertension guidelines from the WHO or Egyptian Hypertension Society. They will unequivocally state that patients must not stop prescribed medication without a doctor's supervision. This highlights the potential danger of the claim.</li>
+                            <li><span class="font-bold text-[#06D6A0]">Trace:</span> Search Google Scholar for <code class="text-sm bg-gray-200 p-1 rounded">"hibiscus tea" hypertension "systematic review"</code>. A systematic review summarizes all available high-quality studies. You'll find evidence that hibiscus has a modest BP-lowering effect, but no review will recommend it as a sole therapy or "replacement" for proven drugs, especially for moderate-to-severe hypertension. The key is understanding the difference between a "supplementary" and a "replacement" therapy.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-16"><button onclick="showMenu()" class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg">← Back to Main Menu</button></div>
+        </div>
+        
+        <!-- ================================================================= -->
+        <!-- Page 4: Tools (ACADEMIC UPDATE) (hidden by default)               -->
+        <!-- ================================================================= -->
+        <div id="page-tools" class="page-section hidden">
+            <header class="bg-slate-800 p-6 md:p-8 text-white text-center rounded-2xl mb-12 shadow-lg"><h1 class="text-2xl sm:text-3xl md:text-4xl font-bold">4. Essential Tools & Techniques</h1><p class="mt-2 text-lg md:text-xl text-slate-300">Your toolkit for academic integrity and verifying sources.</p></header>
+            <div class="space-y-16">
+                <!-- Reverse Image Search -->
+                <section>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3 text-blue-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15.5 21a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3zM15.5 15a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3zM8.5 21a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3zM8.5 15a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3zM2 9.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-1zM6 9.5a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-1zM2 3.5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1zM6 3.5a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1z"/><path d="M12 21a9 9 0 0 1-9-9c0-4.96 4.04-9 9-9s9 4.04 9 9-4.04 9-9 9zm0-16.2c-3.97 0-7.2 3.23-7.2 7.2s3.23 7.2 7.2 7.2 7.2-3.23 7.2-7.2-3.23-7.2-7.2-7.2z"/><path d="M12 13.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5zm0-3.2a.7.7 0 1 0 0 1.4.7.7 0 0 0 0-1.4z"/></svg>Reverse Image Search</h2>
+                    <p class="text-gray-600 mb-6 max-w-3xl">An image from an old event is often reused to create a fake story. A reverse image search helps you find the original source and context of a photo, a crucial step for verifying sources in presentations and research papers.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <a href="https://images.google.com/" target="_blank" rel="noopener noreferrer" class="tool-card block bg-slate-50 p-6 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-slate-100"><h3 class="font-bold text-lg text-gray-800">Google Images</h3><p class="text-sm text-gray-600 mt-1">The most popular tool. Upload an image or paste a URL to find where it appears online.</p></a>
+                        <a href="https://tineye.com/" target="_blank" rel="noopener noreferrer" class="tool-card block bg-slate-50 p-6 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-slate-100"><h3 class="font-bold text-lg text-gray-800">TinEye</h3><p class="text-sm text-gray-600 mt-1">Specializes in finding the oldest version of an image, which is often the original.</p></a>
+                        <a href="https://yandex.com/images/" target="_blank" rel="noopener noreferrer" class="tool-card block bg-slate-50 p-6 rounded-lg border-2 border-slate-200 hover:border-blue-500 hover:bg-slate-100"><h3 class="font-bold text-lg text-gray-800">Yandex</h3><p class="text-sm text-gray-600 mt-1">A powerful alternative, sometimes finds images that Google and TinEye miss.</p></a>
+                    </div>
+                </section>
+                
+                <!-- AI & Plagiarism Detection -->
+                <section>
+                    <h2 class="text-2xl font-bold text-gray-800 mb-4 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 mr-3 text-purple-500" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8V4H8"/><rect x="8" y="4" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v4a2 2 0 0 1-2 2h-2"/><path d="M12 12v8h4"/><rect x="8" y="12" width="8" height="8" rx="1"/><path d="M8 12H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/></svg>AI & Plagiarism Detection</h2>
+                    <p class="text-gray-600 mb-6 max-w-3xl">In the age of AI, academic integrity is more important than ever. Use these tools to ensure your work is original and to check sources for potential AI generation or plagiarism.</p>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <a href="https://www.grammarly.com/plagiarism-checker" target="_blank" rel="noopener noreferrer" class="tool-card block bg-slate-50 p-6 rounded-lg border-2 border-slate-200 hover:border-purple-500 hover:bg-slate-100"><h3 class="font-bold text-lg text-gray-800">Plagiarism Checkers</h3><p class="text-sm text-gray-600 mt-1">Tools like Grammarly's checker help you check your own work for unintentional plagiarism before submitting.</p></a>
+                        <a href="#" onclick="alert('This is the system your university uses to check submissions for plagiarism.')" class="tool-card cursor-pointer block bg-slate-50 p-6 rounded-lg border-2 border-slate-200 hover:border-purple-500 hover:bg-slate-100"><h3 class="font-bold text-lg text-gray-800">Turnitin</h3><p class="text-sm text-gray-600 mt-1">Understand the tool your university uses. It compares your work against a massive database of content.</p></a>
+                        <a href="https://gptzero.me/" target="_blank" rel="noopener noreferrer" class="tool-card block bg-slate-50 p-6 rounded-lg border-2 border-slate-200 hover:border-purple-500 hover:bg-slate-100"><h3 class="font-bold text-lg text-gray-800">AI Content Detectors</h3><p class="text-sm text-gray-600 mt-1">Tools like GPTZero can indicate if a text was likely written by AI. Use with caution as they are not always perfect.</p></a>
+                    </div>
+                </section>
+            </div>
+            <div class="text-center mt-16"><button onclick="showMenu()" class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg">← Back to Main Menu</button></div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- Page 5: Search (hidden by default)                                -->
+        <!-- ================================================================= -->
+        <div id="page-search" class="page-section hidden">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-2xl">
+                <header class="bg-indigo-600 p-6 md:p-8 text-white text-center"><h1 class="text-2xl sm:text-3xl md:text-4xl font-bold">5. The Art of Smart Search</h1><p class="mt-2 text-lg md:text-xl text-indigo-100">Find Reliable Information, Faster</p></header>
+                <div class="p-6 md:p-8 space-y-8">
+                    <section>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v11.494m-9-5.747h18" /></svg>Beyond Traditional Google</h2>
+                        <div class="flex flex-col md:flex-row items-center justify-center p-6 bg-gray-50 rounded-lg"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/2f/Google_2015_logo.svg/1200px-Google_2015_logo.svg.png" alt="Google Logo" class="h-12 md:h-16 mb-4 md:mb-0 md:mr-4" onerror="this.onerror=null;this.src='https://placehold.co/200x50/FFFFFF/000000?text=Google';"><svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-gray-400 mx-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/01/Google_Scholar_logo.svg/1024px-Google_Scholar_logo.svg.png" alt="Google Scholar Logo" class="h-12 md:h-16" onerror="this.onerror=null;this.src='https://placehold.co/200x50/FFFFFF/000000?text=Google+Scholar';"></div>
+                        <p class="text-center text-gray-600 mt-4">For academic and scientific information, use <span class="font-bold text-indigo-600">Google Scholar</span> to find studies, papers, and patents.</p>
+                    </section>
+                    <section>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 7h3a5 5 0 015 5 5 5 0 01-5 5h-3m-6 0H6a5 5 0 01-5-5 5 5 0 015-5h3" /></svg>Your Words Are Your Key: Boolean Operators</h2>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-6"><div class="bg-green-50 border-2 border-green-200 rounded-lg p-6 text-center"><h3 class="text-2xl font-bold text-green-700">AND</h3><p class="text-gray-600 my-2">Narrows your search. Both terms must be present.</p><div class="relative h-20 w-32 mx-auto my-4"><div class="absolute top-0 left-0 w-20 h-20 bg-green-200 rounded-full opacity-70"></div><div class="absolute top-0 right-0 w-20 h-20 bg-green-300 rounded-full opacity-70"></div></div><p class="font-mono bg-green-100 text-green-800 p-2 rounded">Paracetamol <span class="font-bold">AND</span> Liver</p></div><div class="bg-blue-50 border-2 border-blue-200 rounded-lg p-6 text-center"><h3 class="text-2xl font-bold text-blue-700">OR</h3><p class="text-gray-600 my-2">Broadens your search. Either term can be present.</p><div class="relative h-20 w-40 mx-auto my-4"><div class="absolute top-0 left-0 w-24 h-20 bg-blue-200 rounded-full opacity-70"></div><div class="absolute top-0 right-0 w-24 h-20 bg-blue-200 rounded-full opacity-70"></div></div><p class="font-mono bg-blue-100 text-blue-800 p-2 rounded">Painkiller <span class="font-bold">OR</span> Analgesic</p></div><div class="bg-red-50 border-2 border-red-200 rounded-lg p-6 text-center"><h3 class="text-2xl font-bold text-red-700">NOT</h3><p class="text-gray-600 my-2">Excludes results. The second term must not be present.</p><div class="relative h-20 w-32 mx-auto my-4"><div class="absolute top-0 left-0 w-20 h-20 bg-red-200 rounded-full"></div><div class="absolute top-0 right-0 w-20 h-20 bg-white rounded-full" style="clip-path: inset(0 0 0 50%);"></div></div><p class="font-mono bg-red-100 text-red-800 p-2 rounded">Hypertension <span class="font-bold">NOT</span> Pregnancy</p></div></div>
+                    </section>
+                    <section>
+                        <h2 class="text-xl sm:text-2xl font-bold text-gray-800 mb-4 flex items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-indigo-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0zM10 7v3m0 0v3m0-3h3m-3 0H7" />
+                            </svg>
+                            Mastering Search Operators
+                        </h2>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-400">
+                                <h3 class="font-bold text-gray-700">Exact Phrase: "..."</h3>
+                                <p class="text-gray-600 mt-1">Use quotation marks to search for an exact phrase. This is the most important operator for reducing irrelevant results.</p>
+                                <p class="font-mono bg-gray-200 text-gray-800 p-2 rounded mt-2 text-sm">"side effects of metformin"</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-400">
+                                <h3 class="font-bold text-gray-700">Search a Specific Site: site:</h3>
+                                <p class="text-gray-600 mt-1">Limit your search to a single trusted website, like the WHO or FDA. This is essential for finding reliable information.</p>
+                                <p class="font-mono bg-gray-200 text-gray-800 p-2 rounded mt-2 text-sm">site:who.int hypertension guidelines</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-400">
+                                <h3 class="font-bold text-gray-700">Find Document Types: filetype:</h3>
+                                <p class="text-gray-600 mt-1">Look for specific file types, which is great for finding official reports, presentations, or data sheets.</p>
+                                <p class="font-mono bg-gray-200 text-gray-800 p-2 rounded mt-2 text-sm">"drug interactions" filetype:pdf</p>
+                            </div>
+                            <div class="bg-gray-50 p-4 rounded-lg border-l-4 border-indigo-400">
+                                <h3 class="font-bold text-gray-700">Wildcard Placeholder: *</h3>
+                                <p class="text-gray-600 mt-1">Use an asterisk as a placeholder for any unknown word or words within a phrase. Helpful for exploring variations of a topic.</p>
+                                <p class="font-mono bg-gray-200 text-gray-800 p-2 rounded mt-2 text-sm">"aspirin for the prevention of *"</p>
+                            </div>
+                        </div>
+                        <div class="mt-6 p-4 bg-indigo-100 rounded-lg text-center">
+                            <h4 class="font-bold text-indigo-800">Combine for Power Searches</h4>
+                            <p class="text-indigo-700 mt-1">Combine operators to create highly specific queries.</p>
+                            <p class="font-mono bg-white text-indigo-900 p-2 rounded mt-2 inline-block shadow-sm">"COVID-19 treatment" site:fda.gov -news filetype:pdf</p>
+                            <p class="text-sm text-indigo-600 mt-2">(This finds official PDF documents about COVID-19 treatment on the FDA website, excluding pages that are just news articles.)</p>
+                        </div>
+                    </section>
+                </div>
+            </div>
+            <div class="text-center mt-16"><button onclick="showMenu()" class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg">← Back to Main Menu</button></div>
+        </div>
+
+        <!-- ================================================================= -->
+        <!-- Page 6: Treasure (hidden by default)                              -->
+        <!-- ================================================================= -->
+        <div id="page-treasure" class="page-section hidden">
+            <div class="bg-white rounded-2xl overflow-hidden shadow-2xl">
+                <header class="bg-amber-600 p-6 md:p-8 text-white text-center"><div class="flex justify-center items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10 mr-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4" /></svg><h1 class="text-2xl sm:text-3xl md:text-4xl font-bold">6. Pharmacists' Treasure Chest</h1></div><p class="mt-2 text-lg md:text-xl text-amber-100">Your Go-To Reliable Information Sources</p></header>
+                <div class="p-6 md:p-8">
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
+                        <div class="flex flex-col space-y-6"><h2 class="text-xl font-bold text-gray-800 border-b-4 border-cyan-500 pb-2 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-cyan-500" viewBox="0 0 20 20" fill="currentColor"><path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" /><path fill-rule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clip-rule="evenodd" /></svg>For Quick Drug Info</h2>
+            <a href="https://www.uptodate.com/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-cyan-50 p-4 rounded-lg hover:bg-cyan-100"><h3 class="font-semibold text-cyan-800">UpToDate</h3></a>
+            <a href="https://www.medscape.com/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-cyan-50 p-4 rounded-lg hover:bg-cyan-100"><h3 class="font-semibold text-cyan-800">Medscape</h3></a>
+            <a href="https://www.drugs.com/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-cyan-50 p-4 rounded-lg hover:bg-cyan-100"><h3 class="font-semibold text-cyan-800">Drugs.com</h3></a>
+            <a href="https://pubchem.ncbi.nlm.nih.gov/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-cyan-50 p-4 rounded-lg hover:bg-cyan-100"><h3 class="font-semibold text-cyan-800">PubChem</h3></a>
+            <a href="https://go.drugbank.com/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-cyan-50 p-4 rounded-lg hover:bg-cyan-100"><h3 class="font-semibold text-cyan-800">DrugBank</h3></a>
+                        </div>
+                        <div class="flex flex-col space-y-6"><h2 class="text-xl font-bold text-gray-800 border-b-4 border-slate-500 pb-2 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-slate-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M4 4a2 2 0 012-2h8a2 2 0 012 2v12a1 1 0 110 2h-3a1 1 0 01-1-1v-2a1 1 0 00-1-1H9a1 1 0 00-1 1v2a1 1 0 01-1 1H4a1 1 0 110-2V4zm3 1h2v2H7V5zm2 4H7v2h2V9zm2-4h2v2h-2V5zm2 4h-2v2h2V9z" clip-rule="evenodd" /></svg>For Regulatory Bodies</h2><a href="https://www.edaegypt.gov.eg/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-slate-50 p-4 rounded-lg hover:bg-slate-100"><h3 class="font-semibold text-slate-800">Egyptian Drug Authority (EDA)</h3></a><a href="https://www.who.int/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-slate-50 p-4 rounded-lg hover:bg-slate-100"><h3 class="font-semibold text-slate-800">World Health Organization (WHO)</h3></a><a href="https://www.fda.gov/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-slate-50 p-4 rounded-lg hover:bg-slate-100"><h3 class="font-semibold text-slate-800">U.S. Food & Drug Admin (FDA)</h3></a></div>
+                        <div class="flex flex-col space-y-6"><h2 class="text-xl font-bold text-gray-800 border-b-4 border-purple-500 pb-2 flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-3 text-purple-500" viewBox="0 0 20 20" fill="currentColor"><path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.998.998 0 01.056.222l.666 2.661a1 1 0 00.942.829h3.17a1 1 0 00.942-.829l.666-2.661a.998.998 0 01.056-.222l2.644-1.132a1 1 0 000-1.84l-7-3zM12 14a1 1 0 011 1v2a1 1 0 11-2 0v-2a1 1 0 011-1z" /><path d="M4 13a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" /><path d="M16 13a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" /></svg>For Academic Research</h2><a href="https://pubmed.ncbi.nlm.nih.gov/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-purple-50 p-4 rounded-lg hover:bg-purple-100"><h3 class="font-semibold text-purple-800">PubMed <span class="text-sm font-normal">(Most Important)</span></h3></a><a href="https://www.sciencedirect.com/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-purple-50 p-4 rounded-lg hover:bg-purple-100"><h3 class="font-semibold text-purple-800">ScienceDirect</h3></a><a href="https://scholar.google.com/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-purple-50 p-4 rounded-lg hover:bg-purple-100"><h3 class="font-semibold text-purple-800">Google Scholar</h3></a><a href="https://www.semanticscholar.org/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-purple-50 p-4 rounded-lg hover:bg-purple-100"><h3 class="font-semibold text-purple-800">Semantic Scholar</h3></a><a href="https://www.perplexity.ai/" target="_blank" rel="noopener noreferrer" class="resource-card block bg-purple-50 p-4 rounded-lg hover:bg-purple-100"><h3 class="font-semibold text-purple-800">AI Research Agents (e.g. Perplexity)</h3></a></div>
+                    </div>
+                </div>
+            </div>
+            <div class="text-center mt-16"><button onclick="showMenu()" class="inline-flex items-center px-6 py-3 bg-gray-600 text-white font-semibold rounded-lg hover:bg-gray-700 transition-colors shadow-lg">← Back to Main Menu</button></div>
+        </div>
+
+    </div>
+
+    <script>
+        const mainMenu = document.getElementById('main-menu');
+        const pageSections = document.querySelectorAll('.page-section');
+        let SIFTChart = null;
+
+        function showPage(pageId) {
+            mainMenu.classList.add('hidden');
+            pageSections.forEach(section => section.classList.add('hidden'));
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.remove('hidden');
+                window.scrollTo(0, 0);
+            }
+            if (pageId === 'page-sift') {
+                initializeSIFTChart();
+            }
+        }
+
+        function showMenu() {
+            pageSections.forEach(section => section.classList.add('hidden'));
+            mainMenu.classList.remove('hidden');
+            window.scrollTo(0, 0);
+        }
+        
+        function initializeSIFTChart() {
+            const ctx = document.getElementById('sourceCredibilityChart').getContext('2d');
+            if (SIFTChart) { SIFTChart.destroy(); }
+            const sourceData = {
+                labels: ['Anonymous "Guru" Account', 'Commercial Website / Store', 'Reputable News Organization', 'Government Health Agency (WHO, FDA)', 'Peer-Reviewed Scientific Journal'],
+                datasets: [{
+                    label: 'Relative Credibility Score', data: [5, 20, 70, 85, 98],
+                    backgroundColor: ['rgba(239, 68, 68, 0.6)', 'rgba(245, 158, 11, 0.6)', 'rgba(59, 130, 246, 0.6)', 'rgba(20, 83, 163, 0.6)', 'rgba(4, 70, 124, 0.6)'],
+                    borderColor: ['rgba(239, 68, 68, 1)', 'rgba(245, 158, 11, 1)', 'rgba(59, 130, 246, 1)', 'rgba(20, 83, 163, 1)', 'rgba(4, 70, 124, 1)'],
+                    borderWidth: 2
+                }]
+            };
+            SIFTChart = new Chart(ctx, {
+                type: 'bar', data: sourceData,
+                options: {
+                    indexAxis: 'y', responsive: true, maintainAspectRatio: false,
+                    scales: { x: { beginAtZero: true, max: 100 }, y: { grid: { display: false } } },
+                    plugins: { legend: { display: false }, title: { display: true, text: 'Source Credibility Comparison', font: { size: 16 } } }
+                }
+            });
+        }
+    </script>
+</body>
+</html>

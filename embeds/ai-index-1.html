@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Services Directory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs-container {
+            display: flex;
+            flex-wrap: wrap;
+            background: #f8f9fa;
+            padding: 10px;
+            gap: 5px;
+            border-bottom: 3px solid #e9ecef;
+        }
+
+        .tab-button {
+            flex: 1 1 auto;
+            min-width: 120px;
+            padding: 12px 16px;
+            background: white;
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            color: #495057;
+        }
+
+        .tab-button:hover {
+            background: #f8f9fa;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab-button.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .tab-icon {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .tab-icon img, .tab-icon svg { /* Support both img and svg */
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+
+        .tab-content {
+            padding: 40px;
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .service-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .service-header {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .service-icon-large {
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+            padding: 0;
+            overflow: hidden;
+        }
+
+        .service-icon-large img, .service-icon-large svg { /* Support both img and svg */
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .service-info h2 {
+            font-size: 2em;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+
+        .service-info .country {
+            color: #7f8c8d;
+            font-size: 1.1em;
+        }
+
+        .service-description {
+            font-size: 1.2em;
+            color: #34495e;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
+        }
+
+        .service-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .feature-tag {
+            padding: 8px 16px;
+            background: #e3f2fd;
+            color: #1976d2;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .visit-button {
+            display: inline-block;
+            padding: 15px 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 30px;
+            font-size: 1.1em;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.3);
+        }
+
+        .visit-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .tabs-container {
+                flex-direction: column;
+            }
+            
+            .tab-button {
+                width: 100%;
+            }
+            
+            .service-header {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>AI Services Directory</h1>
+            <p>Explore the world's leading AI platforms and tools</p>
+        </div>
+
+        <div class="tabs-container" id="tabsContainer"></div>
+        <div id="contentContainer"></div>
+    </div>
+
+    <script>
+        const services = [
+            {
+                id: 'claude',
+                name: 'Claude',
+                logo: `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQJxDz5Tpea6n5Ec-WQWHy5Fl3-0CT5Rbz-Ggwa8b-HvbEj7CmVpr5rpRtnz6WdNu0y6bM&usqp=CAU" alt="Claude Logo">`,
+                company: 'Anthropic',
+                country: 'USA',
+                description: 'Advanced AI assistant from Anthropic, focused on safety with powerful Sonnet and Opus models.',
+                features: ['Sonnet', 'Opus', 'AI Models'],
+                url: 'https://claude.ai'
+            },
+            {
+                id: 'grok',
+                name: 'Grok',
+                logo: `<img src="https://pngdownload.io/wp-content/uploads/2025/05/Grok-Logo-Transparent.webp" alt="Grok Logo">`,
+                company: 'xAI',
+                country: 'USA',
+                description: "xAI's witty conversational AI with real-time knowledge, inspired by Hitchhiker's Guide to the Galaxy.",
+                features: ['AI Models', 'Real-time Data'],
+                url: 'https://grok.com/'
+            },
+            {
+                id: 'gemini',
+                name: 'Gemini',
+                logo: `<img src="https://9to5google.com/wp-content/uploads/sites/4/2025/07/new-Gemini-icon-cover.jpg?quality=82&strip=all&w=1600" alt="Gemini Logo">`,
+                company: 'Google',
+                country: 'USA',
+                description: "Google's most capable AI, offering powerful multimodal reasoning for text, images, code, and more.",
+                features: ['Pro Model', 'AI Studio', 'Multimodal'],
+                url: 'https://gemini.google.com/'
+            },
+            {
+                id: 'glm',
+                name: 'GLM-4.5',
+                logo: `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdQtM8BJDfLEhWW3D9VfgYB_f8ayfh9816Nw&s" alt="Zhipu AI Logo">`,
+                company: 'Zhipu AI',
+                country: 'China',
+                description: 'Zhipu AI\'s powerful language model with strong multilingual capabilities and advanced reasoning for complex tasks.',
+                features: ['AI Models', 'Multilingual'],
+                url: 'https://chat.z.ai/'
+            },
+            {
+                id: 'qwen',
+                name: 'Qwen-3',
+                logo: `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSp72aZpmj5SA1mPK-p4APrfAgKOSgYcUu9AA&s" alt="Qwen Logo">`,
+                company: 'Alibaba',
+                country: 'China',
+                description: 'Alibaba\'s versatile large language model, supporting a wide range of applications and seamless cloud integration.',
+                features: ['AI Models', 'Cloud Integration'],
+                url: 'https://chat.qwen.ai/'
+            },
+            {
+                id: 'deepseek',
+                name: 'DeepSeek',
+                logo: `<img src="https://cdn-1.webcatalog.io/catalog/deepseek/deepseek-icon-filled-256.png?v=1754272374277" alt="DeepSeek Logo">`,
+                company: 'DeepSeek',
+                country: 'China',
+                description: 'An advanced open-source AI model excelling in code generation and mathematical reasoning with deep problem-solving skills.',
+                features: ['Latest Version', 'AI Models'],
+                url: 'https://chat.deepseek.com/'
+            },
+            {
+                id: 'manus',
+                name: 'Manus',
+                logo: `<img src="https://play-lh.googleusercontent.com/7RIeDBEnjVVn3d1yr441p7u0BK9eT8E6P9i__XYTcJAzOe7sqVgJp7pmlypqY9NBqjI" alt="Manus Logo">`,
+                company: 'Manus',
+                country: 'China',
+                description: 'An AI platform offering both foundational models and intelligent agents for diverse, automated workflows.',
+                features: ['AI Models', 'AI Agents'],
+                url: 'https://manus.im/app'
+            },
+            {
+                id: 'skywork',
+                name: 'Skywork',
+                logo: `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQnIUT9KHzAFNMusrwXkWGJrP2fgZk_MpUErlgJGkh6nUDAdTIFJxrwR02u9UJvZTKT3eQ&usqp=CAU" alt="Skywork Logo">`,
+                company: 'Skywork',
+                country: 'Singapore',
+                description: 'An advanced AI platform with powerful models and agent capabilities, developed for large-scale enterprise solutions.',
+                features: ['AI Models', 'AI Agents'],
+                url: 'https://skywork.ai/'
+            },
+            {
+                id: 'genspark',
+                name: 'Genspark',
+                logo: `<img src="https://play-lh.googleusercontent.com/eL-phQCOfvhdKFir0y6deLKcALuWuUUBQIKh4ocn70ybvCgtALjJUYPjJkZmzaeu9SU" alt="Genspark Logo">`,
+                company: 'Genspark',
+                country: 'USA',
+                description: 'A next-generation AI search engine that generates comprehensive results from various online sources.',
+                features: ['AI Models', 'AI Agents'],
+                url: 'https://www.genspark.ai/'
+            },
+            {
+                id: 'mistral',
+                name: 'Mistral',
+                logo: `<img src="https://media.licdn.com/dms/image/v2/D560BAQGAH0ZkR38jXQ/company-logo_200_200/B56ZU6_sVBGoAI-/0/1740451530340/mistralai_logo?e=2147483647&v=beta&t=AO4mPTC6R4UqpWOWb6qemwKB7ngoS7iI9Mme1IO2Zog" alt="Mistral Logo">`,
+                company: 'Mistral AI',
+                country: 'France',
+                description: 'A leading European AI company creating efficient, open-source models and developer tools for various applications.',
+                features: ['AI Models', 'AI Agents'],
+                url: 'https://mistral.ai/'
+            },
+            {
+                id: 'chatgpt',
+                name: 'ChatGPT',
+                logo: `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTMdM9MEQ0ExL1PmInT3U5I8v63YXBEdoIT0Q&s" alt="ChatGPT Logo">`,
+                company: 'OpenAI',
+                country: 'USA',
+                description: "OpenAI's flagship conversational AI, excelling at dialogue, content creation, and a wide range of language tasks.",
+                features: ['AI Models', 'AI Agents', 'GPT-4o'],
+                url: 'https://chatgpt.com/'
+            },
+            {
+                id: 'felo',
+                name: 'Felo',
+                logo: `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRc6bmY9l56ICkAoM1D8Bm98F8DuVMnErSrGA&s" alt="Felo Logo">`,
+                company: 'Felo',
+                country: 'Japan',
+                description: 'A Japanese AI platform for seamless, multilingual communication and real-time translation.',
+                features: ['AI Models', 'AI Agents'],
+                url: 'https://felo.ai/'
+            },
+            {
+                id: 'kimi',
+                name: 'KIMI',
+                logo: `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRU7fMleBn9JP-QsLaL_YEs3KYY1ndjsJ1dJZih6MOmPYZQwgQgFz-7eo00A6Hh-f9m7Go&usqp=CAU" alt="KIMI Logo">`,
+                company: 'Moonshot AI',
+                country: 'China',
+                description: "Moonshot AI's model with a massive context window, capable of processing and understanding long documents.",
+                features: ['Large Context', 'AI Models'],
+                url: 'https://www.kimi.com/'
+            },
+            {
+                id: 'copilot',
+                name: 'Copilot',
+                logo: `<img src="https://play-lh.googleusercontent.com/p8R1lAZI5_WCOzmvBYnOQasCWcjc9d2vM7z4PaVku8b9AfxGhqQqM0ldJ8KULHblVj-g" alt="Copilot Logo">`,
+                company: 'Microsoft',
+                country: 'USA',
+                description: 'Microsoft\'s AI assistant, integrated across Windows, Edge, and Microsoft 365 applications for enhanced productivity.',
+                features: ['GPT-4 Powered', 'Microsoft Integration'],
+                url: 'https://copilot.microsoft.com/'
+            },
+            {
+                id: 'perplexity',
+                name: 'Perplexity',
+                logo: `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRJ_PP6vwhd2-JO6ISkW1yu-z_dQgv09IINZQ&s" alt="Perplexity Logo">`,
+                company: 'Perplexity AI',
+                country: 'USA',
+                description: 'An AI-powered answer engine that provides direct, cited answers to questions by searching the web.',
+                features: ['Web Search', 'AI Models'],
+                url: 'https://www.perplexity.ai/'
+            },
+            {
+                id: 'consensus',
+                name: 'Consensus',
+                logo: `<img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ8Kcc9LAzvrp-Id84UHPeTUcNRhw8hKMcSyXbNBDvJonSNBG5fiOcb0DrZjkHnzMGoJag&usqp=CAU" alt="Consensus Logo">`,
+                company: 'Consensus',
+                country: 'USA',
+                description: 'An AI search engine for scientific research, finding evidence-based answers from peer-reviewed academic papers.',
+                features: ['Scientific Research', 'Academic Papers', 'Reliable Sources'],
+                url: 'https://consensus.app/'
+            },
+            {
+                id: 'scispace',
+                name: 'SciSpace',
+                logo: `<img src="https://media.licdn.com/dms/image/sync/v2/C4D27AQEp2PfnvwYv4Q/articleshare-shrink_800/articleshare-shrink_800/0/1717561517303?e=2147483647&v=beta&t=UkDOmU6mL3JYtLsjZ1Z5qvJHvcgxv24bqarlk3fVedU" alt="SciSpace Logo">`,
+                company: 'SciSpace',
+                country: 'International',
+                description: 'A powerful platform for literature review, helping researchers discover, read, and understand scientific papers efficiently.',
+                features: ['Literature Review', 'Academic Research', 'Citation Management'],
+                url: 'https://typeset.io/'
+            }
+        ];
+
+        function createTabs() {
+            const tabsContainer = document.getElementById('tabsContainer');
+            const contentContainer = document.getElementById('contentContainer');
+
+            services.forEach((service, index) => {
+                // Create tab button
+                const tabButton = document.createElement('button');
+                tabButton.className = 'tab-button';
+                if (index === 0) tabButton.classList.add('active');
+                tabButton.innerHTML = `
+                    <span class="tab-icon">${service.logo}</span>
+                    <span>${service.name}</span>
+                `;
+                tabButton.onclick = () => showTab(service.id);
+                tabsContainer.appendChild(tabButton);
+
+                // Create tab content
+                const tabContent = document.createElement('div');
+                tabContent.className = 'tab-content';
+                if (index === 0) tabContent.classList.add('active');
+                tabContent.id = `tab-${service.id}`;
+                tabContent.innerHTML = `
+                    <div class="service-card">
+                        <div class="service-header">
+                            <div class="service-icon-large">${service.logo}</div>
+                            <div class="service-info">
+                                <h2>${service.name}</h2>
+                                <p class="country">${service.company} • ${service.country}</p>
+                            </div>
+                        </div>
+                        <div class="service-description">
+                            ${service.description}
+                        </div>
+                        <div class="service-features">
+                            ${service.features.map(feature => `
+                                <span class="feature-tag">${feature}</span>
+                            `).join('')}
+                        </div>
+                        <a href="${service.url}" target="_blank" class="visit-button">
+                            Visit ${service.name} →
+                        </a>
+                    </div>
+                `;
+                contentContainer.appendChild(tabContent);
+            });
+        }
+
+        function showTab(serviceId) {
+            // Update tabs
+            const tabs = document.querySelectorAll('.tab-button');
+            const contents = document.querySelectorAll('.tab-content');
+            
+            tabs.forEach((tab, index) => {
+                const currentServiceId = services[index].id;
+                // Find button by its corresponding service ID
+                const btn = Array.from(tabs).find(t => t.innerText.trim().toLowerCase().includes(currentServiceId));
+
+                if (currentServiceId === serviceId) {
+                    tab.classList.add('active');
+                } else {
+                    tab.classList.remove('active');
+                }
+            });
+
+            contents.forEach(content => {
+                if (content.id === `tab-${serviceId}`) {
+                    content.classList.add('active');
+                } else {
+                    content.classList.remove('active');
+                }
+            });
+        }
+
+        // Initialize tabs on page load
+        createTabs();
+    </script>
+</body>
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chemistry Suite: Generator & Calculator</title>
+    <style>
+        /* --- STYLING (CSS) --- */
+        body { 
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; 
+            display: flex; 
+            flex-wrap: wrap; /* Allows panes to stack on very narrow screens */
+            justify-content: center; 
+            gap: 2rem; 
+            padding: 1rem; 
+            background-color: #f0f0f0; 
+            font-size: 16px;
+        }
+        .pane { 
+            background-color: white; 
+            border: 1px solid #ccc; 
+            border-radius: 8px; 
+            padding: 1.5rem; 
+            width: 100%;
+            max-width: 450px; /* Max width for each pane */
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1); 
+            box-sizing: border-box;
+        }
+        h2, h4 { 
+            text-align: center; 
+            color: #333; 
+            margin-top: 0;
+        }
+        .form-group { 
+            margin-bottom: 1rem; 
+        }
+        label { 
+            display: block; 
+            font-weight: 600; 
+            margin-bottom: 0.25rem; 
+            color: #555; 
+            font-size: 0.95rem;
+        }
+        input[type="number"], input[type="text"] { 
+            width: calc(100% - 18px); 
+            padding: 8px; 
+            border: 1px solid #ddd; 
+            border-radius: 4px; 
+            font-size: 1.05rem;
+        }
+        .checkbox-group label { 
+            display: inline-block; 
+            margin-right: 1rem; 
+            font-weight: normal;
+        }
+        button { 
+            width: 100%; 
+            padding: 0.75rem; 
+            font-size: 1.05rem; 
+            font-weight: 600; 
+            border: none; 
+            border-radius: 4px; 
+            cursor: pointer; 
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            opacity: 0.9;
+        }
+        .btn-generate { background-color: #007bff; color: white; }
+        .btn-calculate { background-color: #28a745; color: white; }
+        .results { 
+            margin-top: 1rem; 
+            padding-top: 1rem; 
+            border-top: 1px solid #eee; 
+        }
+        .results p { 
+            margin: 0.5rem 0; 
+            font-size: 1.15rem; 
+            font-weight: 600;
+        }
+        .results span { 
+            font-weight: normal; 
+            color: #333; 
+        }
+        .color-red { color: darkred; }
+        .color-blue { color: darkblue; }
+        .monospace { 
+            font-family: "Courier New", Courier, monospace; 
+            /* --- MODIFICATION: Increased font size for formulas --- */
+            font-size: 1.6rem; 
+            background-color: #f4f4f4;
+            padding: 4px 8px; /* Slightly more padding to match new size */
+            border-radius: 4px;
+        }
+        #formatted-problem {
+            background-color: #f8f9fa;
+            border: 1px dashed #ced4da;
+            padding: 1rem;
+            border-radius: 5px;
+            white-space: pre-wrap; 
+            line-height: 1.5;
+            font-size: 1rem;
+            color: #212529;
+        }
+        #formatted-problem strong {
+            font-weight: 700;
+            color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ===================================== -->
+    <!--          GENERATOR PANE (HTML)        -->
+    <!-- ===================================== -->
+    <div class="pane">
+        <h2>Problem Generator</h2>
+        <div class="form-group">
+            <label for="gen-sample-weight" class="color-red">Sample Weight (g)</label>
+            <input type="number" id="gen-sample-weight" value="1.0" step="0.001">
+        </div>
+        <div class="form-group">
+            <label for="gen-max-carbons">Maximum Carbon Atoms (3-20)</label>
+            <input type="number" id="gen-max-carbons" value="6" min="3" max="10">
+        </div>
+        <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="gen-contain-o" checked> Include Oxygen</label>
+            <label><input type="checkbox" id="gen-contain-n"> Include Nitrogen</label>
+        </div>
+        <button id="generate-btn" class="btn-generate">Generate & Populate Problem</button>
+        <div class="results" id="generator-results" style="display:none;">
+            <h4>Generated Problem Statement</h4>
+            <pre id="formatted-problem"></pre>
+            <hr>
+            <p class="color-red">Molecular Weight: <span id="gen-mw"></span></p>
+            <p class="color-blue">CO₂ Produced: <span id="gen-co2"></span> g</p>
+            <p class="color-blue">H₂O Produced: <span id="gen-h2o"></span> g</p>
+            <p class="color-blue" id="gen-n-container" style="display:none;">Weight of N: <span id="gen-n"></span> g</p>
+        </div>
+    </div>
+
+    <!-- ===================================== -->
+    <!--         CALCULATOR PANE (HTML)        -->
+    <!-- ===================================== -->
+    <div class="pane">
+        <h2>Formula Calculator</h2>
+        <div class="form-group">
+            <label for="calc-sample-weight" class="color-red">Sample Weight (g)</label>
+            <input type="number" id="calc-sample-weight" placeholder="e.g., 1.0" step="0.001">
+        </div>
+        <div class="form-group">
+            <label for="calc-co2" class="color-blue">Amount of CO₂ (g)</label>
+            <input type="number" id="calc-co2" placeholder="e.g., 2.521" step="0.001">
+        </div>
+        <div class="form-group">
+            <label for="calc-h2o" class="color-blue">Amount of H₂O (g)</label>
+            <input type="number" id="calc-h2o" placeholder="e.g., 1.241" step="0.001">
+        </div>
+        <div class="form-group" id="calc-n-group">
+            <label for="calc-n" class="color-blue">Weight of N (g)</label>
+            <input type="number" id="calc-n" placeholder="e.g., 0.212" step="0.001">
+        </div>
+        <div class="form-group">
+            <label for="calc-mw" class="color-red">Molecular Weight (g/mol, optional)</label>
+            <input type="number" id="calc-mw" placeholder="e.g., 88">
+        </div>
+        <div class="form-group checkbox-group">
+            <label><input type="checkbox" id="calc-contain-o" checked> Oxygen Present</label>
+            <label><input type="checkbox" id="calc-contain-n"> Nitrogen Present</label>
+        </div>
+        <button id="calculate-btn" class="btn-calculate">Calculate Formulas</button>
+        <div class="results" id="calculator-results" style="display:none;">
+            <p>Percentages: <span id="calc-percentages"></span></p>
+            <p class="color-red">Empirical Formula: <span id="calc-ef" class="monospace"></span></p>
+            <p class="color-blue">Molecular Formula: <span id="calc-mf" class="monospace"></span></p>
+            <p class="color-red">IHD: <span id="calc-ihd" class="monospace"></span></p>
+        </div>
+    </div>
+
+    <script>
+    // --- JAVASCRIPT LOGIC ---
+
+    // --- Helper Functions ---
+    const truncate = (value) => Math.floor(value * 1000) / 1000;
+    const getRandomInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    const toSubscript = (text) => String(text).replace(/[0-9]/g, (char) => '₀₁₂₃₄₅₆₇₈₉'[char]);
+    const getVal = (id) => parseFloat(document.getElementById(id).value);
+    const getChecked = (id) => document.getElementById(id).checked;
+
+    // --- Logic for the Generator Pane ---
+    const generateProblem = () => {
+        try {
+            const sampleWeight = getVal('gen-sample-weight');
+            const maxCarbons = parseInt(document.getElementById('gen-max-carbons').value);
+            const containO = getChecked('gen-contain-o');
+            const containN = getChecked('gen-contain-n');
+            
+            if (isNaN(sampleWeight) || isNaN(maxCarbons)) {
+                alert("Please enter valid numbers for sample weight and max carbons.");
+                return;
+            }
+            if (!containO && !containN) {
+                alert("Generator Error: Please select at least one element (Oxygen or Nitrogen) to include besides Carbon and Hydrogen.");
+                return;
+            }
+
+            const numC = getRandomInt(3, maxCarbons);
+            const numN = containN ? getRandomInt(1, 2) : 0;
+            const numO = containO ? getRandomInt(1, 3) : 0;
+            
+            let numH = getRandomInt(numC, numC * 2 + 2);
+            if ((numN % 2) !== (numH % 2)) {
+                numH < numC * 2 + 2 ? numH++ : numH--;
+            }
+
+            const mw = (numC * 12) + (numH * 1) + (numN * 14) + (numO * 16);
+            const atomWeights = { C: 12, H: 1, N: 14, O: 16 };
+            const atomCounts = { C: numC, H: numH, N: numN, O: numO };
+            const totalTheoreticalWeight = Object.keys(atomCounts).reduce((sum, key) => sum + atomCounts[key] * atomWeights[key], 0);
+            
+            const scaleFactor = sampleWeight / totalTheoreticalWeight;
+            const weightC = atomCounts.C * 12 * scaleFactor;
+            const weightH = atomCounts.H * 1 * scaleFactor;
+            const weightN = atomCounts.N * 14 * scaleFactor;
+
+            const co2Weight = truncate(weightC * (44 / 12));
+            const h2oWeight = truncate(weightH * (18 / 2));
+            const nWeight = truncate(weightN);
+            
+            let elementList = "C, H";
+            if (containN && containO) {
+                elementList = "C, H, N and O";
+            } else if (containN) {
+                elementList = "C, H and N";
+            } else if (containO) {
+                elementList = "C, H and O";
+            }
+
+            let nitrogenSentence = "";
+            if (containN && containO) {
+                nitrogenSentence = `and the nitrogen in the sample weighs <strong>${nWeight}</strong> g, `;
+            }
+
+            const problemText = `When <strong>${sampleWeight}</strong> g of a sample was exposed to combustion in air, <strong>${co2Weight}</strong> g and <strong>${h2oWeight}</strong> g of CO₂ and water were produced, respectively.
+Knowing that the sample contains ${elementList}, ${nitrogenSentence}if the sample has a M.W. of <strong>${mw}</strong> g/mol, determine:
+
+A) % composition of each element in the sample.
+B) Empirical and molecular formulas.
+C) IHD.`;
+
+            document.getElementById('formatted-problem').innerHTML = problemText;
+
+            // Display original generator results
+            document.getElementById('gen-mw').textContent = mw;
+            document.getElementById('gen-co2').textContent = co2Weight;
+            document.getElementById('gen-h2o').textContent = h2oWeight;
+            
+            const nContainer = document.getElementById('gen-n-container');
+            if (containN) {
+                document.getElementById('gen-n').textContent = nWeight;
+                nContainer.style.display = 'block';
+            } else {
+                nContainer.style.display = 'none';
+            }
+            document.getElementById('generator-results').style.display = 'block';
+
+            // Auto-populate the calculator
+            document.getElementById('calc-sample-weight').value = sampleWeight;
+            document.getElementById('calc-co2').value = co2Weight;
+            document.getElementById('calc-h2o').value = h2oWeight;
+            document.getElementById('calc-mw').value = mw;
+            document.getElementById('calc-contain-n').checked = containN;
+            document.getElementById('calc-contain-o').checked = containO;
+            
+            const calcNGroup = document.getElementById('calc-n-group');
+            if (containN && containO) {
+                calcNGroup.style.display = 'block';
+                document.getElementById('calc-n').value = nWeight;
+            } else {
+                calcNGroup.style.display = 'none';
+                document.getElementById('calc-n').value = '';
+            }
+
+        } catch (error) {
+            alert('An error occurred while generating the problem: ' + error.message);
+        }
+    };
+    
+    // --- Logic for the Calculator Pane ---
+    const calculateFormulas = () => {
+        try {
+            const sampleWeight = getVal('calc-sample-weight');
+            const co2Amount = getVal('calc-co2');
+            const h2oAmount = getVal('calc-h2o');
+            const mwValue = getVal('calc-mw') || null;
+            const nWeight = getVal('calc-n') || 0;
+            const containO = getChecked('calc-contain-o');
+            const containN = getChecked('calc-contain-n');
+            
+            if (isNaN(sampleWeight) || isNaN(co2Amount) || isNaN(h2oAmount)) {
+                alert("Please enter valid numbers for sample weight, CO₂, and H₂O.");
+                return;
+            }
+
+            const carbon = truncate((co2Amount * 12) / 44);
+            const hydrogen = truncate(h2oAmount / 9);
+            const percentC = truncate((carbon / sampleWeight) * 100);
+            const percentH = truncate((hydrogen / sampleWeight) * 100);
+
+            let percentN = 0, percentO = 0;
+            if (containN && containO) { // C,H,N,O case
+                percentN = truncate((nWeight / sampleWeight) * 100);
+                percentO = truncate(100 - (percentC + percentH + percentN));
+            } else if (containN) { // C,H,N only
+                percentN = truncate(100 - (percentC + percentH));
+            } else if (containO) { // C,H,O only
+                percentO = truncate(100 - (percentC + percentH));
+            }
+            
+            const cDiv = truncate(percentC / 12);
+            const hDiv = truncate(percentH / 1);
+            const nDiv = truncate(percentN / 14);
+            const oDiv = truncate(percentO / 16);
+
+            const values = [cDiv, hDiv, nDiv, oDiv].filter(v => v > 0);
+            if (values.length === 0) throw new Error("No elements found from input data.");
+            
+            const minValue = Math.min(...values);
+            const ratios = [cDiv, hDiv, nDiv, oDiv].map(v => truncate(v / minValue));
+            
+            let finalRatios = null;
+            for (let factor = 1; factor <= 7; factor++) {
+                const adj = ratios.map(r => truncate(r * factor));
+                if (adj.filter(r => r > 0).every(r => Math.abs(r - Math.round(r)) <= 0.15)) {
+                    finalRatios = adj.map(r => Math.round(r));
+                    break;
+                }
+            }
+            if (!finalRatios) throw new Error("Could not determine integer ratios.");
+            const [rc, rh, rn, ro] = finalRatios;
+
+            // Build Results
+            let percentagesText = `C: ${percentC.toFixed(3)}% | H: ${percentH.toFixed(3)}%`;
+            if (rn > 0) percentagesText += ` | N: ${percentN.toFixed(3)}%`;
+            if (ro > 0 && percentO > 0.001) percentagesText += ` | O: ${percentO.toFixed(3)}%`;
+            
+            let ef = `C${rc > 1 ? rc : ''}H${rh > 1 ? rh : ''}`;
+            if (rn > 0) ef += `N${rn > 1 ? rn : ''}`;
+            if (ro > 0) ef += `O${ro > 1 ? ro : ''}`;
+            
+            let mf = '', ihd = '';
+            if (mwValue && !isNaN(mwValue)) {
+                const efWeight = (rc*12) + (rh*1) + (rn*14) + (ro*16);
+                const mf_factor = Math.round(mwValue / efWeight);
+                const [mc, mh, mn, mo] = [rc, rh, rn, ro].map(r => r * mf_factor);
+                mf = `C${mc > 1 ? mc : ''}H${mh > 1 ? mh : ''}`;
+                if (mn > 0) mf += `N${mn > 1 ? mn : ''}`;
+                if (mo > 0) mf += `O${mo > 1 ? mo : ''}`;
+                ihd = Math.floor((2 * mc + 2 + mn - mh) / 2);
+            }
+            
+            // Display calculator results
+            document.getElementById('calc-percentages').textContent = percentagesText;
+            document.getElementById('calc-ef').innerHTML = toSubscript(ef);
+            document.getElementById('calc-mf').innerHTML = toSubscript(mf);
+            document.getElementById('calc-ihd').textContent = ihd;
+            document.getElementById('calculator-results').style.display = 'block';
+
+        } catch (error) {
+            alert('Calculation Error: ' + error.message);
+        }
+    };
+    
+    // --- Event Listeners to connect buttons to functions ---
+    document.getElementById('generate-btn').addEventListener('click', generateProblem);
+    document.getElementById('calculate-btn').addEventListener('click', calculateFormulas);
+
+    // Show/hide N-weight field based on checkboxes
+    const updateNFieldVisibility = () => {
+        const calcNGroup = document.getElementById('calc-n-group');
+        if (getChecked('calc-contain-n') && getChecked('calc-contain-o')) {
+            calcNGroup.style.display = 'block';
+        } else {
+            calcNGroup.style.display = 'none';
+        }
+    };
+    document.getElementById('calc-contain-n').addEventListener('change', updateNFieldVisibility);
+    document.getElementById('calc-contain-o').addEventListener('change', updateNFieldVisibility);
+    
+    // Initial call to set the correct state
+    updateNFieldVisibility();
+
+    </script>
+
+</body>
+</html>

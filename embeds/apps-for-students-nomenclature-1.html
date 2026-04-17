@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heterocyclic Nomenclature Quiz</title>
+    <script src="https://unpkg.com/@rdkit/rdkit/dist/RDKit_minimal.js"></script>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f4f7f9;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 20px;
+            box-sizing: border-box;
+        }
+        #quiz-container {
+            background-color: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 380px;
+            padding: 20px;
+            text-align: center;
+            box-sizing: border-box;
+        }
+        h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        #molecule-canvas {
+            width: 180px;
+            height: 160px;
+            margin: 10px auto;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            display: block;
+        }
+        #loader {
+            font-size: 1em;
+            color: #555;
+            min-height: 180px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        #options-container {
+            list-style-type: none;
+            padding: 0;
+            margin: 20px 0;
+            text-align: left;
+        }
+        .option {
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: background-color 0.2s, border-color 0.2s;
+        }
+        .option:hover {
+            background-color: #e9ecef;
+        }
+        .option.correct {
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            color: #155724;
+        }
+        .option.incorrect {
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            color: #721c24;
+        }
+        .option.disabled {
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        #submit-btn, #next-btn {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px 30px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+        #submit-btn:hover, #next-btn:hover {
+            background-color: #0056b3;
+        }
+        #submit-btn:disabled {
+            background-color: #cccccc;
+            cursor: not-allowed;
+        }
+        #feedback {
+            margin-top: 20px;
+            font-size: 1.1em;
+            font-weight: bold;
+            min-height: 25px;
+        }
+        #score {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: #007bff;
+        }
+        #click-counter {
+            font-size: 15px;
+            margin-top: 15px;
+            color: #444;
+        }
+    </style>
+</head>
+<body>
+    <div id="quiz-container">
+        <div id="score">Score: 0</div>
+        <h2>What is the name of this compound?</h2>
+        <div id="molecule-display">
+            <p id="loader">Loading chemistry library...</p>
+            <canvas id="molecule-canvas" width="180" height="160" style="display: none;"></canvas>
+        </div>
+        <div id="options-container"></div>
+        <div id="feedback"></div>
+        <button id="submit-btn">Submit Answer</button>
+        <button id="next-btn" style="display: none;">Next Question</button>
+        <!-- 🔹 Live Click Counter -->
+        <div id="click-counter">Total Questions Answered by All Visitors: Loading...</div>
+    </div>
+
+    <script>
+        // Quiz Data (your full dataset stays here unchanged)
+        const quizData = [
+            // Monocyclic 5-membered
+            { smiles: "c1cc[nH]c1", options: ["Pyrrole", "Pyridine", "Furan", "Thiophene"], correct: 0 },
+            { smiles: "c1ccoc1", options: ["Thiophene", "Furan", "Pyrrole", "Oxazole"], correct: 1 },
+            { smiles: "c1ccsc1", options: ["Thiazole", "Pyran", "Thiophene", "Furan"], correct: 2 },
+            { smiles: "c1cnc[nH]1", options: ["Imidazole", "Pyrazole", "Oxazole", "Triazole"], correct: 0 },
+            { smiles: "c1cn[nH]c1", options: ["Imidazole", "Pyrazole", "Isoxazole", "Thiazole"], correct: 1 },
+            { smiles: "c1cnco1", options: ["Isoxazole", "Thiazole", "Oxazole", "Furan"], correct: 2 },
+            { smiles: "c1noc(c1)", options: ["Oxazole", "Isoxazole", "Furan", "Thiazole"], correct: 1 },
+            { smiles: "c1cncs1", options: ["Isothiazole", "Oxazole", "Thiophene", "Thiazole"], correct: 3 },
+            { smiles: "c1csnc1", options: ["Thiazole", "Isoxazole", "Isothiazole", "Thiophene"], correct: 2 },
+            { smiles: "c1n[nH]nn1", options: ["Tetrazole", "Triazole", "Pentazole", "Imidazole"], correct: 0 },
+            // Monocyclic 6-membered
+            { smiles: "c1ccncc1", options: ["Pyrimidine", "Pyrrole", "Piperidine", "Pyridine"], correct: 3 },
+            { smiles: "c1cncnc1", options: ["Pyridine", "Pyridazine", "Pyrimidine", "Pyrazine"], correct: 2 },
+            { smiles: "c1cnccn1", options: ["Pyrimidine", "Pyridazine", "Triazine", "Pyrazine"], correct: 3 },
+            { smiles: "c1ccnnc1", options: ["Pyridine", "Pyridazine", "Pyrimidine", "Pyrazine"], correct: 1 },
+            { smiles: "c1ncncn1", options: ["Pyrazine", "1,2,4-Triazine", "1,3,5-Triazine", "Pyrimidine"], correct: 2 },
+            {smiles: "C1=COCC=C1", options: ["2H-Pyran", "4H-Pyran", "2H-Pyranose", "Furan"], correct: 0},
+            {smiles: "C1=COC=CC1", options: ["2H-Pyran", "4H-Pyran", "2H-Pyranose", "Furan"], correct: 1},
+            // Saturated Rings
+            { smiles: "C1CCNC1", options: ["Pyrrolidine", "Piperidine", "Pyrrole", "Aziridine"], correct: 0 },
+            { smiles: "C1CCOC1", options: ["Furan", "Tetrahydrofuran", "Dioxane", "Pyran"], correct: 1 },
+            { smiles: "C1CCNCC1", options: ["Pyridine", "Pyrrolidine", "Piperidine", "Morpholine"], correct: 2 },
+            { smiles: "C1CNCCN1", options: ["Pyridazine", "Morpholine", "Pyrazine", "Piperazine"], correct: 3 },
+            { smiles: "C1COCCN1", options: ["Piperazine", "Morpholine", "Dioxane", "Pyrrolidine"], correct: 1 },
+            { smiles: "C1COCOC1", options: ["1,3-Dioxane", "Tetrahydrofuran", "Morpholine", "1,4-Dioxane"], correct: 0 },
+            { smiles: "C1CCSCC1", options: ["Thiophene", "Thiane", "Thiirane", "Thiepane"], correct: 1 },
+            { smiles: "C1CN1", options: ["Oxirane", "Azetidine", "Thiirane", "Aziridine"], correct: 3 },
+            { smiles: "C1CNC1", options: ["Azetidine", "Aziridine", "Pyrrolidine", "Oxetane"], correct: 0 },
+            { smiles: "C1CO1", options: ["Oxetane", "Oxirane", "Aziridine", "Furan"], correct: 1 },
+            { smiles: "C1CCO1", options: ["THF", "Oxirane", "Oxetane", "Dioxane"], correct: 2 },
+            // Fused Benzenoid Systems
+            { smiles: "c1ccc2c(c1)[nH]cc2", options: ["Isoindole", "Indole", "Carbazole", "Pyrrole"], correct: 1 },
+            { smiles: "c1ccc2c(c1)c[nH]c2", options: ["Quinoline", "Indole", "Isoindole", "Benzimidazole"], correct: 2 },
+            { smiles: "c1ccc2c(c1)occ2", options: ["Coumarin", "Chromene", "Benzofuran", "Furan"], correct: 2 },
+            { smiles: "c1ccc2c(c1)scc2", options: ["Thionaphthene", "Benzoxazole", "Thiophene", "Benzothiophene"], correct: 3 },
+            { smiles: "c1ccc2c(c1)[nH]cn2", options: ["Benzothiazole", "Indazole", "Purine", "Benzimidazole"], correct: 3 },
+            { smiles: "c1ccc2c(c1)nco2", options: ["Indoxazine", "Benzisoxazole", "Oxazoline", "Benzoxazole"], correct: 3 },
+            { smiles: "c1ccc2c(c1)ncs2", options: ["Benzothiazole", "Benzothiophene", "Thiazole", "Indole"], correct: 0 },
+            { smiles: "c1ccc2c(c1)cccn2", options: ["Quinoline", "Indole", "Benzene", "Naphthalene"], correct: 0 },
+            { smiles: "c1ccc2c(c1)cncc2", options: ["Indole", "Cinnoline", "Isoquinoline", "Quinoline"], correct: 2 },
+            { smiles: "c1ccc2c(c1)nncc2", options: ["Phthalazine", "Quinazoline", "Cinnoline", "Quinoxaline"], correct: 2 },
+            { smiles: "c1ccc2c(c1)ncnc2", options: ["Quinoxaline", "Cinnoline", "Quinazoline", "Purine"], correct: 2 },
+            { smiles: "c1ccc2c(c1)nccn2", options: ["Quinazoline", "Phenazine", "Cinnoline", "Quinoxaline"], correct: 3 },
+            // Larger Fused Systems
+            { smiles: "c1ccc2c(c1)[nH]c3ccccc23", options: ["Indole", "Acridine", "Carbazole", "Dibenzofuran"], correct: 2 },
+            { smiles: "c1ccc2c(c1)oc3ccccc32", options: ["Benzofuran", "Furan", "Carbazole", "Dibenzofuran"], correct: 3 },
+            { smiles: "c1ccc2c(c1)sc3ccccc32", options: ["Dibenzothiophene", "Benzothiophene", "Thianthrene", "Phenothiazine"], correct: 0 },
+            { smiles: "c1ccc2c(c1)[nH]c3ccccc3s2", options: ["Acridine", "Phenothiazine", "Thianthrene", "Carbazole"], correct: 1 },
+            { smiles: "c1ccc2c(c1)oc3ccccc3[nH]2", options: ["Phenothiazine", "Acridine", "Carbazole", "Phenoxazine"], correct: 3 },
+            { smiles: "C12=NC=NC=C1NC=N2", options: ["Purine", "Acridine", "Carbazole", "xanthine"], correct: 0 },
+            { smiles: "C12=CC=CC=C1C=C3C(C=CC=C3)=N2", options: ["Purine", "Acridine", "Carbazole", "xanthine"], correct: 1 },
+            // Fused Heterocyclic Systems
+            { smiles: "c1ccc2nccn2c1", options: ["imidazo[1,2-a]pyrimidine", "imidazo[2,1-a]pyridine", "Imidazo[1,2-a]pyridine", "Benzimidazole"], correct: 2 },
+            { smiles: "c1coc2c1scc2", options: ["Thieno[2,3-b]furan", "Thieno[3,2-b]furan", "Furo[2,3-b]thiophene", "Benzofuran"], correct: 1 },
+            { smiles: "c1csc2c1scc2", options: ["Thieno[2,3-b]thiophene", "Thieno[3,2-b]thiophene", "Dithienothiophene", "Benzothiophene"], correct: 1 },
+            { smiles: "c1coc2c1occ2", options: ["Furo[2,3-b]furan", "Benzofuran", "Furo[3,2-b]furan", "Dioxin"], correct: 2 },
+            { smiles: "C12=NC=CC1=CC=N2", options: ["Pyrrolo[3,2-b]pyrrole", "Indole", "Purine", "Pyrrolo[2,3-b]pyrrole"], correct: 3 },
+            { smiles: "c1ccc2c(c1)n3c(cn2)nnc3", options: ["1,2,4-triazolo[4,3-a]quinoxaline", "1,2,4-Triazolo[1,5-a]quinoxaline", "Imidazo[1,2-a]pyridine", "Pyridotriazole"], correct: 0 },
+            { smiles: "c1nc2c(s1)ncnc2", options: ["Thiazolo[4,5-d]pyrimidine", "Thiazolo[5,4-d]pyrimidine", "Purine", "Benzothiazole"], correct: 1 },
+            { smiles: "c1nc2c(s1)[nH]cc2", options: ["Imidazo[2,1-b]thiazole", "Imidazo[1,2-b]pyridazine", "pyrrolo[3,2-d]thiazole", "Pyrrolo[2,1-b]thiazole"], correct: 2 },
+            { smiles: "c1cnc2c(c1)scc2", options: ["Thieno[2,3-b]pyridine", "Thieno[3,2-b]pyridine", "Benzothiophene", "Quinoline"], correct: 1 }
+        ];
+
+        // --- Click Counter API ---
+        const counterApiUrl = "https://script.google.com/macros/s/AKfycbwNUpY-Gq04Ocipc3rLzJeEHtgMeRzwQ3bzyZd0yAUrr9f3ikQ5zWDDpZd3Pl7VuaI/exec"; // replace with your Google Apps Script Web App URL
+
+        async function loadClickCount() {
+            try {
+                let res = await fetch(counterApiUrl);
+                let count = await res.text();
+                document.getElementById("click-counter").innerText = "Total Questions Answered by All Visitors: " + count;
+            } catch (err) {
+                console.error("Error loading click count", err);
+            }
+        }
+
+        async function incrementClickCount() {
+            try {
+                let res = await fetch(counterApiUrl + "?action=increment");
+                let count = await res.text();
+                document.getElementById("click-counter").innerText = "Total Questions Answered by All Visitors: " + count;
+            } catch (err) {
+                console.error("Error incrementing click count", err);
+            }
+        }
+
+        const canvas = document.getElementById('molecule-canvas');
+        const loader = document.getElementById('loader');
+        const optionsContainer = document.getElementById('options-container');
+        const submitBtn = document.getElementById('submit-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const feedbackEl = document.getElementById('feedback');
+        const scoreEl = document.getElementById('score');
+
+        let currentQuestionIndex = 0;
+        let answered = false;
+        let usedIndices = new Set();
+        let RDKitModule = null;
+        let score = 0;
+
+        window.initRDKitModule().then(function(RDKit) {
+            RDKitModule = RDKit;
+            loader.style.display = 'none';
+            canvas.style.display = 'block';
+            loadQuestion();
+        }).catch(() => {
+            loader.textContent = "Error: Could not load the chemistry drawing library.";
+        });
+
+        function getNextQuestionIndex() {
+            if (usedIndices.size === quizData.length) {
+                usedIndices.clear();
+            }
+            let nextIndex;
+            do {
+                nextIndex = Math.floor(Math.random() * quizData.length);
+            } while (usedIndices.has(nextIndex));
+            usedIndices.add(nextIndex);
+            return nextIndex;
+        }
+
+        function loadQuestion() {
+            if (!RDKitModule) return;
+
+            answered = false;
+            optionsContainer.innerHTML = '';
+            feedbackEl.textContent = '';
+            submitBtn.style.display = 'block';
+            nextBtn.style.display = 'none';
+            submitBtn.disabled = false;
+
+            currentQuestionIndex = getNextQuestionIndex();
+            const question = quizData[currentQuestionIndex];
+
+            const mol = RDKitModule.get_mol(question.smiles);
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            if (mol) {
+                mol.draw_to_canvas(canvas, -1, -1);
+                mol.delete();
+            }
+
+            question.options.forEach((option, index) => {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'option';
+                optionDiv.textContent = option;
+                optionDiv.addEventListener('click', () => checkAnswer(index));
+                optionsContainer.appendChild(optionDiv);
+            });
+        }
+
+        function checkAnswer(answerIndex) {
+            if (answered) return;
+            answered = true;
+
+            // 🔹 Count every click
+            incrementClickCount();
+
+            const question = quizData[currentQuestionIndex];
+            const options = optionsContainer.querySelectorAll('.option');
+
+            if (answerIndex === question.correct) {
+                score++;
+                scoreEl.textContent = `Score: ${score}`;
+                feedbackEl.textContent = "✅ Correct!";
+                feedbackEl.style.color = '#28a745';
+                options[answerIndex].classList.add('correct');
+            } else {
+                feedbackEl.textContent = `❌ Incorrect. Correct: ${question.options[question.correct]}`;
+                feedbackEl.style.color = '#dc3545';
+                options[answerIndex].classList.add('incorrect');
+                options[question.correct].classList.add('correct');
+            }
+            options.forEach(opt => opt.classList.add('disabled'));
+
+            submitBtn.style.display = 'none';
+            nextBtn.style.display = 'block';
+        }
+
+        nextBtn.addEventListener('click', loadQuestion);
+
+        // 🔹 Load click count when page starts
+        loadClickCount();
+    </script>
+</body>
+</html>
