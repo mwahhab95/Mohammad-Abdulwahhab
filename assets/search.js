@@ -120,9 +120,11 @@ async function performAISearch(query) {
     const systemPrompt = `You are a professional chemistry education assistant. 
 Your task is to help students find the most relevant videos from Mohammad Abdulwahhab's organic chemistry collection.
 Below is the metadata of all available videos (title, summary, keywords).
+The student might ask in English or Arabic. You must respond in the SAME language the student uses.
+
 When a student asks a question or searches for a topic, identify the 3-5 most relevant videos.
 Return ONLY a JSON array of objects with this structure: 
-[{"id": "video_id", "title": "video_title", "reason": "concise explanation of why this is relevant to the student's query"}]
+[{"id": "video_id", "title": "video_title", "reason": "concise explanation in the user's language of why this is relevant"}]
 
 Metadata:
 ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
