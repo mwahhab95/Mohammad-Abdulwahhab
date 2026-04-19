@@ -106,50 +106,66 @@ async function performAISearch(query) {
         }
     }
 
-    statusEl.innerText = "AI is thinking (الذكاء الاصطناعي يفكر)...";
+    statusEl.innerText = "Searching... (جاري البحث...)";
     statusEl.classList.add('active');
     resultsEl.classList.remove('active');
     btnEl.disabled = true;
     btnEl.innerHTML = '<div class="spinner"></div> Searching...';
 
-    const systemPrompt = `You are a chemistry expert. A student is asking: "${query}"
-Search through the following video metadata (titles, summaries, keywords) to find the 3-5 most relevant videos.
-Even if the query is in Arabic, match it against the English metadata semantically.
-Always provide the "reason" in the SAME language as the query (Arabic if the query is Arabic).
+    const systemPrompt = `You are a specialized Chemistry Education AI. Your task is to match a student's query to the best organic chemistry videos from the provided metadata.
 
-Return ONLY a JSON array: [{"id": "video_id", "title": "video_title", "reason": "Explanation"}]
+STUDENT QUERY: "${query}"
 
-Metadata:
-${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}`;
+INSTRUCTIONS:
+1. Language Detection: Detect if the query is in Arabic or English.
+2. Semantic Matching: Match the query's chemistry topics to the English metadata (titles, summaries, keywords).
+3. Precision: If the query is in English, provide highly accurate results based on exact and semantic matches.
+4. Translation (Arabic Queries): If the query is in Arabic, translate it to standard organic chemistry English terms before matching.
+5. Output Language: The "reason" for each result must be in the SAME language as the student's query (Arabic for Arabic queries, English for English queries).
+6. Output Format: Return ONLY a valid JSON array of objects. No introductory text.
+
+METADATA:
+${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
+
+JSON STRUCTURE:
+[{"id": "video_id", "title": "video_title", "reason": "Short explanation of relevance"}]`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: systemPrompt }] }]
+                contents: [{ parts: [{ text: systemPrompt }] }],
+                generationConfig: {
+                    temperature: 0.2 // Lower temperature for more consistent JSON
+                }
             })
         });
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`API Error: ${response.status} - ${errorData.error?.message}`);
+            throw new Error(`API Error: ${response.status}`);
         }
 
         const data = await response.json();
         let aiResponseText = data.candidates[0].content.parts[0].text;
         
-        // Robust JSON extraction
-        const jsonMatch = aiResponseText.match(/\[\s*\{.*\}\s*\]/s);
-        if (!jsonMatch) {
-            console.log("Raw AI Response:", aiResponseText);
-            throw new Error("The AI didn't return a valid list of videos. Try being more specific.");
+        // Clean up any potential markdown formatting
+        const cleanedText = aiResponseText.replace(/```json|```/g, "").trim();
+        
+        // Find the first [ and last ] to extract the JSON array
+        const start = cleanedText.indexOf('[');
+        const end = cleanedText.lastIndexOf(']');
+        
+        if (start === -1 || end === -1) {
+            throw new Error("No video results found for this specific query.");
         }
         
-        const results = JSON.parse(jsonMatch[0]);
+        const jsonString = cleanedText.substring(start, end + 1);
+        const results = JSON.parse(jsonString);
 
         if (results.length === 0) {
-            throw new Error("No relevant videos found for this topic.");
+            throw new Error("No relevant videos found. Try different terms.");
         }
 
         sessionStorage.setItem(cacheKey, JSON.stringify(results));
@@ -158,12 +174,11 @@ ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summar
         console.error("Search error:", error);
         
         const keywordResults = performKeywordFallback(query);
-        renderResults(keywordResults);
-        
         if (keywordResults.length > 0) {
-            statusEl.innerText = "Showing basic results (AI limited):";
+            renderResults(keywordResults);
+            statusEl.innerText = "Showing matches based on keywords:";
         } else {
-            statusEl.innerHTML = `<span style="color:red">Error: ${error.message}</span><br>Try searching in English or use simpler keywords like 'Alkanes'.`;
+            statusEl.innerHTML = `<span style="color:red">No results found.</span><br>Try a broader topic or search in English.`;
         }
     } finally {
         btnEl.disabled = false;
