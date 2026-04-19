@@ -23,7 +23,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@500;600;700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="../assets/site.css" />
+    <link rel="stylesheet" href="../assets/search.css" />
     <script type="module" src="../assets/site.js"></script>
+    <script type="module" src="../assets/search.js"></script>
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to content</a>
@@ -68,6 +70,22 @@
               <span>and heterocyclic exploration</span>
             </div>
           </div>
+        </div>
+
+        <!-- AI Search Engine Section -->
+        <div class="search-container">
+          <div class="search-header">
+            <h2>AI Video Search <span class="ai-badge">Powered by Gemini</span></h2>
+            <p>Ask a question or search for a keyword to find the most relevant video content.</p>
+          </div>
+          <form class="search-form" id="searchForm">
+            <div class="search-input-wrapper">
+              <input type="text" id="searchInput" class="search-input" placeholder="e.g., How to draw resonance structures? or 'hybridization'" required>
+            </div>
+            <button type="submit" class="search-button" id="searchBtn">Search</button>
+          </form>
+          <div class="search-status" id="searchStatus"></div>
+          <div class="search-results" id="searchResults"></div>
         </div>
 
         <div class="learn-journey-heading">
