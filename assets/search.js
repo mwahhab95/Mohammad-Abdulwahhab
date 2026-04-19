@@ -84,7 +84,7 @@ async function performAISearch(query) {
     const normalizedQuery = query.toLowerCase().trim();
     const cacheKey = `search_cache_${normalizedQuery}`;
 
-    // Detect if Arabic
+    // Language Detection
     const isArabic = /[\u0600-\u06FF]/.test(query);
     resultsEl.style.direction = isArabic ? 'rtl' : 'ltr';
     resultsEl.style.textAlign = isArabic ? 'right' : 'left';
@@ -98,7 +98,7 @@ async function performAISearch(query) {
         try {
             const results = JSON.parse(cachedResponse);
             renderResults(results);
-            statusEl.innerText = isArabic ? "نتائج البحث المحفوظة:" : "Showing cached results:";
+            statusEl.innerText = isArabic ? "نتائج من الذاكرة المؤقتة:" : "Showing cached results:";
             statusEl.classList.add('active');
             return;
         } catch (e) {
@@ -106,46 +106,30 @@ async function performAISearch(query) {
         }
     }
 
-    statusEl.innerText = isArabic ? "جاري الترجمة والبحث..." : "Searching...";
+    statusEl.innerText = isArabic ? "جاري تحليل سؤالك والبحث عن أفضل الفيديوهات..." : "Analyzing your query and searching...";
     statusEl.classList.add('active');
     resultsEl.classList.remove('active');
     btnEl.disabled = true;
-    btnEl.innerHTML = '<div class="spinner"></div> Searching...';
+    btnEl.innerHTML = '<div class="spinner"></div>';
 
-    // DUAL-PASS STRATEGY: 
-    // If Arabic, we explicitly ask Gemini to translate the intent to English keywords first.
-    let englishQuery = query;
-    if (isArabic) {
-        try {
-            const translationResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    contents: [{ parts: [{ text: `Translate this Arabic chemistry query into a list of 5 specific English technical keywords: "${query}". Return only the keywords separated by commas.` }] }]
-                })
-            });
-            const transData = await translationResponse.json();
-            englishQuery = transData.candidates[0].content.parts[0].text;
-            console.log("Arabic translated to keywords:", englishQuery);
-        } catch (e) {
-            console.error("Translation pass failed", e);
-        }
-    }
+    const systemPrompt = `You are a Chemistry Expert Search Engine. 
+Your goal is to match the USER QUERY to the most relevant videos from the METADATA.
 
-    const systemPrompt = `You are a Chemistry Search Engine. 
-Match the student's request to the following metadata.
-STUDENT REQUEST (Keywords): "${englishQuery}"
-ORIGINAL QUERY: "${query}"
+USER QUERY: "${query}"
+LANGUAGE: ${isArabic ? 'Arabic' : 'English'}
 
 INSTRUCTIONS:
-1. Find the 3-5 most relevant videos.
-2. If the original query was Arabic, write the "reason" in Arabic.
-3. Return ONLY a JSON array.
+1. Translate the intent of the query to English chemistry terms if it is in Arabic.
+2. Compare the query (or its translation) against video titles, summaries, and keywords.
+3. Select the 3-5 most relevant videos. DO NOT return an empty list if any thematic match exists.
+4. If the query is in Arabic, write the "reason" in Arabic. If in English, write it in English.
+5. Return ONLY a valid JSON array.
 
 METADATA:
 ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
 
-FORMAT: [{"id": "...", "title": "...", "reason": "..."}]`;
+JSON FORMAT:
+[{"id": "video_id", "title": "video_title", "reason": "Explanation"}]`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -153,26 +137,34 @@ FORMAT: [{"id": "...", "title": "...", "reason": "..."}]`;
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ parts: [{ text: systemPrompt }] }],
-                generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
+                generationConfig: {
+                    temperature: 0.7, // Higher temperature to encourage finding "close" matches
+                    responseMimeType: "application/json"
+                }
             })
         });
 
         const data = await response.json();
-        const results = JSON.parse(data.candidates[0].content.parts[0].text);
+        const rawText = data.candidates[0].content.parts[0].text;
+        const results = JSON.parse(rawText);
 
-        if (!results || results.length === 0) throw new Error("No results found.");
+        if (!Array.isArray(results) || results.length === 0) {
+            throw new Error("No specific matches found.");
+        }
 
         sessionStorage.setItem(cacheKey, JSON.stringify(results));
         renderResults(results);
-        statusEl.innerText = isArabic ? `تم العثور على ${results.length} نتائج:` : `Found ${results.length} relevant videos:`;
+        statusEl.innerText = isArabic ? `تم العثور على ${results.length} فيديوهات مقترحة:` : `Found ${results.length} suggested videos:`;
     } catch (error) {
-        console.error("Search error:", error);
-        const keywordResults = performKeywordFallback(isArabic ? englishQuery : query);
+        console.error("AI Search failure:", error);
+        
+        // Final fallback: Keyword search
+        const keywordResults = performKeywordFallback(query);
         if (keywordResults.length > 0) {
             renderResults(keywordResults);
-            statusEl.innerText = isArabic ? "نتائج مطابقة للكلمات الأساسية:" : "Keyword matches:";
+            statusEl.innerText = isArabic ? "نتائج تعتمد على الكلمات الدليلية:" : "Keyword-based results:";
         } else {
-            statusEl.innerText = isArabic ? "عذراً، لم أجد فيديوهات مطابقة. جرب البحث بالإنجليزية." : "No results found.";
+            statusEl.innerText = isArabic ? "لم نجد نتائج دقيقة. جرب البحث بكلمات مثل 'التهجين' أو 'hybridization'." : "No relevant videos found. Try different terms.";
         }
     } finally {
         btnEl.disabled = false;
