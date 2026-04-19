@@ -117,14 +117,30 @@ async function performAISearch(query) {
     btnEl.disabled = true;
     btnEl.innerHTML = '<div class="spinner"></div> Searching...';
 
-    const systemPrompt = `You are a professional chemistry education assistant. 
-Your task is to help students find the most relevant videos from Mohammad Abdulwahhab's organic chemistry collection.
-The provided metadata is primarily in English, but the student might ask in Arabic or English. 
-You must translate the student's Arabic intent to match the English metadata semantically.
-Respond in the SAME language the student uses (if they ask in Arabic, the "reason" must be in Arabic).
+    const systemPrompt = `You are an expert Chemistry Education AI. 
+Your goal is to find English videos based on Arabic or English queries.
 
-Return ONLY a JSON array of objects with this structure: 
-[{"id": "video_id", "title": "video_title", "reason": "concise explanation in the student's language of why this is relevant"}]
+IMPORTANT TRANSLATIONS FOR MATCHING:
+- التهجين = Hybridization
+- الرنين = Resonance
+- الروابط الكيميائية = Chemical Bonds
+- الألكانات = Alkanes
+- الألكينات = Alkenes
+- الألكاينات = Alkynes
+- الكيمياء الفراغية = Stereochemistry
+- الحلقات غير المتجانسة = Heterocyclic
+- التحليل الطيفي = Spectroscopy
+- الاحماض الكربوكسيلية = Carboxylic Acids
+- الكحوليات = Alcohols
+
+TASK:
+1. Translate the student's Arabic query to English chemistry terms.
+2. Search the provided English metadata for the most relevant matches.
+3. Respond in Arabic if the query was in Arabic, or English if it was in English.
+4. Return ONLY a valid JSON array of objects. No markdown, no preamble.
+
+Structure:
+[{"id": "video_id", "title": "video_title", "reason": "concise explanation in user's language"}]
 
 Metadata:
 ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
