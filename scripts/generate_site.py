@@ -838,21 +838,79 @@ def render_workshop_overview(prefix: str) -> str:
         "scientific-research-workshop/session-2",
         "scientific-research-workshop/session-3",
     ]
-    return '<section class="card-grid apps-grid">' + "".join(
+    session_details = {
+        "scientific-research-workshop/session-1": {
+            "label": "Session 1",
+            "title": "The Everyday Researcher: From Digital Noise to Trusted Source",
+            "summary": "Build a practical foundation for finding reliable information and separating strong evidence from distraction and weak sourcing.",
+        },
+        "scientific-research-workshop/session-2": {
+            "label": "Session 2",
+            "title": "Decoding Research: From Question to Publication",
+            "summary": "Follow the research journey from forming a strong question to understanding the steps that shape a publishable scientific study.",
+        },
+        "scientific-research-workshop/session-3": {
+            "label": "Session 3",
+            "title": "Making an Impact: How to Share Your Science",
+            "summary": "Explore practical strategies for presenting, communicating, and amplifying research so that good science reaches the right audience.",
+        },
+    }
+    cards = "".join(
         f"""
-        <article class="tool-card">
-          <div class="card-head">
-            <span class="eyebrow-card">Workshop Session {index}</span>
-            <h3>{html.escape(PAGE_SPECS[route]['title'])}</h3>
-            <p>{html.escape(PAGE_SPECS[route]['description'])}</p>
-          </div>
-          <div class="card-actions">
-            <a class="button button-primary" href="{route_to_href(route, prefix)}">Open session</a>
-          </div>
-        </article>
+          <article class="workshop-session-card">
+            <div class="workshop-session-topline">
+              <span class="workshop-session-number">{index:02d}</span>
+              <span class="workshop-session-format">Interactive material + video</span>
+            </div>
+            <div class="workshop-session-body">
+              <span class="workshop-session-label">{html.escape(session_details[route]['label'])}</span>
+              <h3>{html.escape(session_details[route]['title'])}</h3>
+              <p>{html.escape(session_details[route]['summary'])}</p>
+            </div>
+            <div class="workshop-session-footer">
+              <a class="button button-primary" href="{route_to_href(route, prefix)}">Open session</a>
+            </div>
+          </article>
         """
         for index, route in enumerate(session_routes, 1)
-    ) + "</section>"
+    )
+    return f"""
+    <section class="workshop-overview" aria-labelledby="workshop-title">
+      <div class="workshop-hero">
+        <div class="workshop-hero-copy">
+          <span class="workshop-kicker">Research Workshop</span>
+          <h1 id="workshop-title">Introduction to Scientific Research</h1>
+          <p class="workshop-lead">A focused three-session learning path covering trusted sources, research design, and practical ways to share scientific work with clarity and impact.</p>
+        </div>
+        <div class="workshop-summary" aria-label="Workshop highlights">
+          <div class="workshop-stat">
+            <strong>3</strong>
+            <span>guided sessions</span>
+          </div>
+          <div class="workshop-stat">
+            <strong>Interactive</strong>
+            <span>embedded materials</span>
+          </div>
+          <div class="workshop-stat">
+            <strong>Recorded</strong>
+            <span>session videos</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="workshop-section-heading">
+        <div>
+          <span class="workshop-section-kicker">Workshop roadmap</span>
+          <h2>Move through the sessions in order</h2>
+        </div>
+        <p>Each session has its own materials page with the embedded content and recording ready to open.</p>
+      </div>
+
+      <section class="workshop-session-grid" aria-label="Workshop sessions">
+        {cards}
+      </section>
+    </section>
+    """
 
 
 def render_workshop_session(route: str, parsed: dict, prefix: str) -> str:

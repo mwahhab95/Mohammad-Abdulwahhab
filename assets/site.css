@@ -958,6 +958,218 @@ p + p { margin-top: 0.75rem; }
 .live-app-shell--psychometric-exam-analysis-tool iframe { min-height: 1200px; }
 .app-shell--workshop iframe { min-height: 1400px; }
 
+/* ── Workshop Overview (scoped) ──────────────────────────── */
+.workshop-overview {
+  display: grid;
+  gap: 1.6rem;
+}
+
+.workshop-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.7fr) minmax(18rem, 0.95fr);
+  gap: 1.4rem;
+  padding: clamp(1.6rem, 3vw, 2.4rem);
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.16), transparent 34%),
+    linear-gradient(145deg, rgba(255, 255, 255, 0.98), rgba(240, 244, 249, 0.98));
+  border: 1px solid rgba(26, 35, 50, 0.1);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+  position: relative;
+}
+
+.workshop-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(110deg, rgba(30, 77, 140, 0.04), transparent 38%),
+    radial-gradient(circle at bottom right, rgba(37, 99, 176, 0.08), transparent 30%);
+  pointer-events: none;
+}
+
+.workshop-hero-copy,
+.workshop-summary,
+.workshop-section-heading,
+.workshop-session-card {
+  position: relative;
+  z-index: 1;
+}
+
+.workshop-kicker,
+.workshop-section-kicker,
+.workshop-session-label,
+.workshop-session-format {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  width: fit-content;
+  padding: 0.35rem 0.8rem;
+  border-radius: var(--radius-pill);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.workshop-kicker,
+.workshop-section-kicker {
+  background: rgba(37, 99, 176, 0.08);
+  border: 1px solid rgba(37, 99, 176, 0.14);
+  color: var(--navy-600);
+}
+
+.workshop-hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 1.02;
+  letter-spacing: -0.03em;
+  margin: 0.75rem 0;
+}
+
+.workshop-lead {
+  max-width: 60ch;
+  font-size: 1.04rem;
+  line-height: 1.8;
+}
+
+.workshop-summary {
+  display: grid;
+  gap: 0.8rem;
+  align-content: center;
+}
+
+.workshop-stat {
+  display: grid;
+  gap: 0.2rem;
+  padding: 1rem 1.05rem;
+  background: rgba(255, 255, 255, 0.78);
+  border: 1px solid rgba(26, 35, 50, 0.09);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 10px 26px rgba(17, 44, 74, 0.06);
+}
+
+.workshop-stat strong {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  color: var(--navy-800);
+}
+
+.workshop-stat span {
+  color: var(--text-sec);
+  font-size: 0.92rem;
+}
+
+.workshop-section-heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0 0.25rem;
+}
+
+.workshop-section-heading h2 {
+  margin: 0.45rem 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 3vw, 2rem);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+}
+
+.workshop-section-heading p {
+  max-width: 38rem;
+  font-size: 0.98rem;
+}
+
+.workshop-session-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1.2rem;
+}
+
+.workshop-session-card {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  min-height: 100%;
+  padding: 1.4rem;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.98), rgba(244, 247, 251, 0.98));
+  border: 1px solid rgba(26, 35, 50, 0.09);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--transition), box-shadow var(--transition), border-color var(--transition);
+}
+
+.workshop-session-card:hover {
+  transform: translateY(-3px);
+  border-color: rgba(37, 99, 176, 0.24);
+  box-shadow: var(--shadow-md), 0 0 20px rgba(37, 99, 176, 0.08);
+}
+
+.workshop-session-topline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.workshop-session-number {
+  display: inline-grid;
+  place-items: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--navy-800), var(--navy-600));
+  color: #fff;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  letter-spacing: 0.04em;
+  box-shadow: 0 12px 24px rgba(26, 58, 102, 0.22);
+}
+
+.workshop-session-format {
+  background: rgba(37, 99, 176, 0.06);
+  border: 1px solid rgba(37, 99, 176, 0.12);
+  color: var(--navy-600);
+}
+
+.workshop-session-body {
+  display: grid;
+  gap: 0.7rem;
+  flex: 1 1 auto;
+}
+
+.workshop-session-label {
+  background: rgba(56, 189, 248, 0.12);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  color: var(--navy-700);
+}
+
+.workshop-session-body h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--text-pri);
+}
+
+.workshop-session-body p {
+  font-size: 0.98rem;
+  line-height: 1.75;
+}
+
+.workshop-session-footer {
+  display: flex;
+  align-items: center;
+  margin-top: auto;
+  padding-top: 0.35rem;
+}
+
 /* ── Footer ───────────────────────────────────────────────── */
 .site-footer {
   display: flex;
@@ -997,6 +1209,7 @@ p + p { margin-top: 0.75rem; }
 @media (max-width: 960px) {
   .hero,
   .hero-main,
+  .workshop-hero,
   .two-column-copy,
   .image-pair-grid,
   .profile-links,
@@ -1009,6 +1222,10 @@ p + p { margin-top: 0.75rem; }
   }
 
   .apps-grid--3-cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .workshop-session-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
@@ -1078,12 +1295,30 @@ p + p { margin-top: 0.75rem; }
   .hero h1,
   .page-intro h1 { font-size: clamp(2rem, 9vw, 3rem); }
 
+  .workshop-hero h1 {
+    font-size: clamp(2rem, 8vw, 3rem);
+  }
+
   .focus-button-row,
   .profile-links,
   .apps-grid,
   .apps-grid--3-cols,
-  .learn-grid {
+  .learn-grid,
+  .workshop-session-grid {
     grid-template-columns: 1fr;
+  }
+
+  .workshop-hero {
+    padding: 1.35rem;
+  }
+
+  .workshop-section-heading,
+  .workshop-session-topline {
+    align-items: flex-start;
+  }
+
+  .workshop-session-card {
+    padding: 1.2rem;
   }
 
   .stack-grid--highlights .highlight-card:nth-child(13) .highlight-media--gallery {
