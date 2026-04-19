@@ -106,27 +106,46 @@ async function performAISearch(query) {
         }
     }
 
-    statusEl.innerText = isArabic ? "جاري البحث باستخدام الذكاء الاصطناعي..." : "AI is searching...";
+    statusEl.innerText = isArabic ? "جاري الترجمة والبحث..." : "Searching...";
     statusEl.classList.add('active');
     resultsEl.classList.remove('active');
     btnEl.disabled = true;
     btnEl.innerHTML = '<div class="spinner"></div> Searching...';
 
-    const systemPrompt = `You are a Chemistry Search Assistant.
-Metadata is in ENGLISH. User query is: "${query}"
+    // DUAL-PASS STRATEGY: 
+    // If Arabic, we explicitly ask Gemini to translate the intent to English keywords first.
+    let englishQuery = query;
+    if (isArabic) {
+        try {
+            const translationResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: `Translate this Arabic chemistry query into a list of 5 specific English technical keywords: "${query}". Return only the keywords separated by commas.` }] }]
+                })
+            });
+            const transData = await translationResponse.json();
+            englishQuery = transData.candidates[0].content.parts[0].text;
+            console.log("Arabic translated to keywords:", englishQuery);
+        } catch (e) {
+            console.error("Translation pass failed", e);
+        }
+    }
+
+    const systemPrompt = `You are a Chemistry Search Engine. 
+Match the student's request to the following metadata.
+STUDENT REQUEST (Keywords): "${englishQuery}"
+ORIGINAL QUERY: "${query}"
 
 INSTRUCTIONS:
-1. If the query is in Arabic, translate it to its scientific English equivalent (e.g., "التهجين" -> "Hybridization", "الرنين" -> "Resonance").
-2. Match that English meaning against the metadata provided below.
-3. Find the 3-5 most relevant videos.
-4. Provide the "reason" in the user's language (Arabic if query is Arabic, English if English).
-5. Output MUST be a valid JSON array of objects.
+1. Find the 3-5 most relevant videos.
+2. If the original query was Arabic, write the "reason" in Arabic.
+3. Return ONLY a JSON array.
 
 METADATA:
 ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
 
-JSON FORMAT ONLY:
-[{"id": "video_id", "title": "video_title", "reason": "Reason in user's language"}]`;
+FORMAT: [{"id": "...", "title": "...", "reason": "..."}]`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -134,38 +153,26 @@ JSON FORMAT ONLY:
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 contents: [{ parts: [{ text: systemPrompt }] }],
-                generationConfig: {
-                    temperature: 0.2,
-                }
+                generationConfig: { responseMimeType: "application/json", temperature: 0.1 }
             })
         });
 
-        if (!response.ok) throw new Error("API Connection Error");
-
         const data = await response.json();
-        let aiResponseText = data.candidates[0].content.parts[0].text;
-        
-        // Clean markdown and extract JSON
-        const jsonMatch = aiResponseText.match(/\[\s*\{.*\}\s*\]/s);
-        if (!jsonMatch) throw new Error("Invalid AI response format");
-        
-        const results = JSON.parse(jsonMatch[0]);
+        const results = JSON.parse(data.candidates[0].content.parts[0].text);
 
-        if (!results || results.length === 0) {
-            throw new Error(isArabic ? "لم أجد فيديوهات مطابقة لهذا الموضوع." : "No relevant videos found.");
-        }
+        if (!results || results.length === 0) throw new Error("No results found.");
 
         sessionStorage.setItem(cacheKey, JSON.stringify(results));
         renderResults(results);
-        statusEl.innerText = isArabic ? `تم العثور على ${results.length} فيديوهات:` : `Found ${results.length} relevant videos:`;
+        statusEl.innerText = isArabic ? `تم العثور على ${results.length} نتائج:` : `Found ${results.length} relevant videos:`;
     } catch (error) {
         console.error("Search error:", error);
-        const keywordResults = performKeywordFallback(query);
+        const keywordResults = performKeywordFallback(isArabic ? englishQuery : query);
         if (keywordResults.length > 0) {
             renderResults(keywordResults);
-            statusEl.innerText = isArabic ? "نتائج تعتمد على الكلمات المفتاحية:" : "Matches based on keywords:";
+            statusEl.innerText = isArabic ? "نتائج مطابقة للكلمات الأساسية:" : "Keyword matches:";
         } else {
-            statusEl.innerText = isArabic ? "عذراً، لم أجد نتائج. جرب كلمات أخرى." : "No results found. Try broader terms.";
+            statusEl.innerText = isArabic ? "عذراً، لم أجد فيديوهات مطابقة. جرب البحث بالإنجليزية." : "No results found.";
         }
     } finally {
         btnEl.disabled = false;
