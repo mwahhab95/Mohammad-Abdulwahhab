@@ -84,13 +84,13 @@ async function performAISearch(query) {
     const normalizedQuery = query.toLowerCase().trim();
     const cacheKey = `search_cache_${normalizedQuery}`;
 
+    // Detect if Arabic
+    const isArabic = /[\u0600-\u06FF]/.test(query);
+    resultsEl.style.direction = isArabic ? 'rtl' : 'ltr';
+    resultsEl.style.textAlign = isArabic ? 'right' : 'left';
+
     if (!videoMetadata || videoMetadata.length === 0) {
         await initSearch();
-        if (!videoMetadata || videoMetadata.length === 0) {
-            statusEl.innerText = "Error: Video data could not be loaded.";
-            statusEl.classList.add('active');
-            return;
-        }
     }
 
     const cachedResponse = sessionStorage.getItem(cacheKey);
@@ -98,7 +98,7 @@ async function performAISearch(query) {
         try {
             const results = JSON.parse(cachedResponse);
             renderResults(results);
-            statusEl.innerText = "Showing cached results:";
+            statusEl.innerText = isArabic ? "نتائج البحث المحفوظة:" : "Showing cached results:";
             statusEl.classList.add('active');
             return;
         } catch (e) {
@@ -106,26 +106,25 @@ async function performAISearch(query) {
         }
     }
 
-    statusEl.innerText = "Searching... (جاري البحث...)";
+    statusEl.innerText = isArabic ? "جاري البحث باستخدام الذكاء الاصطناعي..." : "AI is searching...";
     statusEl.classList.add('active');
     resultsEl.classList.remove('active');
     btnEl.disabled = true;
     btnEl.innerHTML = '<div class="spinner"></div> Searching...';
 
-    const systemPrompt = `You are a Chemistry Video Search Engine.
-Metadata is in ENGLISH. User query may be in ARABIC or ENGLISH.
+    const systemPrompt = `أنت مساعد بحث خبير في الكيمياء العضوية لموقع الأستاذ محمد عبد الوهاب.
+مهمتك هي مطابقة سؤال الطالب بأفضل فيديوهات من القائمة المتاحة (Metadata).
 
-STEP-BY-STEP LOGIC:
-1. If query is ARABIC (e.g., "التهجين"), translate it to the ENGLISH chemistry equivalent (e.g., "Hybridization").
-2. Match that English term against the metadata below.
-3. If a match is found, explain why in the user's ORIGINAL language.
+البيانات (Metadata) باللغة الإنجليزية، ولكن الطالب يبحث بـ: "${query}"
+1. إذا كان البحث بالعربية، افهم المعنى الكيميائي وقم بمطابقته مع البيانات الإنجليزية.
+2. يجب أن يكون الـ "reason" (سبب الاختيار) بنفس لغة المستخدم (عربي للبحث العربي، إنجليزي للبحث الإنجليزي).
+3. أرجع النتائج بصيغة JSON فقط كقائمة من الأشياء (Array of objects).
 
-METADATA (Titles, Summaries, Keywords):
+البيانات:
 ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
 
-USER QUERY: "${query}"
-
-RETURN ONLY A JSON ARRAY: [{"id": "video_id", "title": "video_title", "reason": "Arabic reasoning if query was Arabic, English if English"}]`;
+رد بصيغة JSON فقط:
+[{"id": "...", "title": "...", "reason": "..."}]`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -134,52 +133,36 @@ RETURN ONLY A JSON ARRAY: [{"id": "video_id", "title": "video_title", "reason": 
             body: JSON.stringify({
                 contents: [{ parts: [{ text: systemPrompt }] }],
                 generationConfig: {
-                    temperature: 0.2 // Lower temperature for more consistent JSON
+                    temperature: 0.1,
+                    responseMimeType: "application/json"
                 }
             })
         });
 
-        if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(`API Error: ${response.status}`);
-        }
+        if (!response.ok) throw new Error("API Limit reached or error.");
 
         const data = await response.json();
-        let aiResponseText = data.candidates[0].content.parts[0].text;
-        
-        // Clean up any potential markdown formatting
-        const cleanedText = aiResponseText.replace(/```json|```/g, "").trim();
-        
-        // Find the first [ and last ] to extract the JSON array
-        const start = cleanedText.indexOf('[');
-        const end = cleanedText.lastIndexOf(']');
-        
-        if (start === -1 || end === -1) {
-            throw new Error("No video results found for this specific query.");
-        }
-        
-        const jsonString = cleanedText.substring(start, end + 1);
-        const results = JSON.parse(jsonString);
+        const results = JSON.parse(data.candidates[0].content.parts[0].text);
 
-        if (results.length === 0) {
-            throw new Error("No relevant videos found. Try different terms.");
+        if (!results || results.length === 0) {
+            throw new Error(isArabic ? "لم يتم العثور على فيديوهات متعلقة بهذا الموضوع." : "No relevant videos found.");
         }
 
         sessionStorage.setItem(cacheKey, JSON.stringify(results));
         renderResults(results);
+        statusEl.innerText = isArabic ? `تم العثور على ${results.length} فيديوهات:` : `Found ${results.length} relevant videos:`;
     } catch (error) {
         console.error("Search error:", error);
-        
         const keywordResults = performKeywordFallback(query);
         if (keywordResults.length > 0) {
             renderResults(keywordResults);
-            statusEl.innerText = "Showing matches based on keywords:";
+            statusEl.innerText = isArabic ? "نتائج تعتمد على الكلمات المفتاحية:" : "Matches based on keywords:";
         } else {
-            statusEl.innerHTML = `<span style="color:red">No results found.</span><br>Try a broader topic or search in English.`;
+            statusEl.innerText = isArabic ? "عذراً، لم أجد نتائج. جرب كلمات أخرى." : "No results found. Try broader terms.";
         }
     } finally {
         btnEl.disabled = false;
-        btnEl.innerHTML = 'Search';
+        btnEl.innerHTML = isArabic ? 'بحث' : 'Search';
     }
 }
 
