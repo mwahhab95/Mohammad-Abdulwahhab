@@ -112,23 +112,20 @@ async function performAISearch(query) {
     btnEl.disabled = true;
     btnEl.innerHTML = '<div class="spinner"></div> Searching...';
 
-    const systemPrompt = `You are a specialized Chemistry Education AI. Your task is to match a student's query to the best organic chemistry videos from the provided metadata.
+    const systemPrompt = `You are a Chemistry Video Search Engine.
+Metadata is in ENGLISH. User query may be in ARABIC or ENGLISH.
 
-STUDENT QUERY: "${query}"
+STEP-BY-STEP LOGIC:
+1. If query is ARABIC (e.g., "التهجين"), translate it to the ENGLISH chemistry equivalent (e.g., "Hybridization").
+2. Match that English term against the metadata below.
+3. If a match is found, explain why in the user's ORIGINAL language.
 
-INSTRUCTIONS:
-1. Language Detection: Detect if the query is in Arabic or English.
-2. Semantic Matching: Match the query's chemistry topics to the English metadata (titles, summaries, keywords).
-3. Precision: If the query is in English, provide highly accurate results based on exact and semantic matches.
-4. Translation (Arabic Queries): If the query is in Arabic, translate it to standard organic chemistry English terms before matching.
-5. Output Language: The "reason" for each result must be in the SAME language as the student's query (Arabic for Arabic queries, English for English queries).
-6. Output Format: Return ONLY a valid JSON array of objects. No introductory text.
-
-METADATA:
+METADATA (Titles, Summaries, Keywords):
 ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
 
-JSON STRUCTURE:
-[{"id": "video_id", "title": "video_title", "reason": "Short explanation of relevance"}]`;
+USER QUERY: "${query}"
+
+RETURN ONLY A JSON ARRAY: [{"id": "video_id", "title": "video_title", "reason": "Arabic reasoning if query was Arabic, English if English"}]`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
