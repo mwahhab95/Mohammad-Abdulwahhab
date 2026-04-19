@@ -603,24 +603,91 @@ def render_home(parsed: dict, prefix: str) -> str:
 
 
 def render_learn_overview(prefix: str) -> str:
-    cards = []
-    for route, spec in PAGE_SPECS.items():
-        if route.startswith("learn-organic-chemistry/"):
-            cards.append(
-                f"""
-                <article class="tool-card">
-                  <div class="card-head">
-                    <span class="eyebrow-card">Course</span>
-                    <h3>{html.escape(spec['title'])}</h3>
-                    <p>{html.escape(spec['description'])}</p>
-                  </div>
-                  <div class="card-actions">
-                    <a class="button button-primary" href="{route_to_href(route, prefix)}">Open page</a>
-                  </div>
-                </article>
-                """
-            )
-    return '<section class="card-grid apps-grid">' + "".join(cards) + "</section>"
+    stages = [
+        {
+            "route": "learn-organic-chemistry/basics-of-organic-chemistry",
+            "label": "Basics",
+            "tag": "Structures and concepts",
+            "title": "Speaking the Language of Molecules",
+            "summary": "Build the foundation of organic chemistry through bonding, structure, hybridization, resonance, and the visual language of molecules.",
+        },
+        {
+            "route": "learn-organic-chemistry/organic-i",
+            "label": "Organic-I",
+            "tag": "Families and patterns",
+            "title": "Exploring Organic Chemistry Fundamentals",
+            "summary": "Move through essential ideas including hydrocarbon families, aromaticity, and the stereochemical patterns that shape organic thinking.",
+        },
+        {
+            "route": "learn-organic-chemistry/organic-ii",
+            "label": "Organic-II",
+            "tag": "Reactivity and transformations",
+            "title": "Different Classes of Organic Compounds",
+            "summary": "Discover how major functional groups are organized, how they are prepared, and how their reactions drive organic transformations.",
+        },
+        {
+            "route": "learn-organic-chemistry/organic-iii",
+            "label": "Organic-III",
+            "tag": "Interpretation and analysis",
+            "title": "Exploring Heterocycles and Spectroscopic Techniques",
+            "summary": "Explore heterocyclic chemistry while developing the tools needed to interpret structures through spectroscopy and problem solving.",
+        },
+    ]
+    cards = "".join(
+        f"""
+          <article class="learn-journey-card">
+            <div class="learn-journey-topline">
+              <span class="learn-journey-number">{index:02d}</span>
+              <span class="learn-journey-tag">{html.escape(stage['tag'])}</span>
+            </div>
+            <div class="learn-journey-body">
+              <h3>{html.escape(stage['title'])}</h3>
+              <p>{html.escape(stage['summary'])}</p>
+            </div>
+            <div class="learn-journey-footer">
+              <a class="button button-primary" href="{route_to_href(stage['route'], prefix)}">Explore this stage</a>
+            </div>
+          </article>
+        """
+        for index, stage in enumerate(stages, 1)
+    )
+    return f"""
+    <section class="learn-journey" aria-labelledby="learn-journey-title">
+      <div class="learn-journey-hero">
+        <div class="learn-journey-copy">
+          <span class="learn-journey-kicker">Organic Chemistry Journey</span>
+          <h1 id="learn-journey-title">A Journey Through Organic Chemistry</h1>
+          <p class="learn-journey-lead">Explore how molecules are built, how organic structures behave, and how we learn to interpret transformations across the rich landscape of organic chemistry.</p>
+        </div>
+        <div class="learn-journey-summary" aria-label="Journey highlights">
+          <div class="learn-journey-stat">
+            <strong>4</strong>
+            <span>connected stages</span>
+          </div>
+          <div class="learn-journey-stat">
+            <strong>Recorded videos</strong>
+            <span>organized by organic themes</span>
+          </div>
+          <div class="learn-journey-stat">
+            <strong>Spectroscopy</strong>
+            <span>and heterocyclic exploration</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="learn-journey-heading">
+        <div>
+          <span class="learn-journey-section-kicker">Journey map</span>
+          <h2>Four stages through organic chemistry</h2>
+        </div>
+        <p>Each stage opens a page with recorded video topics, arranged as a guided exploration rather than a formal course list.</p>
+      </div>
+
+      <section class="learn-journey-grid" aria-label="Organic chemistry stages">
+        {cards}
+      </section>
+    </section>
+    """
 
 
 def render_apps_academics_hub(prefix: str) -> str:
