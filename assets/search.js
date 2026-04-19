@@ -119,12 +119,12 @@ async function performAISearch(query) {
 
     const systemPrompt = `You are a professional chemistry education assistant. 
 Your task is to help students find the most relevant videos from Mohammad Abdulwahhab's organic chemistry collection.
-Below is the metadata of all available videos (title, summary, keywords).
-The student might ask in English or Arabic. You must respond in the SAME language the student uses.
+The provided metadata is primarily in English, but the student might ask in Arabic or English. 
+You must translate the student's Arabic intent to match the English metadata semantically.
+Respond in the SAME language the student uses (if they ask in Arabic, the "reason" must be in Arabic).
 
-When a student asks a question or searches for a topic, identify the 3-5 most relevant videos.
 Return ONLY a JSON array of objects with this structure: 
-[{"id": "video_id", "title": "video_title", "reason": "concise explanation in the user's language of why this is relevant"}]
+[{"id": "video_id", "title": "video_title", "reason": "concise explanation in the student's language of why this is relevant"}]
 
 Metadata:
 ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
@@ -154,7 +154,11 @@ Student Query: "${query}"`;
             throw new Error("No response candidates returned from AI.");
         }
 
-        const aiResponseText = data.candidates[0].content.parts[0].text;
+        let aiResponseText = data.candidates[0].content.parts[0].text;
+        
+        // Clean up response if it contains markdown code blocks
+        aiResponseText = aiResponseText.replace(/```json\n?|```/g, '').trim();
+        
         const results = JSON.parse(aiResponseText);
 
         // Store in cache for this session
