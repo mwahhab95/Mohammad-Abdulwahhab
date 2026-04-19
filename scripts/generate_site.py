@@ -314,6 +314,15 @@ def normalize_embed_document(code: str) -> str:
         <!DOCTYPE html>
         <html lang="en">
           <head>
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZJFG15M00T"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){{dataLayer.push(arguments);}}
+              gtag('js', new Date());
+
+              gtag('config', 'G-ZJFG15M00T');
+            </script>
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <title>Embedded Resource</title>
@@ -1087,6 +1096,15 @@ def render_page(route: str, spec: dict, parsed: dict, prefix: str, body_html: st
         <!DOCTYPE html>
         <html lang="en">
           <head>
+            <!-- Google tag (gtag.js) -->
+            <script async src="https://www.googletagmanager.com/gtag/js?id=G-ZJFG15M00T"></script>
+            <script>
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){{dataLayer.push(arguments);}}
+              gtag('js', new Date());
+
+              gtag('config', 'G-ZJFG15M00T');
+            </script>
             <meta charset="utf-8" />
             <meta name="viewport" content="width=device-width, initial-scale=1" />
             <title>{html.escape(spec['title'])} | Mohammad Abdulwahhab</title>
