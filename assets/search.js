@@ -98,7 +98,7 @@ async function performAISearch(query) {
         try {
             const results = JSON.parse(cachedResponse);
             renderResults(results);
-            statusEl.innerText = isArabic ? "نتائج من الذاكرة المؤقتة:" : "Showing cached results:";
+            statusEl.innerText = isArabic ? "نتائج البحث المحفوظة:" : "Showing cached results:";
             statusEl.classList.add('active');
             return;
         } catch (e) {
@@ -106,29 +106,28 @@ async function performAISearch(query) {
         }
     }
 
-    statusEl.innerText = isArabic ? "جاري تحليل سؤالك والبحث عن أفضل الفيديوهات..." : "Analyzing your query and searching...";
+    statusEl.innerText = isArabic ? "جاري البحث عن أفضل الفيديوهات..." : "Searching for the best videos...";
     statusEl.classList.add('active');
     resultsEl.classList.remove('active');
     btnEl.disabled = true;
     btnEl.innerHTML = '<div class="spinner"></div>';
 
-    const systemPrompt = `You are a Chemistry Expert Search Engine. 
-Your goal is to match the USER QUERY to the most relevant videos from the METADATA.
+    // Simplify metadata for the AI to read easily
+    const metaList = videoMetadata.map(v => 
+        `ID: ${v.video_id} | Title: ${v.title} | Keywords: ${v.keywords.join(', ')}`
+    ).join('\n');
 
-USER QUERY: "${query}"
-LANGUAGE: ${isArabic ? 'Arabic' : 'English'}
+    const systemPrompt = `You are a Chemistry Search Expert. 
+Student Question: "${query}"
 
-INSTRUCTIONS:
-1. Translate the intent of the query to English chemistry terms if it is in Arabic.
-2. Compare the query (or its translation) against video titles, summaries, and keywords.
-3. Select the 3-5 most relevant videos. DO NOT return an empty list if any thematic match exists.
-4. If the query is in Arabic, write the "reason" in Arabic. If in English, write it in English.
-5. Return ONLY a valid JSON array.
+Your task is to find 3-5 videos from the library below that best match the question.
+If the question is in Arabic, translate it to chemistry English terms (e.g., التهجين = Hybridization) and find matches.
+Provide the "reason" in Arabic if the question is Arabic, and in English if it is English.
 
-METADATA:
-${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
+LIBRARY:
+${metaList}
 
-JSON FORMAT:
+RETURN ONLY A JSON ARRAY:
 [{"id": "video_id", "title": "video_title", "reason": "Explanation"}]`;
 
     try {
@@ -138,33 +137,46 @@ JSON FORMAT:
             body: JSON.stringify({
                 contents: [{ parts: [{ text: systemPrompt }] }],
                 generationConfig: {
-                    temperature: 0.7, // Higher temperature to encourage finding "close" matches
+                    temperature: 0.4,
                     responseMimeType: "application/json"
                 }
             })
         });
 
         const data = await response.json();
-        const rawText = data.candidates[0].content.parts[0].text;
-        const results = JSON.parse(rawText);
+        const results = JSON.parse(data.candidates[0].content.parts[0].text);
 
         if (!Array.isArray(results) || results.length === 0) {
-            throw new Error("No specific matches found.");
+            throw new Error("Empty results");
         }
 
         sessionStorage.setItem(cacheKey, JSON.stringify(results));
         renderResults(results);
-        statusEl.innerText = isArabic ? `تم العثور على ${results.length} فيديوهات مقترحة:` : `Found ${results.length} suggested videos:`;
+        statusEl.innerText = isArabic ? `تم العثور على مقاطع فيديو مقترحة:` : `Found suggested videos:`;
     } catch (error) {
-        console.error("AI Search failure:", error);
+        console.error("Search error:", error);
         
-        // Final fallback: Keyword search
-        const keywordResults = performKeywordFallback(query);
-        if (keywordResults.length > 0) {
-            renderResults(keywordResults);
-            statusEl.innerText = isArabic ? "نتائج تعتمد على الكلمات الدليلية:" : "Keyword-based results:";
-        } else {
-            statusEl.innerText = isArabic ? "لم نجد نتائج دقيقة. جرب البحث بكلمات مثل 'التهجين' أو 'hybridization'." : "No relevant videos found. Try different terms.";
+        // Final fallback: Use the AI to just get 3 English keywords, then use standard search
+        try {
+            const fallbackTrans = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    contents: [{ parts: [{ text: `Give me 3 English chemistry keywords for the Arabic query: "${query}". Return keywords only.` }] }]
+                })
+            });
+            const fbData = await fallbackTrans.json();
+            const keywords = fbData.candidates[0].content.parts[0].text;
+            const fallbackResults = performKeywordFallback(keywords + " " + query);
+            
+            if (fallbackResults.length > 0) {
+                renderResults(fallbackResults);
+                statusEl.innerText = isArabic ? "نتائج مقترحة بناءً على الكلمات المفتاحية:" : "Keyword-based suggestions:";
+            } else {
+                throw new Error("Full failure");
+            }
+        } catch (e) {
+            statusEl.innerText = isArabic ? "عذراً، لم أجد نتائج. جرب كلمات أخرى بالإنجليزية." : "No relevant videos found. Try different terms.";
         }
     } finally {
         btnEl.disabled = false;
