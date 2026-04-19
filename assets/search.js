@@ -85,114 +85,85 @@ async function performAISearch(query) {
     const cacheKey = `search_cache_${normalizedQuery}`;
 
     if (!videoMetadata || videoMetadata.length === 0) {
-        console.warn("Metadata not loaded yet, attempting to reload...");
         await initSearch();
         if (!videoMetadata || videoMetadata.length === 0) {
-            statusEl.innerText = "Error: Video data could not be loaded. Please refresh the page.";
+            statusEl.innerText = "Error: Video data could not be loaded.";
             statusEl.classList.add('active');
             return;
         }
     }
 
-    // 1. Check Session Cache first
     const cachedResponse = sessionStorage.getItem(cacheKey);
     if (cachedResponse) {
-        console.log("Loading results from session cache...");
         try {
             const results = JSON.parse(cachedResponse);
             renderResults(results);
-            statusEl.innerText = "Showing cached AI results:";
+            statusEl.innerText = "Showing cached results:";
             statusEl.classList.add('active');
             return;
         } catch (e) {
-            console.error("Cache parse error", e);
             sessionStorage.removeItem(cacheKey);
         }
     }
 
-    // Show loading state
-    statusEl.innerText = "AI is thinking...";
+    statusEl.innerText = "AI is thinking (الذكاء الاصطناعي يفكر)...";
     statusEl.classList.add('active');
     resultsEl.classList.remove('active');
     btnEl.disabled = true;
     btnEl.innerHTML = '<div class="spinner"></div> Searching...';
 
-    const systemPrompt = `You are an expert Chemistry Education AI. 
-Your goal is to find English videos based on Arabic or English queries.
+    const systemPrompt = `You are a chemistry expert. A student is asking: "${query}"
+Search through the following video metadata (titles, summaries, keywords) to find the 3-5 most relevant videos.
+Even if the query is in Arabic, match it against the English metadata semantically.
+Always provide the "reason" in the SAME language as the query (Arabic if the query is Arabic).
 
-IMPORTANT TRANSLATIONS FOR MATCHING:
-- التهجين = Hybridization
-- الرنين = Resonance
-- الروابط الكيميائية = Chemical Bonds
-- الألكانات = Alkanes
-- الألكينات = Alkenes
-- الألكاينات = Alkynes
-- الكيمياء الفراغية = Stereochemistry
-- الحلقات غير المتجانسة = Heterocyclic
-- التحليل الطيفي = Spectroscopy
-- الاحماض الكربوكسيلية = Carboxylic Acids
-- الكحوليات = Alcohols
-
-TASK:
-1. Translate the student's Arabic query to English chemistry terms.
-2. Search the provided English metadata for the most relevant matches.
-3. Respond in Arabic if the query was in Arabic, or English if it was in English.
-4. Return ONLY a valid JSON array of objects. No markdown, no preamble.
-
-Structure:
-[{"id": "video_id", "title": "video_title", "reason": "concise explanation in user's language"}]
+Return ONLY a JSON array: [{"id": "video_id", "title": "video_title", "reason": "Explanation"}]
 
 Metadata:
-${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
-
-Student Query: "${query}"`;
+${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                contents: [{ parts: [{ text: systemPrompt }] }],
-                generationConfig: {
-                    responseMimeType: "application/json",
-                }
+                contents: [{ parts: [{ text: systemPrompt }] }]
             })
         });
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(`API Error: ${response.status} - ${errorData.error?.message || 'Unknown error'}`);
+            throw new Error(`API Error: ${response.status} - ${errorData.error?.message}`);
         }
 
         const data = await response.json();
-        
-        if (!data.candidates || data.candidates.length === 0) {
-            throw new Error("No response candidates returned from AI.");
-        }
-
         let aiResponseText = data.candidates[0].content.parts[0].text;
         
-        // Clean up response if it contains markdown code blocks
-        aiResponseText = aiResponseText.replace(/```json\n?|```/g, '').trim();
+        // Robust JSON extraction
+        const jsonMatch = aiResponseText.match(/\[\s*\{.*\}\s*\]/s);
+        if (!jsonMatch) {
+            console.log("Raw AI Response:", aiResponseText);
+            throw new Error("The AI didn't return a valid list of videos. Try being more specific.");
+        }
         
-        const results = JSON.parse(aiResponseText);
+        const results = JSON.parse(jsonMatch[0]);
 
-        // Store in cache for this session
+        if (results.length === 0) {
+            throw new Error("No relevant videos found for this topic.");
+        }
+
         sessionStorage.setItem(cacheKey, JSON.stringify(results));
-
         renderResults(results);
     } catch (error) {
-        console.error("AI Search error:", error);
+        console.error("Search error:", error);
         
-        // Fallback to simple keyword search
-        console.log("Falling back to keyword search...");
         const keywordResults = performKeywordFallback(query);
         renderResults(keywordResults);
         
         if (keywordResults.length > 0) {
-            statusEl.innerText = "AI search is currently unavailable. Showing results based on keywords:";
+            statusEl.innerText = "Showing basic results (AI limited):";
         } else {
-            statusEl.innerText = "Sorry, I couldn't find any relevant videos. Try different keywords.";
+            statusEl.innerHTML = `<span style="color:red">Error: ${error.message}</span><br>Try searching in English or use simpler keywords like 'Alkanes'.`;
         }
     } finally {
         btnEl.disabled = false;
