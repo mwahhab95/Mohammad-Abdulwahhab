@@ -87,7 +87,7 @@ async function performAISearch(query) {
     const isArabic = /[\u0600-\u06FF]/.test(query);
     
     if (isArabic) {
-        statusEl.innerHTML = `<span style="color:var(--navy-600); font-weight:bold;">Please ask your query in English.<br>من فضلك، اكتب سؤالك باللغة الإنجليزية.</span>`;
+        statusEl.innerHTML = `<span style="color:var(--text-pri); font-weight:500;">Please ask your query in English.<br>من فضلك، اكتب سؤالك باللغة الإنجليزية.</span>`;
         statusEl.classList.add('active');
         resultsEl.classList.remove('active');
         return;
