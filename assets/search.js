@@ -112,19 +112,21 @@ async function performAISearch(query) {
     btnEl.disabled = true;
     btnEl.innerHTML = '<div class="spinner"></div> Searching...';
 
-    const systemPrompt = `أنت مساعد بحث خبير في الكيمياء العضوية لموقع الأستاذ محمد عبد الوهاب.
-مهمتك هي مطابقة سؤال الطالب بأفضل فيديوهات من القائمة المتاحة (Metadata).
+    const systemPrompt = `You are a Chemistry Search Assistant.
+Metadata is in ENGLISH. User query is: "${query}"
 
-البيانات (Metadata) باللغة الإنجليزية، ولكن الطالب يبحث بـ: "${query}"
-1. إذا كان البحث بالعربية، افهم المعنى الكيميائي وقم بمطابقته مع البيانات الإنجليزية.
-2. يجب أن يكون الـ "reason" (سبب الاختيار) بنفس لغة المستخدم (عربي للبحث العربي، إنجليزي للبحث الإنجليزي).
-3. أرجع النتائج بصيغة JSON فقط كقائمة من الأشياء (Array of objects).
+INSTRUCTIONS:
+1. If the query is in Arabic, translate it to its scientific English equivalent (e.g., "التهجين" -> "Hybridization", "الرنين" -> "Resonance").
+2. Match that English meaning against the metadata provided below.
+3. Find the 3-5 most relevant videos.
+4. Provide the "reason" in the user's language (Arabic if query is Arabic, English if English).
+5. Output MUST be a valid JSON array of objects.
 
-البيانات:
+METADATA:
 ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
 
-رد بصيغة JSON فقط:
-[{"id": "...", "title": "...", "reason": "..."}]`;
+JSON FORMAT ONLY:
+[{"id": "video_id", "title": "video_title", "reason": "Reason in user's language"}]`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -133,19 +135,24 @@ ${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summar
             body: JSON.stringify({
                 contents: [{ parts: [{ text: systemPrompt }] }],
                 generationConfig: {
-                    temperature: 0.1,
-                    responseMimeType: "application/json"
+                    temperature: 0.2,
                 }
             })
         });
 
-        if (!response.ok) throw new Error("API Limit reached or error.");
+        if (!response.ok) throw new Error("API Connection Error");
 
         const data = await response.json();
-        const results = JSON.parse(data.candidates[0].content.parts[0].text);
+        let aiResponseText = data.candidates[0].content.parts[0].text;
+        
+        // Clean markdown and extract JSON
+        const jsonMatch = aiResponseText.match(/\[\s*\{.*\}\s*\]/s);
+        if (!jsonMatch) throw new Error("Invalid AI response format");
+        
+        const results = JSON.parse(jsonMatch[0]);
 
         if (!results || results.length === 0) {
-            throw new Error(isArabic ? "لم يتم العثور على فيديوهات متعلقة بهذا الموضوع." : "No relevant videos found.");
+            throw new Error(isArabic ? "لم أجد فيديوهات مطابقة لهذا الموضوع." : "No relevant videos found.");
         }
 
         sessionStorage.setItem(cacheKey, JSON.stringify(results));
