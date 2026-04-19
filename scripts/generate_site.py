@@ -20,10 +20,10 @@ NAVIGATION = (
         "Learn Organic Chemistry",
         "learn-organic-chemistry",
         (
-            ("Basics of Organic Chemistry", "learn-organic-chemistry/basics-of-organic-chemistry"),
-            ("Organic-I", "learn-organic-chemistry/organic-i"),
-            ("Organic-II", "learn-organic-chemistry/organic-ii"),
-            ("Organic-III", "learn-organic-chemistry/organic-iii"),
+            ("Speaking the Language of Molecules", "learn-organic-chemistry/basics-of-organic-chemistry"),
+            ("Exploring Organic Chemistry Fundamentals", "learn-organic-chemistry/organic-i"),
+            ("Different Classes of Organic Compounds", "learn-organic-chemistry/organic-ii"),
+            ("Exploring Heterocycles and Spectroscopic Techniques", "learn-organic-chemistry/organic-iii"),
         ),
     ),
     (
@@ -75,26 +75,26 @@ PAGE_SPECS = {
     },
     "learn-organic-chemistry/basics-of-organic-chemistry": {
         "source": "learn-organic-chemistry_basics-of-organic-chemistry.html",
-        "title": "Basics of Organic Chemistry",
-        "description": "Foundational organic chemistry topics and recorded lessons.",
+        "title": "Speaking the Language of Molecules",
+        "description": "Recorded videos exploring bonding, structure, hybridization, resonance, and the visual language of molecules.",
         "kind": "course-videos",
     },
     "learn-organic-chemistry/organic-i": {
         "source": "learn-organic-chemistry_organic-i.html",
-        "title": "Organic-I",
-        "description": "Organic-I lecture topics and video lessons from the original site.",
+        "title": "Exploring Organic Chemistry Fundamentals",
+        "description": "Recorded videos exploring hydrocarbon families, aromaticity, and stereochemical thinking.",
         "kind": "course-videos",
     },
     "learn-organic-chemistry/organic-ii": {
         "source": "learn-organic-chemistry_organic-ii.html",
-        "title": "Organic-II",
-        "description": "Organic-II lecture topics and video lessons from the original site.",
+        "title": "Different Classes of Organic Compounds",
+        "description": "Recorded videos exploring major functional groups, their preparation, and their transformations.",
         "kind": "course-videos",
     },
     "learn-organic-chemistry/organic-iii": {
         "source": "learn-organic-chemistry_organic-iii.html",
-        "title": "Organic-III",
-        "description": "Organic-III lecture topics and video lessons from the original site.",
+        "title": "Exploring Heterocycles and Spectroscopic Techniques",
+        "description": "Recorded videos exploring heterocyclic chemistry, spectroscopy, and problem solving.",
         "kind": "course-videos",
     },
     "apps-for-academics/my-apps-for-academics": {
@@ -744,15 +744,14 @@ def render_course_page(parsed: dict) -> str:
     texts = [text for text in texts if text not in {"-", "1", "2", "3"}]
     pairs = []
     for index, video in enumerate(parsed["youtube_urls"]):
-        title = texts[index] if index < len(texts) else f"Lesson {index + 1}"
+        title = texts[index] if index < len(texts) else f"Video {index + 1}"
         pairs.append((title, video))
     return f"""
     <section class="panel">
       <div class="panel-header">
         <div>
-          <span class="eyebrow-card">Course Outline</span>
-          <h2>{html.escape(parsed['title'].replace('Mohammad Abdulwahhab - ', ''))}</h2>
-          <p>Topic titles and lesson videos for this course.</p>
+          <span class="eyebrow-card">Recorded Topics</span>
+          <p>Topic highlights and recorded videos for this stage of the journey.</p>
         </div>
       </div>
     </section>
