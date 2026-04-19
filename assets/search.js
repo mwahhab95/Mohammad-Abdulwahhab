@@ -76,39 +76,24 @@ async function initSearch() {
     }
 }
 
-// Dictionary for 100% reliability on common terms
-const CHEMISTRY_DICT = {
-    "التهجين": "Hybridization",
-    "تهجين": "Hybridization",
-    "الرنين": "Resonance",
-    "رنين": "Resonance",
-    "الالكانات": "Alkanes",
-    "الألكانات": "Alkanes",
-    "الالكينات": "Alkenes",
-    "الألكينات": "Alkenes",
-    "الالكاينات": "Alkynes",
-    "الألكاينات": "Alkynes",
-    "تركيب الذرة": "Atomic Structure",
-    "الذرة": "Atom",
-    "كيمياء فراغية": "Stereochemistry",
-    "تسمية": "Nomenclature",
-    "الاحماض الكربوكسيلية": "Carboxylic Acids",
-    "كحول": "Alcohol",
-    "فينول": "Phenol"
-};
-
 async function performAISearch(query) {
     const statusEl = document.getElementById('searchStatus');
     const resultsEl = document.getElementById('searchResults');
     const btnEl = document.getElementById('searchBtn');
 
     const normalizedQuery = query.toLowerCase().trim();
-    const cacheKey = `search_cache_${normalizedQuery}`;
-
-    // Language Detection
+    
+    // Detect if Arabic
     const isArabic = /[\u0600-\u06FF]/.test(query);
-    resultsEl.style.direction = isArabic ? 'rtl' : 'ltr';
-    resultsEl.style.textAlign = isArabic ? 'right' : 'left';
+    
+    if (isArabic) {
+        statusEl.innerHTML = `<span style="color:var(--navy-600); font-weight:bold;">Please ask your query in English.<br>من فضلك، اكتب سؤالك باللغة الإنجليزية.</span>`;
+        statusEl.classList.add('active');
+        resultsEl.classList.remove('active');
+        return;
+    }
+
+    const cacheKey = `search_cache_${normalizedQuery}`;
 
     if (!videoMetadata || videoMetadata.length === 0) {
         await initSearch();
@@ -119,7 +104,7 @@ async function performAISearch(query) {
         try {
             const results = JSON.parse(cachedResponse);
             renderResults(results);
-            statusEl.innerText = isArabic ? "النتائج المحفوظة:" : "Showing cached results:";
+            statusEl.innerText = "Showing cached results:";
             statusEl.classList.add('active');
             return;
         } catch (e) {
@@ -127,47 +112,26 @@ async function performAISearch(query) {
         }
     }
 
-    statusEl.innerText = isArabic ? "جاري البحث..." : "Searching...";
+    statusEl.innerText = "Searching the video library...";
     statusEl.classList.add('active');
     resultsEl.classList.remove('active');
     btnEl.disabled = true;
     btnEl.innerHTML = '<div class="spinner"></div>';
 
-    // STEP 1: Translate Intent
-    let effectiveQuery = query;
-    if (isArabic) {
-        // Check dictionary first
-        if (CHEMISTRY_DICT[normalizedQuery]) {
-            effectiveQuery = CHEMISTRY_DICT[normalizedQuery];
-            console.log("Dictionary match:", effectiveQuery);
-        } else {
-            // Ask AI for translation only
-            try {
-                const transResponse = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        contents: [{ parts: [{ text: `Translate this Arabic chemistry topic to its exact English scientific name: "${query}". Return only the English name.` }] }]
-                    })
-                });
-                const transData = await transResponse.json();
-                effectiveQuery = transData.candidates[0].content.parts[0].text.trim();
-                console.log("AI Translation:", effectiveQuery);
-            } catch (e) {
-                console.error("Translation fail", e);
-            }
-        }
-    }
+    const systemPrompt = `You are a specialized Chemistry Education AI. Your task is to match the student's English query to the best organic chemistry videos from the provided metadata.
 
-    // STEP 2: Perform Search with English Intent
-    const systemPrompt = `You are a Chemistry Expert. 
-Search the library for: "${effectiveQuery}"
-Explain the relevance in ${isArabic ? 'ARABIC' : 'ENGLISH'}.
+STUDENT QUERY: "${query}"
 
-LIBRARY:
-${videoMetadata.map(v => `ID: ${v.video_id} | Title: ${v.title} | Keywords: ${v.keywords.join(',')}`).join('\n')}
+INSTRUCTIONS:
+1. Match the query's chemistry topics to the English metadata (titles, summaries, keywords).
+2. Select the 3-5 most relevant videos.
+3. Return ONLY a valid JSON array of objects. No introductory text.
 
-RETURN ONLY JSON: [{"id": "video_id", "title": "video_title", "reason": "Reason in ${isArabic ? 'Arabic' : 'English'}"}]`;
+METADATA:
+${JSON.stringify(videoMetadata.map(v => ({id: v.video_id, title: v.title, summary: v.summary, keywords: v.keywords})))}
+
+JSON STRUCTURE:
+[{"id": "video_id", "title": "video_title", "reason": "Short explanation of why this video is relevant"}]`;
 
     try {
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${GEMINI_API_KEY}`, {
@@ -176,36 +140,36 @@ RETURN ONLY JSON: [{"id": "video_id", "title": "video_title", "reason": "Reason 
             body: JSON.stringify({
                 contents: [{ parts: [{ text: systemPrompt }] }],
                 generationConfig: {
-                    temperature: 0.2,
+                    temperature: 0.1,
                     responseMimeType: "application/json"
                 }
             })
         });
 
+        if (!response.ok) throw new Error("API Connection Error");
+
         const data = await response.json();
         const results = JSON.parse(data.candidates[0].content.parts[0].text);
 
         if (!Array.isArray(results) || results.length === 0) {
-            throw new Error("No results found.");
+            throw new Error("No relevant videos found for this topic.");
         }
 
         sessionStorage.setItem(cacheKey, JSON.stringify(results));
         renderResults(results);
-        statusEl.innerText = isArabic ? `تم العثور على نتائج لـ "${query}":` : `Found results for "${query}":`;
+        statusEl.innerText = `Found ${results.length} relevant videos:`;
     } catch (error) {
-        console.error("Final search failure:", error);
-        
-        // Final desperate fallback: Keyword search using the translated term
-        const keywordResults = performKeywordFallback(effectiveQuery + " " + query);
+        console.error("Search error:", error);
+        const keywordResults = performKeywordFallback(query);
         if (keywordResults.length > 0) {
             renderResults(keywordResults);
-            statusEl.innerText = isArabic ? "نتائج مطابقة للكلمات:" : "Matches found:";
+            statusEl.innerText = "Showing keyword matches:";
         } else {
-            statusEl.innerText = isArabic ? "لم يتم العثور على فيديوهات. جرب كلمة أخرى." : "No relevant videos found.";
+            statusEl.innerText = "No results found. Try broader terms or different keywords.";
         }
     } finally {
         btnEl.disabled = false;
-        btnEl.innerHTML = isArabic ? 'بحث' : 'Search';
+        btnEl.innerHTML = 'Search';
     }
 }
 
