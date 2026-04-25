@@ -1,5 +1,5 @@
 const GEMINI_API_KEY = "AIzaSyDdIWu-5sbzY4WqwLLoDLCTgOSLA4vK4OI";
-const DATA_URL = "../mohammad_indexed_content.json";
+const DATA_URL = "/Mohammad-Abdulwahhab/mohammad_indexed_content.json";
 
 const VIDEO_MAP = {
     // Basics
