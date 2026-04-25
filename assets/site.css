@@ -951,6 +951,7 @@ p + p { margin-top: 0.75rem; }
 
 .video-shell iframe { aspect-ratio: 16 / 9; min-height: 260px; }
 .app-shell iframe   { min-height: 680px; }
+.app-shell--nomenclature iframe { min-height: 660px; }
 .live-app-shell iframe { min-height: 760px; }
 .live-app-shell--mark-list-maker iframe { min-height: 1500px; }
 .live-app-shell--attendance-export iframe { min-height: 2800px; }

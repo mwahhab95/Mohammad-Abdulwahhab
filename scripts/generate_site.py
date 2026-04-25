@@ -859,6 +859,7 @@ def render_embedded_tools(route: str, parsed: dict, prefix: str) -> str:
         title = sanitize_text(match.group(1)) if match else f"Embedded tool {index + 1}"
         embed_items.append((title, write_embed_file(route, index, code), "Open full screen"))
     grid_class = "stack-grid stack-grid-two" if route == "apps-for-students/elemental-analysis" else "stack-grid"
+    specific_class = " app-shell--nomenclature" if route == "apps-for-students/nomenclature" else ""
     cards = []
     for title, embed_path, label in embed_items:
         cards.append(
@@ -867,7 +868,7 @@ def render_embedded_tools(route: str, parsed: dict, prefix: str) -> str:
               <div class="card-head">
                 <h3>{html.escape(title)}</h3>
               </div>
-              <div class="embed-shell app-shell">
+              <div class="embed-shell app-shell{specific_class}">
                 <iframe loading="lazy" src="{prefix}{html.escape(embed_path)}" title="{html.escape(title)}"></iframe>
               </div>
               <div class="card-actions">
