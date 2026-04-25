@@ -242,11 +242,15 @@ font-size: 1em;
 🎯 Select Functional Group Class
 </label>
 <select id="class-selector" class="class-selector">
+<option value="Alkenes/Alkynes">Alkenes/ Alkynes</option>
 <option value="Alcohols">Alcohols</option>
+<option value="Ethers">Ethers</option>
 <option value="Aldehydes">Aldehydes</option>
 <option value="Ketones">Ketones</option>
 <option value="Carboxylic Acids">Carboxylic Acids</option>
+<option value="Esters">Esters</option>
 <option value="Amines">Amines</option>
+<option value="Aromatics">Aromatics</option>
 <option value="Mixed">Mixed (All Classes)</option>
 </select>
 <button class="start-btn" onclick="startQuiz()">🚀 Start Quiz</button>
@@ -256,7 +260,7 @@ font-size: 1em;
 <div id="status-box"></div>
 <div id="molecule-display">
 <p id="loader">Loading chemistry library...</p>
-<canvas id="molecule-canvas" width="280" height="260" style="display: none;"></canvas>
+<canvas id="molecule-canvas" width="260" height="260" style="display: none;"></canvas>
 </div>
 <p id="choices-label">📝 Select the correct IUPAC name:</p>
 <div id="options-container"></div>
@@ -273,6 +277,37 @@ font-size: 1em;
 <script>
 // Dataset
 const dataset = [
+// ALKENES / ALKYNES
+{"class": "Alkenes/Alkynes", "smiles": "C=C", "name": "Ethene"},
+{"class": "Alkenes/Alkynes", "smiles": "CC=C", "name": "Propene"},
+{"class": "Alkenes/Alkynes", "smiles": "C=CCC", "name": "But-1-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "CC=CC", "name": "But-2-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "CC(C)=C", "name": "2-Methylprop-1-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "C=CCCC", "name": "Pent-1-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "CC=CCC", "name": "Pent-2-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "CC(C)=CC", "name": "2-Methylbut-2-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "C=C(C)CC", "name": "2-Methylbut-1-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "CC(C)C=C", "name": "3-Methylbut-1-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "C=CCCCC", "name": "Hex-1-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "CC=CCCC", "name": "Hex-2-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "CCC=CCC", "name": "Hex-3-ene"},
+{"class": "Alkenes/Alkynes", "smiles": "C=CC=C", "name": "Buta-1,3-diene"},
+{"class": "Alkenes/Alkynes", "smiles": "C=CC=CC", "name": "Penta-1,3-diene"},
+{"class": "Alkenes/Alkynes", "smiles": "C#C", "name": "Ethyne"},
+{"class": "Alkenes/Alkynes", "smiles": "CC#C", "name": "Propyne"},
+{"class": "Alkenes/Alkynes", "smiles": "C#CCC", "name": "But-1-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "CC#CC", "name": "But-2-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "C#CCCC", "name": "Pent-1-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "CC#CCC", "name": "Pent-2-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "C#CC(C)C", "name": "3-Methylbut-1-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "C#CCCCC", "name": "Hex-1-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "CC#CCCC", "name": "Hex-2-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "CCC#CCC", "name": "Hex-3-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "C=CC#C", "name": "But-1-en-3-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "C=CCC#C", "name": "Pent-1-en-4-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "C=CC#CC", "name": "Pent-1-en-3-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "CC=CC#C", "name": "Pent-3-en-1-yne"},
+{"class": "Alkenes/Alkynes", "smiles": "C=CC=CC#C", "name": "Hexa-1,3-dien-5-yne"},
 // ALCOHOLS
 {"class": "Alcohols", "smiles": "CO", "name": "Methanol"},
 {"class": "Alcohols", "smiles": "CCO", "name": "Ethanol"},
@@ -336,6 +371,26 @@ const dataset = [
 {"class": "Ketones", "smiles": "CC(C)(C)C(=O)C", "name": "3,3-Dimethylbutan-2-one"},
 {"class": "Ketones", "smiles": "CC(CC(C)(C)C)=O", "name": "4,4-Dimethylpentan-2-one"},
 {"class": "Ketones", "smiles": "CC(C)CC(=O)C(C)C", "name": "2,5-Dimethylhexan-3-one"},
+// ETHERS
+{"class": "Ethers", "smiles": "COC", "name": "Methoxymethane"},
+{"class": "Ethers", "smiles": "CCOC", "name": "Methoxyethane"},
+{"class": "Ethers", "smiles": "CCOCC", "name": "Ethoxyethane"},
+{"class": "Ethers", "smiles": "CCCOC", "name": "1-Methoxypropane"},
+{"class": "Ethers", "smiles": "CC(C)OC", "name": "2-Methoxypropane"},
+{"class": "Ethers", "smiles": "CCCCOC", "name": "1-Methoxybutane"},
+{"class": "Ethers", "smiles": "CCC(C)OC", "name": "2-Methoxybutane"},
+{"class": "Ethers", "smiles": "CC(C)COC", "name": "1-Methoxy-2-methylpropane"},
+{"class": "Ethers", "smiles": "CC(C)(C)OC", "name": "2-Methoxy-2-methylpropane"},
+{"class": "Ethers", "smiles": "CCOCCC", "name": "1-Ethoxypropane"},
+{"class": "Ethers", "smiles": "CCOC(C)C", "name": "2-Ethoxypropane"},
+{"class": "Ethers", "smiles": "CCOCCCC", "name": "1-Ethoxybutane"},
+{"class": "Ethers", "smiles": "CCOC(C)CC", "name": "2-Ethoxybutane"},
+{"class": "Ethers", "smiles": "CCCOCCC", "name": "1-Propoxypropane"},
+{"class": "Ethers", "smiles": "COCCOC", "name": "1,2-Dimethoxyethane"},
+{"class": "Ethers", "smiles": "COCCCOC", "name": "1,3-Dimethoxypropane"},
+{"class": "Ethers", "smiles": "CCOCCOCC", "name": "1,2-Diethoxyethane"},
+{"class": "Ethers", "smiles": "COC(C)COC", "name": "1,2-Dimethoxypropane"},
+{"class": "Ethers", "smiles": "COCC(C)CC", "name": "1-Methoxy-2-methylbutane"},
 // CARBOXYLIC ACIDS
 {"class": "Carboxylic Acids", "smiles": "C(=O)O", "name": "Methanoic acid"},
 {"class": "Carboxylic Acids", "smiles": "CC(=O)O", "name": "Ethanoic acid"},
@@ -357,6 +412,26 @@ const dataset = [
 {"class": "Carboxylic Acids", "smiles": "CC(C)C(C)C(=O)O", "name": "2,3-Dimethylbutanoic acid"},
 {"class": "Carboxylic Acids", "smiles": "CCC(C)C(C)C(=O)O", "name": "2,3-Dimethylpentanoic acid"},
 {"class": "Carboxylic Acids", "smiles": "CC(C)(C)CC(=O)O", "name": "3,3-Dimethylbutanoic acid"},
+// ESTERS
+{"class": "Esters", "smiles": "COC=O", "name": "Methyl methanoate"},
+{"class": "Esters", "smiles": "CCOC=O", "name": "Ethyl methanoate"},
+{"class": "Esters", "smiles": "COC(=O)C", "name": "Methyl ethanoate"},
+{"class": "Esters", "smiles": "CCOC(=O)C", "name": "Ethyl ethanoate"},
+{"class": "Esters", "smiles": "CCCOC(=O)C", "name": "Propyl ethanoate"},
+{"class": "Esters", "smiles": "CCCCOC(=O)C", "name": "Butyl ethanoate"},
+{"class": "Esters", "smiles": "COC(=O)CC", "name": "Methyl propanoate"},
+{"class": "Esters", "smiles": "CCOC(=O)CC", "name": "Ethyl propanoate"},
+{"class": "Esters", "smiles": "CCCOC(=O)CC", "name": "Propyl propanoate"},
+{"class": "Esters", "smiles": "COC(=O)CCC", "name": "Methyl butanoate"},
+{"class": "Esters", "smiles": "CCOC(=O)CCC", "name": "Ethyl butanoate"},
+{"class": "Esters", "smiles": "COC(=O)CCCC", "name": "Methyl pentanoate"},
+{"class": "Esters", "smiles": "CCOC(=O)CCCC", "name": "Ethyl pentanoate"},
+{"class": "Esters", "smiles": "COC(=O)C(C)C", "name": "Methyl 2-methylpropanoate"},
+{"class": "Esters", "smiles": "CCOC(=O)C(C)C", "name": "Ethyl 2-methylpropanoate"},
+{"class": "Esters", "smiles": "COC(=O)C(C)CC", "name": "Methyl 2-methylbutanoate"},
+{"class": "Esters", "smiles": "CCOC(=O)C(C)CC", "name": "Ethyl 2-methylbutanoate"},
+{"class": "Esters", "smiles": "COC(=O)C(C)(C)C", "name": "Methyl 2,2-dimethylpropanoate"},
+{"class": "Esters", "smiles": "CCOC(=O)C(C)(C)C", "name": "Ethyl 2,2-dimethylpropanoate"},
 // AMINES
 {"class": "Amines", "smiles": "CN", "name": "Methanamine"},
 {"class": "Amines", "smiles": "CCN", "name": "Ethanamine"},
@@ -378,6 +453,24 @@ const dataset = [
 {"class": "Amines", "smiles": "CC(C)NC(C)C", "name": "diisopropylamine"},
 {"class": "Amines", "smiles": "CN(C)CC(C)C", "name": "N,N,2-Trimethylpropan-1-amine"},
 {"class": "Amines", "smiles": "CC(C)N(CC)CC", "name": "N,N-Diethylpropan-2-amine"},
+// AROMATICS
+{"class": "Aromatics", "smiles": "c1ccccc1", "name": "Benzene"},
+{"class": "Aromatics", "smiles": "Cc1ccccc1", "name": "Methylbenzene"},
+{"class": "Aromatics", "smiles": "CCc1ccccc1", "name": "Ethylbenzene"},
+{"class": "Aromatics", "smiles": "CCCc1ccccc1", "name": "Propylbenzene"},
+{"class": "Aromatics", "smiles": "CC(C)(C)c1ccccc1", "name": "tert-Butylbenzene"},
+{"class": "Aromatics", "smiles": "Oc1ccccc1", "name": "Phenol"},
+{"class": "Aromatics", "smiles": "Brc1ccccc1", "name": "Bromobenzene"},
+{"class": "Aromatics", "smiles": "COc1ccccc1", "name": "Methoxybenzene"},
+{"class": "Aromatics", "smiles": "Nc1ccccc1", "name": "Aniline"},
+{"class": "Aromatics", "smiles": "O=Cc1ccccc1", "name": "Benzaldehyde"},
+{"class": "Aromatics", "smiles": "CC(=O)c1ccccc1", "name": "1-Phenylethan-1-one"},
+{"class": "Aromatics", "smiles": "O=C(O)c1ccccc1", "name": "Benzoic acid"},
+{"class": "Aromatics", "smiles": "Clc1ccccc1", "name": "Chlorobenzene"},
+{"class": "Aromatics", "smiles": "Cc1ccccc1C", "name": "1,2-Dimethylbenzene"},
+{"class": "Aromatics", "smiles": "Cc1cccc(C)c1", "name": "1,3-Dimethylbenzene"},
+{"class": "Aromatics", "smiles": "Cc1ccc(C)cc1", "name": "1,4-Dimethylbenzene"},
+{"class": "Aromatics", "smiles": "C=Cc1ccccc1", "name": "Ethenylbenzene"},
 ];
 const canvas = document.getElementById('molecule-canvas');
 const loader = document.getElementById('loader');
